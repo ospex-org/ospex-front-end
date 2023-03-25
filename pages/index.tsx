@@ -26,7 +26,7 @@ import {
 import injectedModule from "@web3-onboard/injected-wallets"
 import coinbaseModule from "@web3-onboard/coinbase"
 
-import { PrimaryTable } from "./table"
+import PrimaryTable from "./table"
 import {
   CFPv1Address,
   JsonRpcProviderUrl,
@@ -35,7 +35,7 @@ import {
 import { CFPv1Abi } from "../contracts/CFPv1"
 import { IERC20Abi } from "../contracts/IERC20"
 import { contest, speculation, position } from "../constants/interface"
-import { Positions } from "./positions"
+import Positions from "./positions"
 import { contestsGteCurrentTime } from "../constants/queries"
 import { useQuery } from "@apollo/client"
 

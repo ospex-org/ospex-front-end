@@ -13,7 +13,7 @@ import { addressSpecificPositions } from "../constants/queries"
 import { useQuery } from "@apollo/client"
 import { Footer } from "../components/Footer"
 
-export const Positions = () => {
+const Positions = () => {
   const { address } = useContext(ProviderContext)
   const [userContests, setUserContests] = useState<contest[] | []>([])
   const [userSpeculations, setUserSpeculations] = useState<speculation[] | []>(
@@ -169,3 +169,5 @@ export const Positions = () => {
     </>
   )
 }
+
+export default Positions

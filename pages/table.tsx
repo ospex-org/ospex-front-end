@@ -14,7 +14,7 @@ import { SpeculationCard } from "../components/Speculation"
 import { SearchIcon } from "@chakra-ui/icons"
 import { Footer } from "../components/Footer"
 
-export const PrimaryTable = () => {
+const PrimaryTable = () => {
   const { contests, speculations, positions } = useContext(ProviderContext)
   const [query, setQuery] = useState("")
 
@@ -120,3 +120,5 @@ export const PrimaryTable = () => {
     </>
   )
 }
+
+export default PrimaryTable

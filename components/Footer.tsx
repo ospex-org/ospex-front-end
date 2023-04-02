@@ -5,6 +5,7 @@ import {
   IconButton,
   useColorModeValue,
 } from "@chakra-ui/react"
+import Link from "next/link"
 import { FaGithub } from "react-icons/fa"
 
 export function Footer() {
@@ -27,6 +28,7 @@ export function Footer() {
             href="https://github.com/ospex-org"
             aria-label="GitHub"
             icon={<FaGithub fontSize="1.5rem" />}
+            target="_blank"
           />
         </ButtonGroup>
       </Stack>

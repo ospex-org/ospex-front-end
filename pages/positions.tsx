@@ -151,15 +151,18 @@ const Positions = () => {
         maxW="fit-content"
       >
         <Box>
-          <Text
-            textTransform="none"
-            fontWeight="normal"
-            fontSize="24px"
-            p={35}
-            color={useColorModeValue("black", "white")}
-          >
-            Positions
-          </Text>
+          <Center>
+            <Text
+              textTransform="none"
+              fontWeight="normal"
+              fontSize="24px"
+              pt={5}
+              pb={30}
+              color={useColorModeValue("black", "white")}
+            >
+              Positions
+            </Text>
+          </Center>
         </Box>
         <Box>{RenderCards()}</Box>
       </Box>

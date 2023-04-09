@@ -113,15 +113,24 @@ const Positions = () => {
   }, [loading, error, data])
 
   const RenderCards = () => {
-    console.log("address:", address)
-
     return (
       <>
         {userPositions
-          .filter(function (position) {
+          .filter((position) => {
             return position.userId === address
           })
-          .reverse()
+          .sort((a: position, b: position) => {
+            const speculationA = userSpeculations.find(
+              (speculation) => speculation.id === a.speculationId
+            )
+            const speculationB = userSpeculations.find(
+              (speculation) => speculation.id === b.speculationId
+            )
+            if (speculationA && speculationB) {
+              return speculationB.lockTime - speculationA.lockTime
+            }
+            return 0
+          })
           .map((position, index) => (
             <PositionCard
               speculation={userSpeculations.find(

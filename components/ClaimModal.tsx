@@ -103,12 +103,6 @@ export function ClaimModal({
               mr={3}
               onClick={() => {
                 if (provider) {
-                  console.log("provider is:", provider)
-                  console.log("cfpContract is", cfpContract)
-                  console.log(
-                    "position.speculationId is",
-                    position.speculationId
-                  )
                   ;(async () => {
                     try {
                       const claimTx = await cfpContract!.claim(

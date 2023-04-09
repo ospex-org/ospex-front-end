@@ -9,6 +9,8 @@ import {
   AccordionPanel,
   AccordionButton,
   Divider,
+  Center,
+  AbsoluteCenter,
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { SpeculationTotalAddress } from "../constants/addresses"
@@ -102,7 +104,8 @@ export function SpeculationCard({
                   height={7}
                   mb={2}
                   ml={3}
-                  textAlign={"center"}
+                  justifyContent="center"
+                  alignItems="center"
                   bg={colorMode === "light" ? "#f3f4f6" : "#272b33"}
                   _hover={
                     colorMode === "light"
@@ -125,7 +128,7 @@ export function SpeculationCard({
                     }
                   }}
                 >
-                  &nbsp;Yes
+                  Yes
                 </AccordionButton>
                 <AccordionButton
                   fontSize="sm"
@@ -136,7 +139,8 @@ export function SpeculationCard({
                   height={7}
                   mb={2}
                   ml={3}
-                  textAlign={"center"}
+                  justifyContent="center"
+                  alignItems="center"
                   bg={colorMode === "light" ? "#f3f4f6" : "#272b33"}
                   _hover={
                     colorMode === "light"
@@ -159,7 +163,7 @@ export function SpeculationCard({
                     }
                   }}
                 >
-                  &nbsp;No
+                  No
                 </AccordionButton>
                 <Text ml="3">Pool</Text>
               </SimpleGrid>

@@ -24,7 +24,7 @@ import {
   useWallets,
 } from "@web3-onboard/react"
 import injectedModule from "@web3-onboard/injected-wallets"
-import coinbaseModule from "@web3-onboard/coinbase"
+import coinbaseWalletModule from "@web3-onboard/coinbase"
 
 import PrimaryTable from "./table"
 import {
@@ -47,7 +47,7 @@ declare global {
 }
 
 const injected = injectedModule()
-const coinbase = coinbaseModule()
+const coinbase = coinbaseWalletModule()
 
 const web3Onboard = init({
   wallets: [injected, coinbase],
@@ -159,7 +159,8 @@ const Home: NextPage = () => {
         }
       } else {
         const addresses = await provider.listAccounts()
-        if (addresses.length) {
+        const network = await provider.getNetwork()
+        if (addresses.length && network.chainId === 5) {
           setIsConnected(true)
           setAddress(addresses[0].toLowerCase())
         }
@@ -176,21 +177,25 @@ const Home: NextPage = () => {
   }, [isConnected, provider])
 
   useEffect(() => {
-    ;(async () => {
-      if (provider && USDCContract && isConnected) {
-        const currentAllowance = ethers.utils.formatEther(
-          await USDCContract.allowance(
-            provider.getSigner().getAddress(),
-            CFPv1Address
+    if (provider && USDCContract && isConnected) {
+      ;(async () => {
+        try {
+          const currentAllowance = ethers.utils.formatEther(
+            await USDCContract.allowance(
+              provider.getSigner().getAddress(),
+              CFPv1Address
+            )
           )
-        )
-        const currentBalance = ethers.utils.formatEther(
-          await USDCContract.balanceOf(provider.getSigner().getAddress())
-        )
-        setBalance(+currentBalance)
-        setApprovedAmount(+currentAllowance)
-      }
-    })()
+          const currentBalance = ethers.utils.formatEther(
+            await USDCContract.balanceOf(provider.getSigner().getAddress())
+          )
+          setBalance(+currentBalance)
+          setApprovedAmount(+currentAllowance)
+        } catch (error) {
+          console.error("an error has occurred:", error)
+        }
+      })()
+    }
   }, [USDCContract, provider, isConnected])
 
   useEffect(() => {
@@ -220,17 +225,40 @@ const Home: NextPage = () => {
   }, [loading, error, data])
 
   useEffect(() => {
-    ;(async () => {
-      if (provider && USDCContract && isConnected) {
-        provider.on("block", async () => {
-          const currentBalance = ethers.utils.formatEther(
-            await USDCContract.balanceOf(provider.getSigner().getAddress())
-          )
-          setBalance(+currentBalance)
-        })
-      }
-    })()
+    if (provider && USDCContract && isConnected) {
+      ;(async () => {
+        try {
+          provider.on("block", async () => {
+            const currentBalance = ethers.utils.formatEther(
+              await USDCContract.balanceOf(provider.getSigner().getAddress())
+            )
+            setBalance(+currentBalance)
+          })
+        } catch (error) {
+          console.error("an error has occurred:", error)
+        }
+      })()
+    }
   }, [USDCContract, isConnected, provider])
+
+  useEffect(() => {
+    const handleChainChanged = () => {
+      // Force a refresh when the network changes
+      window.location.reload()
+    }
+
+    if (typeof window.ethereum !== "undefined") {
+      // Subscribe to the 'chainChanged' event
+      window.ethereum.on("chainChanged", handleChainChanged)
+    }
+
+    // Clean up the event listener when the component is unmounted
+    return () => {
+      if (typeof window.ethereum !== "undefined") {
+        window.ethereum.removeListener("chainChanged", handleChainChanged)
+      }
+    }
+  }, [])
 
   async function connectToPolygon() {
     updateAccountCenter({ enabled: false })

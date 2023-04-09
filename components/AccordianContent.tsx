@@ -173,6 +173,26 @@ export function AccordianContent({
                 ? "(1 of 2) Approve amount first"
                 : "(2 of 2) Create position"}
             </Button>
+            <Text
+              fontSize="xs"
+              fontWeight="semibold"
+              mt="2"
+              fontStyle="citation"
+            >
+              {provider && !isApproved
+                ? "Please click Connect in the top-right to connect your wallet"
+                : ""}
+            </Text>
+            <Text
+              fontSize="xs"
+              fontWeight="semibold"
+              mt="2"
+              fontStyle="citation"
+            >
+              {provider && !isApproved
+                ? "If your wallet is already connected, please ensure you are on Polygon network"
+                : ""}
+            </Text>
           </Box>
         </SimpleGrid>
       </FormControl>

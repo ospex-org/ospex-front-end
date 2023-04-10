@@ -241,24 +241,24 @@ const Home: NextPage = () => {
     }
   }, [USDCContract, isConnected, provider])
 
-  useEffect(() => {
-    const handleChainChanged = () => {
-      // Force a refresh when the network changes
-      window.location.reload()
-    }
+  // useEffect(() => {
+  //   const handleChainChanged = () => {
+  //     // Force a refresh when the network changes
+  //     window.location.reload()
+  //   }
 
-    if (typeof window.ethereum !== "undefined") {
-      // Subscribe to the 'chainChanged' event
-      window.ethereum.on("chainChanged", handleChainChanged)
-    }
+  //   if (typeof window.ethereum !== "undefined") {
+  //     // Subscribe to the 'chainChanged' event
+  //     window.ethereum.on("chainChanged", handleChainChanged)
+  //   }
 
-    // Clean up the event listener when the component is unmounted
-    return () => {
-      if (typeof window.ethereum !== "undefined") {
-        window.ethereum.removeListener("chainChanged", handleChainChanged)
-      }
-    }
-  }, [])
+  //   // Clean up the event listener when the component is unmounted
+  //   return () => {
+  //     if (typeof window.ethereum !== "undefined") {
+  //       window.ethereum.removeListener("chainChanged", handleChainChanged)
+  //     }
+  //   }
+  // }, [])
 
   async function connectToPolygon() {
     updateAccountCenter({ enabled: false })

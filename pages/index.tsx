@@ -1,6 +1,6 @@
 import { Contract, ethers } from "ethers"
 import type { NextPage } from "next"
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import {
   Box,
   Heading,
@@ -110,6 +110,7 @@ const Home: NextPage = () => {
   const [speculations, setSpeculations] = useState<speculation[] | []>([])
   const [positions, setPositions] = useState<position[] | []>([])
   const [provider, setProvider] = useState<JsonRpcProvider | undefined | null>()
+  const [chainId, setChainId] = useState<number | null>(null)
   const { colorMode, toggleColorMode } = useColorMode()
   const [isConnected, setIsConnected] = useState(false)
   const [address, setAddress] = useState("")
@@ -159,8 +160,7 @@ const Home: NextPage = () => {
         }
       } else {
         const addresses = await provider.listAccounts()
-        const network = await provider.getNetwork()
-        if (addresses.length && network.chainId === 5) {
+        if (addresses.length && chainId === 5) {
           setIsConnected(true)
           setAddress(addresses[0].toLowerCase())
         }
@@ -174,10 +174,10 @@ const Home: NextPage = () => {
         }
       }
     })()
-  }, [isConnected, provider])
+  }, [isConnected, provider, chainId])
 
   useEffect(() => {
-    if (provider && USDCContract && isConnected) {
+    if (provider && USDCContract && isConnected && chainId === 5) {
       ;(async () => {
         try {
           const currentAllowance = ethers.utils.formatEther(
@@ -196,7 +196,7 @@ const Home: NextPage = () => {
         }
       })()
     }
-  }, [USDCContract, provider, isConnected])
+  }, [USDCContract, provider, isConnected, chainId])
 
   useEffect(() => {
     ;(async () => {
@@ -225,40 +225,68 @@ const Home: NextPage = () => {
   }, [loading, error, data])
 
   useEffect(() => {
-    if (provider && USDCContract && isConnected) {
-      ;(async () => {
+    if (provider && USDCContract && isConnected && chainId === 5) {
+      const fetchAndUpdateData = async () => {
         try {
-          provider.on("block", async () => {
-            const currentBalance = ethers.utils.formatEther(
-              await USDCContract.balanceOf(provider.getSigner().getAddress())
-            )
-            setBalance(+currentBalance)
-          })
+          const signerAddress = await provider.getSigner().getAddress()
+          const currentAllowance = ethers.utils.formatEther(
+            await USDCContract.allowance(signerAddress, CFPv1Address)
+          )
+          const currentBalance = ethers.utils.formatEther(
+            await USDCContract.balanceOf(signerAddress)
+          )
+          setBalance(+currentBalance)
+          setApprovedAmount(+currentAllowance)
         } catch (error) {
-          console.error("an error has occurred:", error)
+          console.error("An error has occurred:", error)
         }
-      })()
+      }
+
+      const updateDataOnBlock = async () => {
+        provider.on("block", fetchAndUpdateData)
+      }
+
+      updateDataOnBlock()
+
+      return () => {
+        // Clean up the event listener when the component is unmounted or dependencies change
+        provider.off("block", fetchAndUpdateData)
+      }
     }
-  }, [USDCContract, isConnected, provider])
+  }, [USDCContract, provider, isConnected, chainId])
 
-  // useEffect(() => {
-  //   const handleChainChanged = () => {
-  //     // Force a refresh when the network changes
-  //     window.location.reload()
-  //   }
+  useEffect(() => {
+    const handleChainChanged = (newChainId: string) => {
+      setChainId(Number(newChainId))
+    }
 
-  //   if (typeof window.ethereum !== "undefined") {
-  //     // Subscribe to the 'chainChanged' event
-  //     window.ethereum.on("chainChanged", handleChainChanged)
-  //   }
+    if (typeof window.ethereum !== "undefined") {
+      // Set the initial chainId
+      window.ethereum
+        .request({ method: "eth_chainId" })
+        .then((initialChainId: string) => setChainId(Number(initialChainId)))
+        .catch((error: Error) => {
+          console.error("Failed to get initial chainId:", error)
+          setChainId(5)
+        })
 
-  //   // Clean up the event listener when the component is unmounted
-  //   return () => {
-  //     if (typeof window.ethereum !== "undefined") {
-  //       window.ethereum.removeListener("chainChanged", handleChainChanged)
-  //     }
-  //   }
-  // }, [])
+      // Subscribe to the 'chainChanged' event
+      window.ethereum.on("chainChanged", handleChainChanged)
+    }
+
+    // Clean up the event listener when the component is unmounted
+    return () => {
+      if (typeof window.ethereum !== "undefined") {
+        window.ethereum.removeListener("chainChanged", handleChainChanged)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (chainId !== 5) {
+      setIsConnected(false)
+    }
+  }, [chainId])
 
   async function connectToPolygon() {
     updateAccountCenter({ enabled: false })
@@ -373,7 +401,11 @@ const Home: NextPage = () => {
               </Button>
             )}
             <Divider mt={2} mb={1} />
-            <Text>Approved for: {approvedAmount} USDC</Text>
+            {isConnected ? (
+              <Text>Approved for: {approvedAmount} USDC</Text>
+            ) : (
+              <Text></Text>
+            )}
           </Box>
         </Flex>
       </Box>

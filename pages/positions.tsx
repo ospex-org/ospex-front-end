@@ -157,23 +157,25 @@ const Positions = () => {
         flexDirection="column"
         alignContent="center"
         m="0 auto"
-        maxW="fit-content"
+        // maxW="fit-content"
       >
-        <Box>
-          <Center>
+        <Center>
+          <Box>
             <Text
               textTransform="none"
               fontWeight="normal"
               fontSize="24px"
-              pt={5}
-              pb={30}
+              pt={35}
+              pb={5}
               color={useColorModeValue("black", "white")}
             >
               Positions
             </Text>
-          </Center>
-        </Box>
-        <Box>{RenderCards()}</Box>
+          </Box>
+        </Center>
+        <Center>
+          <Box>{RenderCards()}</Box>
+        </Center>
       </Box>
       <Center>
         <Footer />

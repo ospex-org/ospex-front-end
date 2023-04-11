@@ -1,6 +1,6 @@
 import { Contract, ethers } from "ethers"
 import type { NextPage } from "next"
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect } from "react"
 import {
   Box,
   Heading,
@@ -402,7 +402,16 @@ const Home: NextPage = () => {
             )}
             <Divider mt={2} mb={1} />
             {isConnected ? (
-              <Text>Approved for: {approvedAmount} USDC</Text>
+              <Text fontSize="sm" letterSpacing="wide">
+                Balance: {balance} USDC
+              </Text>
+            ) : (
+              <Text></Text>
+            )}
+            {isConnected ? (
+              <Text fontSize="sm" letterSpacing="wide">
+                Approved: {approvedAmount} USDC
+              </Text>
             ) : (
               <Text></Text>
             )}

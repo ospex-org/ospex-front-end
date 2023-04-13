@@ -12,7 +12,6 @@ import React, { useState, useContext } from "react"
 import { ProviderContext } from "../contexts/ProviderContext"
 import { SpeculationCard } from "../components/Speculation"
 import { SearchIcon } from "@chakra-ui/icons"
-import { Footer } from "../components/Footer"
 
 const PrimaryTable = () => {
   const { contests, speculations, positions } = useContext(ProviderContext)
@@ -85,7 +84,7 @@ const PrimaryTable = () => {
               textTransform="none"
               fontWeight="normal"
               fontSize="24px"
-              pt={35}
+              pt={50}
               pb={5}
               color={useColorModeValue("black", "white")}
             >
@@ -114,9 +113,6 @@ const PrimaryTable = () => {
           <Accordion>{RenderCards()}</Accordion>
         </Center>
       </Box>
-      <Center>
-        <Footer />
-      </Center>
     </>
   )
 }

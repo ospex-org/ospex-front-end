@@ -12,6 +12,7 @@ import {
   IconButton,
   Divider,
   Hide,
+  Center,
 } from "@chakra-ui/react"
 import { MoonIcon, SunIcon } from "@chakra-ui/icons"
 import { JsonRpcProvider } from "@ethersproject/providers"
@@ -24,7 +25,7 @@ import {
   useWallets,
 } from "@web3-onboard/react"
 import injectedModule from "@web3-onboard/injected-wallets"
-import coinbaseWalletModule from "@web3-onboard/coinbase"
+import walletConnectModule from "@web3-onboard/walletconnect"
 
 import PrimaryTable from "./table"
 import {
@@ -38,6 +39,7 @@ import { contest, speculation, position } from "../constants/interface"
 import Positions from "./positions"
 import { contestsGteCurrentTime } from "../constants/queries"
 import { useQuery } from "@apollo/client"
+import { Footer } from "../components/Footer"
 
 declare global {
   interface Window {
@@ -47,10 +49,10 @@ declare global {
 }
 
 const injected = injectedModule()
-const coinbase = coinbaseWalletModule()
+const walletConnect = walletConnectModule()
 
 const web3Onboard = init({
-  wallets: [injected, coinbase],
+  wallets: [injected, walletConnect],
   chains: [
     {
       id: "0x1",
@@ -290,8 +292,12 @@ const Home: NextPage = () => {
 
   async function connectToPolygon() {
     updateAccountCenter({ enabled: false })
-    await connect()
-    await setChain({ chainId: "0x5" })
+    try {
+      await connect()
+      await setChain({ chainId: "0x5" })
+    } catch (error) {
+      console.error("An error has occurred:", error)
+    }
     setIsConnected(true)
   }
 
@@ -324,7 +330,7 @@ const Home: NextPage = () => {
       >
         <Flex
           as="header"
-          align="center"
+          align="start"
           justify="space-between"
           wrap="wrap"
           padding={3}
@@ -334,7 +340,7 @@ const Home: NextPage = () => {
           width="100%"
           zIndex="1"
         >
-          <Flex align="center">
+          <Flex align="center" paddingTop={5}>
             <Heading fontSize="21px" mr={1}>
               ospex.org <Hide below="md">|</Hide>
             </Heading>
@@ -402,14 +408,21 @@ const Home: NextPage = () => {
             )}
             <Divider mt={2} mb={1} />
             {isConnected ? (
-              <Text fontSize="sm" letterSpacing="wide">
+              <Text fontSize="sm" letterSpacing="wide" align="right">
+                {address.slice(0, 6)}...{address.slice(-4)}
+              </Text>
+            ) : (
+              <Text></Text>
+            )}
+            {isConnected ? (
+              <Text fontSize="sm" letterSpacing="wide" align="right">
                 Balance: {balance} USDC
               </Text>
             ) : (
               <Text></Text>
             )}
             {isConnected ? (
-              <Text fontSize="sm" letterSpacing="wide">
+              <Text fontSize="sm" letterSpacing="wide" align="right">
                 Approved: {approvedAmount} USDC
               </Text>
             ) : (
@@ -420,6 +433,9 @@ const Home: NextPage = () => {
       </Box>
       <Box mt={20}>{pageContests ? <PrimaryTable /> : <Positions />}</Box>
       <Box pb={{ base: 8, md: 10 }} />
+      <Center>
+        <Footer />
+      </Center>
     </ProviderContext.Provider>
   )
 }

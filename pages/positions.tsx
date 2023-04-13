@@ -11,7 +11,6 @@ import { ProviderContext } from "../contexts/ProviderContext"
 import { useState, useEffect } from "react"
 import { addressSpecificPositions } from "../constants/queries"
 import { useQuery } from "@apollo/client"
-import { Footer } from "../components/Footer"
 
 const Positions = () => {
   const { address } = useContext(ProviderContext)
@@ -153,19 +152,14 @@ const Positions = () => {
 
   return (
     <>
-      <Box
-        flexDirection="column"
-        alignContent="center"
-        m="0 auto"
-        // maxW="fit-content"
-      >
+      <Box flexDirection="column" alignContent="center" m="0 auto">
         <Center>
           <Box>
             <Text
               textTransform="none"
               fontWeight="normal"
               fontSize="24px"
-              pt={35}
+              pt={50}
               pb={5}
               color={useColorModeValue("black", "white")}
             >
@@ -177,9 +171,6 @@ const Positions = () => {
           <Box>{RenderCards()}</Box>
         </Center>
       </Box>
-      <Center>
-        <Footer />
-      </Center>
     </>
   )
 }

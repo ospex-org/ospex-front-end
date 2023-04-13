@@ -204,89 +204,102 @@ export function PositionCard({
   }
 
   return (
-    <Flex alignItems="center" wrap="wrap" w="100%" ml="5" mb="5">
-      <Box
-        maxW="sm"
-        minW="sm"
-        borderWidth="1px"
-        borderRadius="lg"
-        overflow="hidden"
-      >
-        <Box p="4">
-          <Box display="flex" alignItems="baseline">
-            <Badge borderRadius="full" px="2" colorScheme="gray">
-              {contest?.league}
-            </Badge>
-          </Box>
-          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" mb="0.5">
-            {/* Denver Broncos at Seattle Seahawks */}
-            {`${contest?.awayTeam} at ${contest?.homeTeam}`}
-          </Box>
+    <>
+      <Box flexDirection="column" alignContent="center" m="0 auto">
+        <Flex alignItems="center" wrap="wrap" w="100%" mb="5">
           <Box
-            color="gray.500"
-            fontWeight="semibold"
-            letterSpacing="wide"
-            fontSize="xs"
-            mb="0.5"
+            width="380px"
+            maxW="md"
+            borderWidth="1px"
+            borderRadius="lg"
+            overflow="hidden"
           >
-            {/* Sep 12, 2022, 5:15 PM PST */}
-            {contest?.eventTime
-              ? new Date(contest?.eventTime * 1000).toLocaleString("en-EN", {
-                  timeStyle: "short",
-                  dateStyle: "medium",
-                })
-              : ""}{" "}
-            PST
-          </Box>
-          <Box fontWeight="bold">
-            {/* Seattle Seahawks win */}
-            {speculationDescriptions
-              ? position.positionType === "Away" ||
-                position.positionType === "Over"
-                ? speculationDescriptions.upperSpeculationTranslation
-                : speculationDescriptions.lowerSpeculationTranslation
-              : ""}
-          </Box>
-          <Box mb="0.5">
-            <>
-              <Text fontSize="sm" fontWeight="semibold">
-                {position
-                  ? `Speculated: ${Number(
-                      BigInt(position.amount) / BigInt(1e18)
-                    ).toFixed(2)} USDC`
-                  : ""}
-              </Text>
-              {BigInt(position.contributedUponCreation) > 0 ? (
-                <Text fontSize="sm" fontWeight="semibold">
-                  {`Contributed: ${Number(
-                    BigInt(position.contributedUponCreation) / BigInt(1e18)
-                  ).toFixed(2)} USDC`}
-                </Text>
-              ) : (
-                ""
-              )}
-              <Divider p={1} mb={1} />
-              <Box fontWeight="semibold" as="h4" lineHeight="tight">
-                {contest?.awayScore &&
-                contest?.homeScore &&
-                contest?.contestStatus === "Scored" ? (
-                  <>
-                    <Text>
-                      {contest?.awayScore > contest?.homeScore
-                        ? `${contest?.awayTeam} ${contest?.awayScore}, ${contest?.homeTeam} ${contest?.homeScore}`
-                        : `${contest?.homeTeam} ${contest?.homeScore}, ${contest?.awayTeam} ${contest?.awayScore}`}
-                    </Text>
-                    <Divider p={1} mb={1} />
-                  </>
-                ) : (
-                  ""
-                )}
+            <Box p="4">
+              <Box display="flex" alignItems="baseline">
+                <Badge borderRadius="full" px="2" colorScheme="gray">
+                  {contest?.league}
+                </Badge>
               </Box>
-              {outcome()}
-            </>
+              <Box
+                mt="1"
+                fontWeight="semibold"
+                as="h4"
+                lineHeight="tight"
+                mb="0.5"
+              >
+                {/* Denver Broncos at Seattle Seahawks */}
+                {`${contest?.awayTeam} at ${contest?.homeTeam}`}
+              </Box>
+              <Box
+                color="gray.500"
+                fontWeight="semibold"
+                letterSpacing="wide"
+                fontSize="xs"
+                mb="0.5"
+              >
+                {/* Sep 12, 2022, 5:15 PM PST */}
+                {contest?.eventTime
+                  ? new Date(contest?.eventTime * 1000).toLocaleString(
+                      "en-EN",
+                      {
+                        timeStyle: "short",
+                        dateStyle: "medium",
+                      }
+                    )
+                  : ""}{" "}
+                PST
+              </Box>
+              <Box fontWeight="bold">
+                {/* Seattle Seahawks win */}
+                {speculationDescriptions
+                  ? position.positionType === "Away" ||
+                    position.positionType === "Over"
+                    ? speculationDescriptions.upperSpeculationTranslation
+                    : speculationDescriptions.lowerSpeculationTranslation
+                  : ""}
+              </Box>
+              <Box mb="0.5">
+                <>
+                  <Text fontSize="sm" fontWeight="semibold">
+                    {position
+                      ? `Speculated: ${Number(
+                          BigInt(position.amount) / BigInt(1e18)
+                        ).toFixed(2)} USDC`
+                      : ""}
+                  </Text>
+                  {BigInt(position.contributedUponCreation) > 0 ? (
+                    <Text fontSize="sm" fontWeight="semibold">
+                      {`Contributed: ${Number(
+                        BigInt(position.contributedUponCreation) / BigInt(1e18)
+                      ).toFixed(2)} USDC`}
+                    </Text>
+                  ) : (
+                    ""
+                  )}
+                  <Divider p={1} mb={1} />
+                  <Box fontWeight="semibold" as="h4" lineHeight="tight">
+                    {contest?.awayScore &&
+                    contest?.homeScore &&
+                    contest?.contestStatus === "Scored" ? (
+                      <>
+                        <Text>
+                          {contest?.awayScore > contest?.homeScore
+                            ? `${contest?.awayTeam} ${contest?.awayScore}, ${contest?.homeTeam} ${contest?.homeScore}`
+                            : `${contest?.homeTeam} ${contest?.homeScore}, ${contest?.awayTeam} ${contest?.awayScore}`}
+                        </Text>
+                        <Divider p={1} mb={1} />
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </Box>
+                  {outcome()}
+                </>
+              </Box>
+            </Box>
           </Box>
-        </Box>
+        </Flex>
       </Box>
-    </Flex>
+    </>
   )
 }

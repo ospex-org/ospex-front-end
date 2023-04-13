@@ -34,6 +34,7 @@ export function AccordianContent({
     provider,
     USDCContract,
     cfpContract,
+    isConnected,
     balance,
     approvedAmount,
     setApprovedAmount,
@@ -121,7 +122,10 @@ export function AccordianContent({
               isLoading={isWaiting}
               loadingText="Awaiting confirmation"
               disabled={
-                !provider || isWaiting || balance < +amount + +contribution
+                !provider ||
+                !isConnected ||
+                isWaiting ||
+                balance < +amount + +contribution
               }
               onClick={() => {
                 if (provider && !isApproved) {

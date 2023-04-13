@@ -5,7 +5,6 @@ import {
   IconButton,
   useColorModeValue,
 } from "@chakra-ui/react"
-import Link from "next/link"
 import { FaGithub } from "react-icons/fa"
 
 export function Footer() {

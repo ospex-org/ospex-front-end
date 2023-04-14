@@ -295,10 +295,10 @@ const Home: NextPage = () => {
     try {
       await connect()
       await setChain({ chainId: "0x5" })
+      setIsConnected(true)
     } catch (error) {
       console.error("An error has occurred:", error)
     }
-    setIsConnected(true)
   }
 
   return (

@@ -81,11 +81,14 @@ export function SpeculationCard({
               mb="0.5"
             >
               {/* Sep 12, 2022, 5:15 PM PST */}
-              {contest && contest.eventTime
-                ? new Date(contest.eventTime * 1000).toLocaleString("en-EN", {
-                    timeStyle: "short",
-                    dateStyle: "medium",
-                  })
+              {speculation && speculation.lockTime
+                ? new Date(speculation.lockTime * 1000).toLocaleString(
+                    "en-EN",
+                    {
+                      timeStyle: "short",
+                      dateStyle: "medium",
+                    }
+                  )
                 : ""}{" "}
               PST
             </Box>

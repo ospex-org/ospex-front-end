@@ -133,7 +133,7 @@ export function AccordianContent({
                     try {
                       const approveTx = await USDCContract!.approve(
                         CFPv1Address,
-                        (total * 1e18).toString()
+                        (total * 1e6).toString()
                       )
                       setIsWaiting(true)
                       await approveTx.wait()
@@ -150,8 +150,8 @@ export function AccordianContent({
                       try {
                         const approveTx = await cfpContract!.createPosition(
                           speculation.id,
-                          ethers.utils.parseUnits(amount.toString(), 18),
-                          ethers.utils.parseUnits(contribution.toString(), 18),
+                          ethers.utils.parseUnits(amount.toString(), 6),
+                          ethers.utils.parseUnits(contribution.toString(), 6),
                           speculationPositionTypeEnum
                         )
                         setIsWaiting(true)

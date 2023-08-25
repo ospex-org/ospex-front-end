@@ -80,6 +80,7 @@ const Positions = () => {
             contestCreator: position.speculation.contest.contestCreator,
             rundownId: position.speculation.contest.rundownId,
             sportspageId: position.speculation.contest.sportspageId,
+            jsonoddsId: position.speculation.contest.jsonoddsId,
             leagueId: position.speculation.contest.leagueId,
             league: position.speculation.contest.league,
             awayTeamId: position.speculation.contest.awayTeamId,

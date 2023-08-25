@@ -12,6 +12,7 @@ export interface contest {
   contestCreator: string,
   rundownId: string,
   sportspageId: string,
+  jsonoddsId: string,
   leagueId: number,
   league: string,
   awayTeamId: number,
@@ -39,7 +40,7 @@ export interface speculation {
 
 export interface position {
   id: string,
-  speculationId: string
+  speculationId: string,
   userId: string,
   amount: number,
   contributedUponCreation: number,
@@ -77,6 +78,7 @@ export interface userPosition {
       contestCreator: string
       rundownId: string
       sportspageId: string
+      jsonoddsId: string
       leagueId: number
       league: string
       awayTeamId: number

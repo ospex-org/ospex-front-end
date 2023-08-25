@@ -45,7 +45,7 @@ export function PositionCard({
           Number(BigInt(speculation?.upperAmount)) === 0 ||
           Number(BigInt(speculation?.lowerAmount)) === 0
         ) {
-          return Number(BigInt(position.amount) / BigInt(1e18))
+          return Number(BigInt(position.amount) / BigInt(1e6))
         }
         // upper scenario; away wins or over wins
         if (
@@ -56,7 +56,7 @@ export function PositionCard({
             ((BigInt(position.amount) / BigInt(speculation!.upperAmount)) *
               (BigInt(speculation!.upperAmount) +
                 BigInt(speculation!.lowerAmount))) /
-              BigInt(1e18)
+              BigInt(1e6)
           ).toFixed(2)
         }
         // lower scenario; home wins or under wins
@@ -68,7 +68,7 @@ export function PositionCard({
             ((BigInt(position.amount) / BigInt(speculation!.lowerAmount)) *
               (BigInt(speculation!.upperAmount) +
                 BigInt(speculation!.lowerAmount))) /
-              BigInt(1e18)
+              BigInt(1e6)
           ).toFixed(2)
         }
       }
@@ -150,14 +150,14 @@ export function PositionCard({
       // contest is over and user won and has already claimed and did not contribute
       if (
         position.claimed &&
-        Number(BigInt(position.contributedUponCreation) / BigInt(1e18)) +
-          Number(BigInt(position.contributedUponClaim) / BigInt(1e18)) <=
+        Number(BigInt(position.contributedUponCreation) / BigInt(1e6)) +
+          Number(BigInt(position.contributedUponClaim) / BigInt(1e6)) <=
           0
       ) {
         return (
           <Text fontSize="sm" fontWeight="semibold">
             Successful claim:{" "}
-            {Number(BigInt(position.amountClaimed) / BigInt(1e18)).toFixed(2)}{" "}
+            {Number(BigInt(position.amountClaimed) / BigInt(1e6)).toFixed(2)}{" "}
             USDC
           </Text>
         )
@@ -165,23 +165,22 @@ export function PositionCard({
 
       if (
         position.claimed &&
-        Number(BigInt(position.contributedUponCreation) / BigInt(1e18)) +
-          Number(BigInt(position.contributedUponClaim) / BigInt(1e18)) >
+        Number(BigInt(position.contributedUponCreation) / BigInt(1e6)) +
+          Number(BigInt(position.contributedUponClaim) / BigInt(1e6)) >
           0
       ) {
         return (
           <>
             <Text fontSize="sm" fontWeight="semibold">
               Successful claim:{" "}
-              {Number(BigInt(position.amountClaimed) / BigInt(1e18)).toFixed(2)}{" "}
+              {Number(BigInt(position.amountClaimed) / BigInt(1e6)).toFixed(2)}{" "}
               USDC
             </Text>
             <Text fontSize="sm" fontWeight="semibold">
               Contributed:{" "}
               {(
-                Number(
-                  BigInt(position.contributedUponCreation) / BigInt(1e18)
-                ) + Number(BigInt(position.contributedUponClaim) / BigInt(1e18))
+                Number(BigInt(position.contributedUponCreation) / BigInt(1e6)) +
+                Number(BigInt(position.contributedUponClaim) / BigInt(1e6))
               ).toFixed(2)}{" "}
               USDC
             </Text>
@@ -263,14 +262,14 @@ export function PositionCard({
                   <Text fontSize="sm" fontWeight="semibold">
                     {position
                       ? `Speculated: ${Number(
-                          BigInt(position.amount) / BigInt(1e18)
+                          BigInt(position.amount) / BigInt(1e6)
                         ).toFixed(2)} USDC`
                       : ""}
                   </Text>
                   {BigInt(position.contributedUponCreation) > 0 ? (
                     <Text fontSize="sm" fontWeight="semibold">
                       {`Contributed: ${Number(
-                        BigInt(position.contributedUponCreation) / BigInt(1e18)
+                        BigInt(position.contributedUponCreation) / BigInt(1e6)
                       ).toFixed(2)} USDC`}
                     </Text>
                   ) : (

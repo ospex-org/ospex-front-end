@@ -9,6 +9,7 @@ export const contestsGteCurrentTime = gql`
       contestCreator
       rundownId
       sportspageId
+      jsonoddsId
       leagueId
       league
       awayTeamId
@@ -74,6 +75,7 @@ export const addressSpecificPositions = gql`
           contestCreator
           rundownId
           sportspageId
+          jsonoddsId
           leagueId
           league
           awayTeamId

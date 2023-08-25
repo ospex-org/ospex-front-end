@@ -162,7 +162,7 @@ const Home: NextPage = () => {
         }
       } else {
         const addresses = await provider.listAccounts()
-        if (addresses.length && chainId === 5) {
+        if (addresses.length && chainId === 80001) {
           setIsConnected(true)
           setAddress(addresses[0].toLowerCase())
         }
@@ -179,17 +179,19 @@ const Home: NextPage = () => {
   }, [isConnected, provider, chainId])
 
   useEffect(() => {
-    if (provider && USDCContract && isConnected && chainId === 5) {
+    if (provider && USDCContract && isConnected && chainId === 80001) {
       ;(async () => {
         try {
-          const currentAllowance = ethers.utils.formatEther(
+          const currentAllowance = ethers.utils.formatUnits(
             await USDCContract.allowance(
               provider.getSigner().getAddress(),
               CFPv1Address
-            )
+            ),
+            6
           )
-          const currentBalance = ethers.utils.formatEther(
-            await USDCContract.balanceOf(provider.getSigner().getAddress())
+          const currentBalance = ethers.utils.formatUnits(
+            await USDCContract.balanceOf(provider.getSigner().getAddress()),
+            6
           )
           setBalance(+currentBalance)
           setApprovedAmount(+currentAllowance)
@@ -227,15 +229,17 @@ const Home: NextPage = () => {
   }, [loading, error, data])
 
   useEffect(() => {
-    if (provider && USDCContract && isConnected && chainId === 5) {
+    if (provider && USDCContract && isConnected && chainId === 80001) {
       const fetchAndUpdateData = async () => {
         try {
           const signerAddress = await provider.getSigner().getAddress()
-          const currentAllowance = ethers.utils.formatEther(
-            await USDCContract.allowance(signerAddress, CFPv1Address)
+          const currentAllowance = ethers.utils.formatUnits(
+            await USDCContract.allowance(signerAddress, CFPv1Address),
+            6
           )
-          const currentBalance = ethers.utils.formatEther(
-            await USDCContract.balanceOf(signerAddress)
+          const currentBalance = ethers.utils.formatUnits(
+            await USDCContract.balanceOf(signerAddress),
+            6
           )
           setBalance(+currentBalance)
           setApprovedAmount(+currentAllowance)
@@ -269,7 +273,7 @@ const Home: NextPage = () => {
         .then((initialChainId: string) => setChainId(Number(initialChainId)))
         .catch((error: Error) => {
           console.error("Failed to get initial chainId:", error)
-          setChainId(5)
+          setChainId(80001)
         })
 
       // Subscribe to the 'chainChanged' event
@@ -285,7 +289,7 @@ const Home: NextPage = () => {
   }, [])
 
   useEffect(() => {
-    if (chainId !== 5) {
+    if (chainId !== 80001) {
       setIsConnected(false)
     }
   }, [chainId])
@@ -294,7 +298,7 @@ const Home: NextPage = () => {
     updateAccountCenter({ enabled: false })
     try {
       await connect()
-      await setChain({ chainId: "0x5" })
+      await setChain({ chainId: "0x80001" })
       setIsConnected(true)
     } catch (error) {
       console.error("An error has occurred:", error)

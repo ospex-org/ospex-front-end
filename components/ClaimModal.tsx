@@ -107,8 +107,8 @@ export function ClaimModal({
                     try {
                       const claimTx = await cfpContract!.claim(
                         Number(position.speculationId),
-                        ethers.utils.parseUnits(contribution.toString(), 18)
-                      ) // change to 6 */
+                        ethers.utils.parseUnits(contribution.toString(), 6)
+                      )
                       isCloseParent()
                       setIsWaiting(true)
                       await claimTx.wait()

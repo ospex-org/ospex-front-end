@@ -112,6 +112,7 @@ export function ClaimModal({
                       isCloseParent()
                       setIsWaiting(true)
                       await claimTx.wait()
+                      setIsWaiting(false)
                     } catch (error) {
                       console.error("an error has occurred:", error)
                     }

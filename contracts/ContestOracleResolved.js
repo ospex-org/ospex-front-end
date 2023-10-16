@@ -3,17 +3,17 @@ export const ContestOracleResolvedAbi = [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "oracle",
+				"name": "_router",
 				"type": "address"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "_donId",
+				"type": "bytes32"
 			},
 			{
 				"internalType": "address",
 				"name": "linkTokenAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "linkBillingRegistryProxyAddress",
 				"type": "address"
 			},
 			{
@@ -57,6 +57,11 @@ export const ContestOracleResolvedAbi = [
 		"type": "error"
 	},
 	{
+		"inputs": [],
+		"name": "IncorrectHash",
+		"type": "error"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -69,12 +74,17 @@ export const ContestOracleResolvedAbi = [
 	},
 	{
 		"inputs": [],
-		"name": "RequestIsAlreadyPending",
+		"name": "NoInlineSecrets",
 		"type": "error"
 	},
 	{
 		"inputs": [],
-		"name": "RequestIsNotPending",
+		"name": "OnlyRouterCanFulfill",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "ReentrancyGuardReentrantCall",
 		"type": "error"
 	},
 	{
@@ -89,11 +99,6 @@ export const ContestOracleResolvedAbi = [
 		"type": "error"
 	},
 	{
-		"inputs": [],
-		"name": "SenderIsNotRegistry",
-		"type": "error"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -102,6 +107,17 @@ export const ContestOracleResolvedAbi = [
 			}
 		],
 		"name": "TimerHasNotExpired",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "requestId",
+				"type": "bytes32"
+			}
+		],
+		"name": "UnexpectedRequestID",
 		"type": "error"
 	},
 	{
@@ -177,31 +193,6 @@ export const ContestOracleResolvedAbi = [
 		"inputs": [
 			{
 				"indexed": true,
-				"internalType": "bytes32",
-				"name": "requestId",
-				"type": "bytes32"
-			},
-			{
-				"indexed": false,
-				"internalType": "bytes",
-				"name": "result",
-				"type": "bytes"
-			},
-			{
-				"indexed": false,
-				"internalType": "bytes",
-				"name": "err",
-				"type": "bytes"
-			}
-		],
-		"name": "OCRResponse",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
 				"internalType": "address",
 				"name": "from",
 				"type": "address"
@@ -259,6 +250,31 @@ export const ContestOracleResolvedAbi = [
 			}
 		],
 		"name": "RequestSent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "requestId",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes",
+				"name": "response",
+				"type": "bytes"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes",
+				"name": "err",
+				"type": "bytes"
+			}
+		],
+		"name": "Response",
 		"type": "event"
 	},
 	{
@@ -351,19 +367,6 @@ export const ContestOracleResolvedAbi = [
 	},
 	{
 		"inputs": [],
-		"name": "LINKMANAGER_ROLE",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "SCOREMANAGER_ROLE",
 		"outputs": [
 			{
@@ -378,6 +381,19 @@ export const ContestOracleResolvedAbi = [
 	{
 		"inputs": [],
 		"name": "SOURCEMANAGER_ROLE",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "SUBSCRIPTIONMANAGER_ROLE",
 		"outputs": [
 			{
 				"internalType": "bytes32",
@@ -551,7 +567,7 @@ export const ContestOracleResolvedAbi = [
 			},
 			{
 				"internalType": "bytes",
-				"name": "secrets",
+				"name": "encryptedSecretsUrls",
 				"type": "bytes"
 			},
 			{
@@ -584,66 +600,13 @@ export const ContestOracleResolvedAbi = [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"components": [
-					{
-						"internalType": "enum Functions.Location",
-						"name": "codeLocation",
-						"type": "uint8"
-					},
-					{
-						"internalType": "enum Functions.Location",
-						"name": "secretsLocation",
-						"type": "uint8"
-					},
-					{
-						"internalType": "enum Functions.CodeLanguage",
-						"name": "language",
-						"type": "uint8"
-					},
-					{
-						"internalType": "string",
-						"name": "source",
-						"type": "string"
-					},
-					{
-						"internalType": "bytes",
-						"name": "secrets",
-						"type": "bytes"
-					},
-					{
-						"internalType": "string[]",
-						"name": "args",
-						"type": "string[]"
-					}
-				],
-				"internalType": "struct Functions.Request",
-				"name": "req",
-				"type": "tuple"
-			},
-			{
-				"internalType": "uint64",
-				"name": "subscriptionId",
-				"type": "uint64"
-			},
-			{
-				"internalType": "uint32",
-				"name": "gasLimit",
-				"type": "uint32"
-			},
-			{
-				"internalType": "uint256",
-				"name": "gasPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "estimateCost",
+		"inputs": [],
+		"name": "donId",
 		"outputs": [
 			{
-				"internalType": "uint96",
+				"internalType": "bytes32",
 				"name": "",
-				"type": "uint96"
+				"type": "bytes32"
 			}
 		],
 		"stateMutability": "view",
@@ -700,19 +663,6 @@ export const ContestOracleResolvedAbi = [
 				"internalType": "struct Contest",
 				"name": "",
 				"type": "tuple"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getDONPublicKey",
-		"outputs": [
-			{
-				"internalType": "bytes",
-				"name": "",
-				"type": "bytes"
 			}
 		],
 		"stateMutability": "view",
@@ -804,32 +754,6 @@ export const ContestOracleResolvedAbi = [
 	},
 	{
 		"inputs": [],
-		"name": "latestError",
-		"outputs": [
-			{
-				"internalType": "bytes",
-				"name": "",
-				"type": "bytes"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "latestResponse",
-		"outputs": [
-			{
-				"internalType": "bytes",
-				"name": "",
-				"type": "bytes"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "linkDenominator",
 		"outputs": [
 			{
@@ -910,6 +834,58 @@ export const ContestOracleResolvedAbi = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "router",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "s_lastError",
+		"outputs": [
+			{
+				"internalType": "bytes",
+				"name": "",
+				"type": "bytes"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "s_lastRequestId",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "s_lastResponse",
+		"outputs": [
+			{
+				"internalType": "bytes",
+				"name": "",
+				"type": "bytes"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -923,7 +899,7 @@ export const ContestOracleResolvedAbi = [
 			},
 			{
 				"internalType": "bytes",
-				"name": "secrets",
+				"name": "encryptedSecretsUrls",
 				"type": "bytes"
 			},
 			{
@@ -981,6 +957,19 @@ export const ContestOracleResolvedAbi = [
 	{
 		"inputs": [
 			{
+				"internalType": "bytes32",
+				"name": "newDonId",
+				"type": "bytes32"
+			}
+		],
+		"name": "setDonId",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "bytes4",
 				"name": "interfaceId",
 				"type": "bytes4"
@@ -1019,6 +1008,19 @@ export const ContestOracleResolvedAbi = [
 			}
 		],
 		"name": "updateLinkDenominator",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_router",
+				"type": "address"
+			}
+		],
+		"name": "updateRouterAddress",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

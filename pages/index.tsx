@@ -32,6 +32,8 @@ import {
   CFPv1Address,
   JsonRpcProviderUrl,
   USDCAddress,
+  ContestCreatorAddress,
+  SpeculationCreatorAddress,
 } from "../constants/addresses"
 import { CFPv1Abi } from "../contracts/CFPv1"
 import { IERC20Abi } from "../contracts/IERC20"
@@ -209,16 +211,23 @@ const Home: NextPage = () => {
       const positionsFromQuery: position[] = []
       if (data && !loading && !error) {
         await data.contests.forEach((contest: contest) => {
-          contestsFromQuery.push(contest)
-          if (contest.speculations) {
-            contest.speculations.forEach((speculation: speculation) => {
-              speculationsFromQuery.push(speculation)
-              if (speculation.positions) {
-                speculation.positions.forEach((position: position) => {
-                  positionsFromQuery.push(position)
-                })
-              }
-            })
+          if (contest.contestCreator === ContestCreatorAddress.toLowerCase()) {
+            contestsFromQuery.push(contest)
+            if (contest.speculations) {
+              contest.speculations.forEach((speculation: speculation) => {
+                if (
+                  speculation.speculationCreator ===
+                  SpeculationCreatorAddress.toLowerCase()
+                ) {
+                  speculationsFromQuery.push(speculation)
+                  if (speculation.positions) {
+                    speculation.positions.forEach((position: position) => {
+                      positionsFromQuery.push(position)
+                    })
+                  }
+                }
+              })
+            }
           }
         })
         setContests(contestsFromQuery)

@@ -35,3 +35,5 @@ export const SpeculationTotalAddress = '0xE1F529063b5AFb80870437Fa0B5A274B07f0f3
 export const SpeculationMoneylineAddress = '0xFD4C25eCf6BD71715e2d48265AF511Ab609ce29d'
 export const USDCAddress = '0xd33602ce228adbc90625e4fc8071aae0cad11fe9'
 export const JsonRpcProviderUrl = 'https://polygon-mumbai.g.alchemy.com/v2/8dx7bOITLIXUAIwpMIy_rIGzdlES8hhl'
+export const ContestCreatorAddress = '0xA8eb19F9B7c2b2611C1279423A0CB2aee3735320'
+export const SpeculationCreatorAddress = '0xA8eb19F9B7c2b2611C1279423A0CB2aee3735320'

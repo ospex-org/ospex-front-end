@@ -344,7 +344,7 @@ const Home: NextPage = () => {
           width="100%"
           zIndex="1"
         >
-          <Flex align="center" paddingTop={5}>
+          <Flex align="center" paddingTop={2}>
             <Heading fontSize="21px" mr={1}>
               ospex.org <Hide below="md">|</Hide>
             </Heading>

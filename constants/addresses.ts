@@ -19,10 +19,19 @@ export const JsonRpcProviderUrl = 'https://eth-goerli.g.alchemy.com/v2/987gt3TTk
 // export const JsonRpcProviderUrl = 'https://polygon-mumbai.g.alchemy.com/v2/8dx7bOITLIXUAIwpMIy_rIGzdlES8hhl'
 
 // polygon mumbai w/ functions upgrade to 8.19 + new functions code with changes to secrets and DON public key (or lack thereof)
-export const ContestOracleResolvedAddress = '0x84e07fF9B7eA7933554C33f9644B8AdAB6b531e2'
-export const CFPv1Address = '0x830f55Ae31D3CdDA4ff06805C01b621b57C7B4f6'
-export const SpeculationSpreadAddress = '0xbFD75B69E14D2071288D49e05691AEAE99d1B212'
-export const SpeculationTotalAddress = '0x177DB22cc0dd946Fe65B9C5dECaAdaDC0cCd0B70'
-export const SpeculationMoneylineAddress = '0xd9DE2d788A9ED0dd0F41B4BE4d3b807EFdACb041'
+// export const ContestOracleResolvedAddress = '0x84e07fF9B7eA7933554C33f9644B8AdAB6b531e2'
+// export const CFPv1Address = '0x830f55Ae31D3CdDA4ff06805C01b621b57C7B4f6'
+// export const SpeculationSpreadAddress = '0xbFD75B69E14D2071288D49e05691AEAE99d1B212'
+// export const SpeculationTotalAddress = '0x177DB22cc0dd946Fe65B9C5dECaAdaDC0cCd0B70'
+// export const SpeculationMoneylineAddress = '0xd9DE2d788A9ED0dd0F41B4BE4d3b807EFdACb041'
+// export const USDCAddress = '0xd33602ce228adbc90625e4fc8071aae0cad11fe9'
+// export const JsonRpcProviderUrl = 'https://polygon-mumbai.g.alchemy.com/v2/8dx7bOITLIXUAIwpMIy_rIGzdlES8hhl'
+
+// polygon mumbai w/ functions upgrade to 8.19 + new functions code with changes to secrets and DON public key (or lack thereof) (take 2)
+export const ContestOracleResolvedAddress = '0x864DfEce94CC2278fF9c972647E478D8248B4234'
+export const CFPv1Address = '0x71d910d60264FE09bf2ea668467467d50b7916f8'
+export const SpeculationSpreadAddress = '0xf102dd2760d9b229e06f36b127f2824FEE96cBdF'
+export const SpeculationTotalAddress = '0xE1F529063b5AFb80870437Fa0B5A274B07f0f300'
+export const SpeculationMoneylineAddress = '0xFD4C25eCf6BD71715e2d48265AF511Ab609ce29d'
 export const USDCAddress = '0xd33602ce228adbc90625e4fc8071aae0cad11fe9'
 export const JsonRpcProviderUrl = 'https://polygon-mumbai.g.alchemy.com/v2/8dx7bOITLIXUAIwpMIy_rIGzdlES8hhl'

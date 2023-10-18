@@ -3,6 +3,204 @@ export const CFPv1Abi = [
 		"inputs": [
 			{
 				"internalType": "address",
+				"name": "_speculationScorer",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_description",
+				"type": "string"
+			}
+		],
+		"name": "addSpeculationType",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_newMax",
+				"type": "uint256"
+			}
+		],
+		"name": "changeMaxSpeculationAmount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_newVoidTime",
+				"type": "uint256"
+			}
+		],
+		"name": "changeVoidTime",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_speculationId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_contributionAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "claim",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_speculationId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_speculationAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_contributionAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "enum PositionType",
+				"name": "_positionType",
+				"type": "uint8"
+			}
+		],
+		"name": "createPosition",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_contestId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint32",
+				"name": "_lockTime",
+				"type": "uint32"
+			},
+			{
+				"internalType": "address",
+				"name": "_speculationScorer",
+				"type": "address"
+			},
+			{
+				"internalType": "int32",
+				"name": "_theNumber",
+				"type": "int32"
+			}
+		],
+		"name": "createSpeculation",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_speculationId",
+				"type": "uint256"
+			}
+		],
+		"name": "forfeitSpeculation",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "grantRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_speculationId",
+				"type": "uint256"
+			}
+		],
+		"name": "lockSpeculation",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "renounceRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "revokeRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
 				"name": "_DAOAddress",
 				"type": "address"
 			},
@@ -45,6 +243,19 @@ export const CFPv1Abi = [
 		"inputs": [],
 		"name": "ReentrancyGuardReentrantCall",
 		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_speculationId",
+				"type": "uint256"
+			}
+		],
+		"name": "scoreSpeculation",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -407,6 +618,32 @@ export const CFPv1Abi = [
 		"type": "event"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_DAOAddress",
+				"type": "address"
+			}
+		],
+		"name": "updateDAOAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_speculationId",
+				"type": "uint256"
+			}
+		],
+		"name": "voidSpeculation",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "DAOAddress",
 		"outputs": [
@@ -430,163 +667,6 @@ export const CFPv1Abi = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "RELAYER_ROLE",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "SCOREMANAGER_ROLE",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_speculationScorer",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "_description",
-				"type": "string"
-			}
-		],
-		"name": "addSpeculationType",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_newMax",
-				"type": "uint256"
-			}
-		],
-		"name": "changeMaxSpeculationAmount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_newVoidTime",
-				"type": "uint256"
-			}
-		],
-		"name": "changeVoidTime",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_speculationId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_contributionAmount",
-				"type": "uint256"
-			}
-		],
-		"name": "claim",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_speculationId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_speculationAmount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_contributionAmount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "enum PositionType",
-				"name": "_positionType",
-				"type": "uint8"
-			}
-		],
-		"name": "createPosition",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_contestId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint32",
-				"name": "_lockTime",
-				"type": "uint32"
-			},
-			{
-				"internalType": "address",
-				"name": "_speculationScorer",
-				"type": "address"
-			},
-			{
-				"internalType": "int32",
-				"name": "_theNumber",
-				"type": "int32"
-			}
-		],
-		"name": "createSpeculation",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_speculationId",
-				"type": "uint256"
-			}
-		],
-		"name": "forfeitSpeculation",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -621,24 +701,6 @@ export const CFPv1Abi = [
 				"type": "address"
 			}
 		],
-		"name": "grantRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
 		"name": "hasRole",
 		"outputs": [
 			{
@@ -648,19 +710,6 @@ export const CFPv1Abi = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_speculationId",
-				"type": "uint256"
-			}
-		],
-		"name": "lockSpeculation",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -724,52 +773,29 @@ export const CFPv1Abi = [
 		"type": "function"
 	},
 	{
-		"inputs": [
+		"inputs": [],
+		"name": "RELAYER_ROLE",
+		"outputs": [
 			{
 				"internalType": "bytes32",
-				"name": "role",
+				"name": "",
 				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
 			}
 		],
-		"name": "renounceRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"inputs": [
+		"inputs": [],
+		"name": "SCOREMANAGER_ROLE",
+		"outputs": [
 			{
 				"internalType": "bytes32",
-				"name": "role",
+				"name": "",
 				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
 			}
 		],
-		"name": "revokeRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_speculationId",
-				"type": "uint256"
-			}
-		],
-		"name": "scoreSpeculation",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -780,57 +806,6 @@ export const CFPv1Abi = [
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "speculationTimerInterval",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "speculationTimers",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "speculationTypes",
-		"outputs": [
-			{
-				"internalType": "contract ISpeculationScorer",
-				"name": "",
-				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -896,6 +871,57 @@ export const CFPv1Abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "speculationTimerInterval",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "speculationTimers",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "speculationTypes",
+		"outputs": [
+			{
+				"internalType": "contract ISpeculationScorer",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "bytes4",
@@ -915,19 +941,6 @@ export const CFPv1Abi = [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_DAOAddress",
-				"type": "address"
-			}
-		],
-		"name": "updateDAOAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "usdc",
 		"outputs": [
@@ -938,19 +951,6 @@ export const CFPv1Abi = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_speculationId",
-				"type": "uint256"
-			}
-		],
-		"name": "voidSpeculation",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{

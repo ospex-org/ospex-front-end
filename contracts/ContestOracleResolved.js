@@ -73,6 +73,28 @@ export const ContestOracleResolvedAbi = [
 		"type": "error"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "requiredAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "LinkNotApproved",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "requiredAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "LinkNotTransferred",
+		"type": "error"
+	},
+	{
 		"inputs": [],
 		"name": "NoInlineSecrets",
 		"type": "error"

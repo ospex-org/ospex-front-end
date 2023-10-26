@@ -69,29 +69,7 @@ export const ContestOracleResolvedAbi = [
 				"type": "uint256"
 			}
 		],
-		"name": "LinkAmountTooLow",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "requiredAmount",
-				"type": "uint256"
-			}
-		],
-		"name": "LinkNotApproved",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "requiredAmount",
-				"type": "uint256"
-			}
-		],
-		"name": "LinkNotTransferred",
+		"name": "LinkNotTransferredByCaller",
 		"type": "error"
 	},
 	{
@@ -118,6 +96,17 @@ export const ContestOracleResolvedAbi = [
 			}
 		],
 		"name": "ScoreContestNotInReadyStatus",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "requiredAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "SubscriptionNotPaidByContract",
 		"type": "error"
 	},
 	{

@@ -27,12 +27,12 @@ export const JsonRpcProviderUrl = 'https://eth-goerli.g.alchemy.com/v2/987gt3TTk
 // export const USDCAddress = '0xd33602ce228adbc90625e4fc8071aae0cad11fe9'
 // export const JsonRpcProviderUrl = 'https://polygon-mumbai.g.alchemy.com/v2/8dx7bOITLIXUAIwpMIy_rIGzdlES8hhl'
 
-// polygon mumbai w/ functions upgrade to 8.19 + new functions code with changes to secrets and DON public key (or lack thereof) (take 2)
-export const ContestOracleResolvedAddress = '0x864DfEce94CC2278fF9c972647E478D8248B4234'
-export const CFPv1Address = '0x71d910d60264FE09bf2ea668467467d50b7916f8'
-export const SpeculationSpreadAddress = '0xf102dd2760d9b229e06f36b127f2824FEE96cBdF'
-export const SpeculationTotalAddress = '0xE1F529063b5AFb80870437Fa0B5A274B07f0f300'
-export const SpeculationMoneylineAddress = '0xFD4C25eCf6BD71715e2d48265AF511Ab609ce29d'
+// polygon mumbai w/ functions upgrade to 8.19 + new functions code with changes to secrets and DON public key (or lack thereof) (take 3)
+export const ContestOracleResolvedAddress = '0x3bb30a30a1256E72C3f43bBCa1A2D68065F6E44f'
+export const CFPv1Address = '0x161944b13236897A1967a9Da79F402C5e79181C6'
+export const SpeculationSpreadAddress = '0xbA3A1C2E412fd5d92640cb84Af58085d85420354'
+export const SpeculationTotalAddress = '0x45AB6E309304142fEB7C1F0Fce9D6EE12a28A69D'
+export const SpeculationMoneylineAddress = '0x5b28bB0b1b5B2CdBc2852b99d997d25fe53F43c7'
 export const USDCAddress = '0xd33602ce228adbc90625e4fc8071aae0cad11fe9'
 export const JsonRpcProviderUrl = 'https://polygon-mumbai.g.alchemy.com/v2/8dx7bOITLIXUAIwpMIy_rIGzdlES8hhl'
 export const ContestCreatorAddress = '0xA8eb19F9B7c2b2611C1279423A0CB2aee3735320'

@@ -83,14 +83,19 @@ export function SpeculationCard({
               {/* Sep 12, 2022, 5:15 PM PST */}
               {speculation && speculation.lockTime
                 ? new Date(speculation.lockTime * 1000).toLocaleString(
-                    "en-EN",
+                    "en-US",
                     {
-                      timeStyle: "short",
-                      dateStyle: "medium",
+                      hour12: true,
+                      weekday: "short",
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "2-digit",
+                      timeZoneName: "short",
                     }
                   )
-                : ""}{" "}
-              PST
+                : ""}
             </Box>
             <Box fontWeight="bold" mb="2">
               {/* Seattle Seahawks win */}
@@ -172,10 +177,14 @@ export function SpeculationCard({
               </SimpleGrid>
               <SimpleGrid columns={3}>
                 <Text fontSize="xs" fontWeight="semibold" ml="1">
-                  {positionDescriptions.upperPositionTranslation}
+                  {speculation.theNumber < 0
+                    ? positionDescriptions.lowerPositionTranslation
+                    : positionDescriptions.upperPositionTranslation}
                 </Text>
                 <Text fontSize="xs" fontWeight="semibold" ml="4">
-                  {positionDescriptions.lowerPositionTranslation}
+                  {speculation.theNumber < 0
+                    ? positionDescriptions.upperPositionTranslation
+                    : positionDescriptions.lowerPositionTranslation}
                 </Text>
                 <Text fontSize="xs" fontWeight="semibold" ml="8">
                   {positionDescriptions.totalAmount.toString()} USDC

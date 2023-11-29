@@ -89,3 +89,25 @@ export const addressSpecificPositions = gql`
     }
   }
 `
+
+export const contestsLtCurrentTime = gql`
+  query getContests($currentTime: Int!) {
+    contests(where: {eventTime_lt: $currentTime}) {
+      id
+      awayScore
+      homeScore
+      contestCreator
+      rundownId
+      sportspageId
+      jsonoddsId
+      leagueId
+      league
+      awayTeamId
+      awayTeam
+      homeTeamId
+      homeTeam
+      eventTime
+      contestStatus
+    }
+  }
+`

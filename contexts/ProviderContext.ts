@@ -5,6 +5,7 @@ import { contest, speculation, position } from "../constants/interface"
 
 interface ProviderInterface {
   provider: JsonRpcProvider | undefined | null
+  contestOracleResolvedContract: Contract | undefined | null
   cfpContract: Contract | undefined | null
   USDCContract: Contract | undefined | null
   isConnected: boolean
@@ -12,15 +13,18 @@ interface ProviderInterface {
   balance: number
   approvedAmount: number
   setApprovedAmount: Dispatch<SetStateAction<number>>
-  isWaiting: boolean
-  setIsWaiting: Dispatch<SetStateAction<boolean>>
   contests: contest[] | []
   speculations: speculation[] | []
   positions: position[] | []
+  isWaiting: boolean | undefined
+  startWaiting: () => void
+  stopWaiting: () => void
+  connectToPolygon: () => void
 }
 
 const defaultState = {
   provider: undefined,
+  contestOracleResolvedContract: undefined,
   cfpContract: undefined,
   USDCContract: undefined,
   isConnected: false,
@@ -28,11 +32,13 @@ const defaultState = {
   balance: 0,
   approvedAmount: 0,
   setApprovedAmount: () => {},
-  isWaiting: false,
-  setIsWaiting: () => {},
   contests: [],
   speculations: [],
   positions: [],
+  isWaiting: false,
+  startWaiting: () => {},
+  stopWaiting: () => {},
+  connectToPolygon: () => {},
 }
 
 export const ProviderContext =

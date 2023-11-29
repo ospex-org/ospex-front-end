@@ -28,6 +28,9 @@ export function Footer() {
             aria-label="GitHub"
             icon={<FaGithub fontSize="1.5rem" />}
             target="_blank"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
           />
         </ButtonGroup>
       </Stack>

@@ -39,7 +39,8 @@ export function ClaimModal({
   contest,
   position,
 }: ClaimModalProps) {
-  const { provider, cfpContract, setIsWaiting } = useContext(ProviderContext)
+  const { provider, cfpContract, startWaiting, stopWaiting } =
+    useContext(ProviderContext)
   const [contribution, setContribution] = useState<string | number>(0)
   const speculationDescriptions = createSpeculationDescriptions(
     speculation!,
@@ -105,16 +106,17 @@ export function ClaimModal({
                 if (provider) {
                   ;(async () => {
                     try {
+                      startWaiting()
                       const claimTx = await cfpContract!.claim(
                         Number(position.speculationId),
                         ethers.utils.parseUnits(contribution.toString(), 6)
                       )
                       isCloseParent()
-                      setIsWaiting(true)
                       await claimTx.wait()
-                      setIsWaiting(false)
                     } catch (error) {
                       console.error("an error has occurred:", error)
+                    } finally {
+                      stopWaiting()
                     }
                   })()
                 }

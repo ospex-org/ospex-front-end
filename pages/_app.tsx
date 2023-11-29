@@ -1,18 +1,61 @@
 import "../styles/globals.css"
 import type { AppProps } from "next/app"
 import { ChakraProvider } from "@chakra-ui/react"
-import { InMemoryCache, ApolloProvider, ApolloClient } from "@apollo/client"
+import { ApolloProvider } from "@apollo/client"
+import { ProviderContext } from "../contexts/ProviderContext"
 
-const client = new ApolloClient({
-  uri: "https://api.thegraph.com/subgraphs/name/vincelaird/ospex",
-  cache: new InMemoryCache(),
-})
+import { useWalletConnection } from "../hooks/useWalletConnection"
+import { useWalletStatus } from "../hooks/useWalletStatus"
+import { useWalletBalances } from "../hooks/useWalletBalances"
+
+import { client } from "../utils/apolloClient"
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const {
+    provider,
+    isConnected,
+    address,
+    chainId,
+    contestOracleResolvedContract,
+    cfpContract,
+    USDCContract,
+    connectToPolygon,
+  } = useWalletConnection()
+
+  const { isWaiting, startWaiting, stopWaiting } = useWalletStatus()
+
+  const { balance, approvedAmount, setApprovedAmount } = useWalletBalances(
+    provider,
+    USDCContract,
+    isConnected,
+    chainId
+  )
+
   return (
     <ApolloProvider client={client}>
       <ChakraProvider>
-        <Component {...pageProps} />
+        <ProviderContext.Provider
+          value={{
+            provider,
+            contestOracleResolvedContract,
+            cfpContract,
+            USDCContract,
+            isConnected,
+            address,
+            balance,
+            approvedAmount,
+            setApprovedAmount,
+            contests: [],
+            speculations: [],
+            positions: [],
+            isWaiting,
+            startWaiting,
+            stopWaiting,
+            connectToPolygon,
+          }}
+        >
+          <Component {...pageProps} />
+        </ProviderContext.Provider>
       </ChakraProvider>
     </ApolloProvider>
   )

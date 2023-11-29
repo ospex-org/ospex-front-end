@@ -90,3 +90,7 @@ export interface userPosition {
     }
   }
 }
+
+export interface EncryptedSecretsUrlsResponse {
+  encryptedSecretsUrls: string
+}

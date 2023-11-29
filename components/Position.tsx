@@ -239,14 +239,19 @@ export function PositionCard({
                 {/* Sep 12, 2022, 5:15 PM PST */}
                 {contest?.eventTime
                   ? new Date(contest?.eventTime * 1000).toLocaleString(
-                      "en-EN",
+                      "en-US",
                       {
-                        timeStyle: "short",
-                        dateStyle: "medium",
+                        hour12: true,
+                        weekday: "short",
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "2-digit",
+                        timeZoneName: "short",
                       }
                     )
-                  : ""}{" "}
-                PST
+                  : ""}
               </Box>
               <Box fontWeight="bold">
                 {/* Seattle Seahawks win */}

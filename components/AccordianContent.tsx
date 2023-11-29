@@ -39,7 +39,8 @@ export function AccordianContent({
     approvedAmount,
     setApprovedAmount,
     isWaiting,
-    setIsWaiting,
+    startWaiting,
+    stopWaiting,
   } = useContext(ProviderContext)
   const [isApproved, setIsApproved] = useState(false)
   const [amount, setAmount] = useState<string | number>(1)
@@ -131,30 +132,31 @@ export function AccordianContent({
                 if (provider && !isApproved) {
                   ;(async () => {
                     try {
+                      startWaiting()
                       const approveTx = await USDCContract!.approve(
                         CFPv1Address,
                         (total * 1e6).toString()
                       )
-                      setIsWaiting(true)
                       await approveTx.wait()
                       setIsApproved(true)
-                      setIsWaiting(false)
                       setApprovedAmount(total)
                     } catch (error) {
                       console.error("an error has occurred:", error)
+                    } finally {
+                      stopWaiting()
                     }
                   })()
                 } else if (provider && isApproved) {
                   if (speculation) {
                     ;(async () => {
                       try {
+                        startWaiting()
                         const approveTx = await cfpContract!.createPosition(
                           speculation.id,
                           ethers.utils.parseUnits(amount.toString(), 6),
                           ethers.utils.parseUnits(contribution.toString(), 6),
                           speculationPositionTypeEnum
                         )
-                        setIsWaiting(true)
                         await approveTx.wait()
                         const newApprovedAmount =
                           approvedAmount - +amount - +contribution
@@ -162,9 +164,10 @@ export function AccordianContent({
                           setIsApproved(false)
                         }
                         setApprovedAmount(newApprovedAmount)
-                        setIsWaiting(false)
                       } catch (error) {
                         console.error("an error has occurred:", error)
+                      } finally {
+                        stopWaiting()
                       }
                     })()
                   }

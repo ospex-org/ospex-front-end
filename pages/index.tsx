@@ -162,10 +162,10 @@ const Home: NextPage = () => {
                   {address.slice(0, 6)}...{address.slice(-4)}
                 </Text>
                 <Text fontSize="sm" letterSpacing="wide" align="right">
-                  Balance: {balance} USDC
+                  Balance: {balance.toFixed(2)} USDC
                 </Text>
                 <Text fontSize="sm" letterSpacing="wide" align="right">
-                  Approved: {approvedAmount} USDC
+                  Approved: {approvedAmount.toFixed(2)} USDC
                 </Text>
                 {isWaiting ? (
                   <Text

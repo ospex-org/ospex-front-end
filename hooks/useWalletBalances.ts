@@ -13,7 +13,7 @@ export function useWalletBalances(
   const [approvedAmount, setApprovedAmount] = useState(0)
 
   useEffect(() => {
-    if (provider && USDCContract && isConnected && chainId === 80001) {
+    if (provider && USDCContract && isConnected && chainId === 137) {
       const fetchAndUpdateData = async () => {
         try {
           const signerAddress = await provider.getSigner().getAddress()

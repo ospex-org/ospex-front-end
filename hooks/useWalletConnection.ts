@@ -29,7 +29,7 @@ declare global {
 
 const wcInitOptions = {
   projectId: "8c38871627d74115d3e9d29ecdbc1155",
-  requiredChains: [1, 89, 80001],
+  requiredChains: [1, 89, 137],
   dappUrl: "https://ospex.org",
 }
 
@@ -119,7 +119,7 @@ export function useWalletConnection() {
         }
       } else {
         const addresses = await provider.listAccounts()
-        if (addresses.length && chainId === 80001) {
+        if (addresses.length && chainId === 137) {
           setIsConnected(true)
           setAddress(addresses[0].toLowerCase())
         }
@@ -154,7 +154,7 @@ export function useWalletConnection() {
         .then((initialChainId: string) => setChainId(Number(initialChainId)))
         .catch((error: Error) => {
           console.error("Failed to get initial chainId:", error)
-          setChainId(80001)
+          setChainId(137)
         })
 
       // Subscribe to the 'chainChanged' event
@@ -170,7 +170,7 @@ export function useWalletConnection() {
   }, [])
 
   useEffect(() => {
-    if (chainId !== 80001) {
+    if (chainId !== 137) {
       setIsConnected(false)
     }
   }, [chainId])
@@ -179,7 +179,7 @@ export function useWalletConnection() {
     updateAccountCenter({ enabled: false })
     try {
       await connect()
-      await setChain({ chainId: "0x80001" })
+      await setChain({ chainId: "0x89" })
       setIsConnected(true)
     } catch (error) {
       console.error("An error has occurred:", error)

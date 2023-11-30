@@ -31,6 +31,27 @@ export const CFPv1Abi = [
 		"type": "constructor"
 	},
 	{
+		"inputs": [],
+		"name": "AccessControlBadConfirmation",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "neededRole",
+				"type": "bytes32"
+			}
+		],
+		"name": "AccessControlUnauthorizedAccount",
+		"type": "error"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -732,7 +753,7 @@ export const CFPv1Abi = [
 			},
 			{
 				"internalType": "address",
-				"name": "account",
+				"name": "callerConfirmation",
 				"type": "address"
 			}
 		],

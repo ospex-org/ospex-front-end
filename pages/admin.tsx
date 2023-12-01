@@ -249,7 +249,10 @@ const Admin: NextPage = () => {
                           const encryptedSecretsUrls =
                             await getEncryptedSecretsUrls()
                           const gasLimit = 300000
-                          const linkAmount = ethers.utils.parseUnits("0.25", 18)
+                          const linkAmount = ethers.utils.parseUnits(
+                            "0.0125",
+                            18
+                          )
                           const IERC20_ABI = [
                             "function approve(address spender, uint256 amount) external returns (bool)",
                           ]

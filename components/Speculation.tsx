@@ -9,8 +9,6 @@ import {
   AccordionPanel,
   AccordionButton,
   Divider,
-  Center,
-  AbsoluteCenter,
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { SpeculationTotalAddress } from "../constants/addresses"

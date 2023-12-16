@@ -9,10 +9,12 @@ import {
   Divider,
 } from "@chakra-ui/react"
 import { useContext } from "react"
+import { ethers } from "ethers"
 import { contest, speculation, position } from "../constants/interface"
 import { ProviderContext } from "../contexts/ProviderContext"
 import { createSpeculationDescriptions } from "../functions/createDescriptions"
 import { ClaimModal } from "./ClaimModal"
+import { TransactionStatusModal } from "./TransactionStatusModal"
 
 type PositionCardProps = {
   speculation?: speculation
@@ -25,38 +27,44 @@ export function PositionCard({
   position,
   contest,
 }: PositionCardProps) {
-  const { provider, isWaiting } = useContext(ProviderContext)
+  const { provider, cfpContract, isWaiting, startWaiting, stopWaiting } =
+    useContext(ProviderContext)
   const { colorMode } = useColorMode()
   const speculationDescriptions = createSpeculationDescriptions(
     speculation!,
     contest!
   )
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    isOpen: isStatusOpen,
+    onOpen: onStatusOpen,
+    onClose: onStatusClose,
+  } = useDisclosure()
 
   const claimableAmount = () => {
     if (speculation) {
       if (
         (speculation?.winSide === position.positionType && !position.claimed) ||
-        Number(BigInt(speculation?.upperAmount)) === 0 ||
-        Number(BigInt(speculation?.lowerAmount)) === 0
+        Number(speculation?.upperAmount) === 0 ||
+        Number(speculation?.lowerAmount) === 0
       ) {
         // amount in position equals total speculation amount (this position was the only position)
         if (
-          Number(BigInt(speculation?.upperAmount)) === 0 ||
-          Number(BigInt(speculation?.lowerAmount)) === 0
+          Number(speculation?.upperAmount) === 0 ||
+          Number(speculation?.lowerAmount) === 0
         ) {
-          return Number(BigInt(position.amount) / BigInt(1e6))
+          return Number(position.amount / 1e6)
         }
         // upper scenario; away wins or over wins
         if (
           position.positionType === "Away" ||
           position.positionType === "Over"
         ) {
-          return Number(
-            ((BigInt(position.amount) / BigInt(speculation!.upperAmount)) *
-              (BigInt(speculation!.upperAmount) +
-                BigInt(speculation!.lowerAmount))) /
-              BigInt(1e6)
+          return (
+            ((Number(position.amount) / Number(speculation!.upperAmount)) *
+              (Number(speculation!.upperAmount) +
+                Number(speculation!.lowerAmount))) /
+            1e6
           ).toFixed(2)
         }
         // lower scenario; home wins or under wins
@@ -64,11 +72,11 @@ export function PositionCard({
           position.positionType === "Home" ||
           position.positionType === "Under"
         ) {
-          return Number(
-            ((BigInt(position.amount) / BigInt(speculation!.lowerAmount)) *
-              (BigInt(speculation!.upperAmount) +
-                BigInt(speculation!.lowerAmount))) /
-              BigInt(1e6)
+          return (
+            ((Number(position.amount) / Number(speculation!.lowerAmount)) *
+              (Number(speculation!.upperAmount) +
+                Number(speculation!.lowerAmount))) /
+            1e6
           ).toFixed(2)
         }
       }
@@ -136,9 +144,14 @@ export function PositionCard({
             <ClaimModal
               isOpenParent={isOpen}
               isCloseParent={onClose}
+              onClaim={handleClaim}
               speculation={speculation}
               contest={contest}
               position={position}
+            />
+            <TransactionStatusModal
+              isOpen={isStatusOpen}
+              onClose={onStatusClose}
             />
             <Text fontSize="sm" fontWeight="semibold">
               {position ? `Claimable: ${claimableAmount()} USDC` : ""}
@@ -150,14 +163,13 @@ export function PositionCard({
       // contest is over and user won and has already claimed and did not contribute
       if (
         position.claimed &&
-        Number(BigInt(position.contributedUponCreation) / BigInt(1e6)) +
-          Number(BigInt(position.contributedUponClaim) / BigInt(1e6)) <=
+        Number(position.contributedUponCreation / 1e6) +
+          Number(position.contributedUponClaim / 1e6) <=
           0
       ) {
         return (
           <Text fontSize="sm" fontWeight="semibold">
-            Successful claim:{" "}
-            {Number(BigInt(position.amountClaimed) / BigInt(1e6)).toFixed(2)}{" "}
+            Successful claim: {Number(position.amountClaimed / 1e6).toFixed(2)}{" "}
             USDC
           </Text>
         )
@@ -165,22 +177,21 @@ export function PositionCard({
 
       if (
         position.claimed &&
-        Number(BigInt(position.contributedUponCreation) / BigInt(1e6)) +
-          Number(BigInt(position.contributedUponClaim) / BigInt(1e6)) >
+        Number(position.contributedUponCreation / 1e6) +
+          Number(position.contributedUponClaim / 1e6) >
           0
       ) {
         return (
           <>
             <Text fontSize="sm" fontWeight="semibold">
               Successful claim:{" "}
-              {Number(BigInt(position.amountClaimed) / BigInt(1e6)).toFixed(2)}{" "}
-              USDC
+              {Number(position.amountClaimed / 1e6).toFixed(2)} USDC
             </Text>
             <Text fontSize="sm" fontWeight="semibold">
               Contributed:{" "}
               {(
-                Number(BigInt(position.contributedUponCreation) / BigInt(1e6)) +
-                Number(BigInt(position.contributedUponClaim) / BigInt(1e6))
+                Number(position.contributedUponCreation / 1e6) +
+                Number(position.contributedUponClaim / 1e6)
               ).toFixed(2)}{" "}
               USDC
             </Text>
@@ -199,6 +210,24 @@ export function PositionCard({
           </Text>
         )
       }
+    }
+  }
+
+  const handleClaim = async (contribution: number | string) => {
+    onClose()
+    onStatusOpen()
+    startWaiting()
+    try {
+      const claimTx = await cfpContract!.claim(
+        Number(position.speculationId),
+        ethers.utils.parseUnits(contribution.toString(), 6)
+      )
+      await claimTx.wait()
+    } catch (error) {
+      console.error("an error has occurred:", error)
+      onStatusClose()
+    } finally {
+      stopWaiting()
     }
   }
 
@@ -266,15 +295,15 @@ export function PositionCard({
                 <>
                   <Text fontSize="sm" fontWeight="semibold">
                     {position
-                      ? `Speculated: ${Number(
-                          BigInt(position.amount) / BigInt(1e6)
-                        ).toFixed(2)} USDC`
+                      ? `Speculated: ${(Number(position.amount) / 1e6).toFixed(
+                          2
+                        )} USDC`
                       : ""}
                   </Text>
-                  {BigInt(position.contributedUponCreation) > 0 ? (
+                  {Number(position.contributedUponCreation) > 0 ? (
                     <Text fontSize="sm" fontWeight="semibold">
-                      {`Contributed: ${Number(
-                        BigInt(position.contributedUponCreation) / BigInt(1e6)
+                      {`Contributed: ${(
+                        Number(position.contributedUponCreation) / 1e6
                       ).toFixed(2)} USDC`}
                     </Text>
                   ) : (

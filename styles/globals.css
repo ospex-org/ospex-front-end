@@ -24,3 +24,14 @@ a {
     background: black;
   }
 }
+
+@keyframes dot {
+    0%, 20% { content: '.'; }
+    40%, 60% { content: '..'; }
+    80%, 100% { content: '...'; }
+}
+
+.blinking-dots::after {
+    content: '';
+    animation: dot 1.5s infinite;
+}

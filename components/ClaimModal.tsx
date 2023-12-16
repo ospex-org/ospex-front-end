@@ -18,7 +18,6 @@ import {
   useColorModeValue,
   Text,
 } from "@chakra-ui/react"
-import { ethers } from "ethers"
 import { useContext, useState } from "react"
 import { contest, position, speculation } from "../constants/interface"
 import { ProviderContext } from "../contexts/ProviderContext"
@@ -27,6 +26,7 @@ import { createSpeculationDescriptions } from "../functions/createDescriptions"
 type ClaimModalProps = {
   isOpenParent: boolean
   isCloseParent: () => void
+  onClaim: (contribution: number | string) => void
   speculation?: speculation
   contest?: contest
   position: position
@@ -35,6 +35,7 @@ type ClaimModalProps = {
 export function ClaimModal({
   isOpenParent,
   isCloseParent,
+  onClaim,
   speculation,
   contest,
   position,
@@ -102,25 +103,7 @@ export function ClaimModal({
               color={useColorModeValue("black", "white")}
               mb={1.5}
               mr={3}
-              onClick={() => {
-                if (provider) {
-                  ;(async () => {
-                    try {
-                      startWaiting()
-                      const claimTx = await cfpContract!.claim(
-                        Number(position.speculationId),
-                        ethers.utils.parseUnits(contribution.toString(), 6)
-                      )
-                      isCloseParent()
-                      await claimTx.wait()
-                    } catch (error) {
-                      console.error("an error has occurred:", error)
-                    } finally {
-                      stopWaiting()
-                    }
-                  })()
-                }
-              }}
+              onClick={() => onClaim(contribution)}
             >
               Submit
             </Button>

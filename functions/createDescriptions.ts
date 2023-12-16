@@ -43,8 +43,8 @@ export function createSpeculationDescriptions(speculation:speculation, contest:c
 }
 
 export function createPositionDescriptions(speculation:speculation, positions:position[]) {
-	const upperAmount = Number(BigInt(speculation.upperAmount) / BigInt(1e6))
-	const lowerAmount = Number(BigInt(speculation.lowerAmount) / BigInt(1e6))
+	const upperAmount = Number(speculation.upperAmount) / 1e6
+	const lowerAmount = Number(speculation.lowerAmount) / 1e6
 	const totalAmount = upperAmount + lowerAmount
 	let upperPositionTranslation: string, lowerPositionTranslation: string
 	if (speculation.speculationScorer == SpeculationTotalAddress.toLowerCase() && upperAmount && lowerAmount) {

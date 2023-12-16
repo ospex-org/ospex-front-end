@@ -12,12 +12,14 @@ import {
   NumberInputStepper,
   SimpleGrid,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react"
 import { ethers } from "ethers"
 import { useContext, useEffect, useState } from "react"
 import { CFPv1Address } from "../constants/addresses"
 import { speculation } from "../constants/interface"
 import { ProviderContext } from "../contexts/ProviderContext"
+import { TransactionStatusModal } from "./TransactionStatusModal"
 
 type AccordianContentProps = {
   speculation?: speculation
@@ -46,6 +48,7 @@ export function AccordianContent({
   const [amount, setAmount] = useState<string | number>(1)
   const [contribution, setContribution] = useState<string | number>(0)
   const [total, setTotal] = useState<number>(1)
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
     if (total > approvedAmount) {
@@ -97,6 +100,7 @@ export function AccordianContent({
               width="125px"
               value={+contribution}
               onChange={setContribution}
+              isDisabled={!isApproved || approvedAmount === 0}
             >
               <NumberInputField id="contribution" />
               <NumberInputStepper>
@@ -133,6 +137,7 @@ export function AccordianContent({
                   ;(async () => {
                     try {
                       startWaiting()
+                      onOpen()
                       const approveTx = await USDCContract!.approve(
                         CFPv1Address,
                         (total * 1e6).toString()
@@ -140,8 +145,10 @@ export function AccordianContent({
                       await approveTx.wait()
                       setIsApproved(true)
                       setApprovedAmount(total)
+                      onClose()
                     } catch (error) {
                       console.error("an error has occurred:", error)
+                      onClose()
                     } finally {
                       stopWaiting()
                     }
@@ -151,6 +158,7 @@ export function AccordianContent({
                     ;(async () => {
                       try {
                         startWaiting()
+                        onOpen()
                         const approveTx = await cfpContract!.createPosition(
                           speculation.id,
                           ethers.utils.parseUnits(amount.toString(), 6),
@@ -164,8 +172,10 @@ export function AccordianContent({
                           setIsApproved(false)
                         }
                         setApprovedAmount(newApprovedAmount)
+                        onClose()
                       } catch (error) {
                         console.error("an error has occurred:", error)
+                        onClose()
                       } finally {
                         stopWaiting()
                       }
@@ -180,6 +190,7 @@ export function AccordianContent({
                 ? "(1 of 2) Approve amount first"
                 : "(2 of 2) Create position"}
             </Button>
+            <TransactionStatusModal isOpen={isOpen} onClose={onClose} />
             <Text
               fontSize="xs"
               fontWeight="semibold"

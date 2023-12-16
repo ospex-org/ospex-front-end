@@ -12,6 +12,7 @@ import {
   Divider,
   Hide,
   Center,
+  useDisclosure,
 } from "@chakra-ui/react"
 import { MoonIcon, SunIcon } from "@chakra-ui/icons"
 import { ProviderContext } from "../contexts/ProviderContext"
@@ -20,6 +21,7 @@ import Positions from "../sections/positions"
 import { Footer } from "../components/Footer"
 import { useQueryResults } from "../hooks/useQueryResults"
 import { client } from "../utils/apolloClient"
+import { TransactionStatusModal } from "../components/TransactionStatusModal"
 
 const Home: NextPage = () => {
   const { colorMode, toggleColorMode } = useColorMode()
@@ -42,6 +44,7 @@ const Home: NextPage = () => {
   } = useContext(ProviderContext)
 
   const { contests, speculations, positions } = useQueryResults(client)
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const togglePage = () => {
     setPageContests((prev) => !prev)
@@ -97,7 +100,7 @@ const Home: NextPage = () => {
               <Text>Open Speculation Exchange</Text>
             </Hide>
           </Flex>
-          <Box>
+          <Box width="145px">
             <IconButton
               mr={1}
               aria-label="Toggle Mode"
@@ -167,26 +170,27 @@ const Home: NextPage = () => {
                 <Text fontSize="sm" letterSpacing="wide" align="right">
                   Approved: {approvedAmount.toFixed(2)} USDC
                 </Text>
-                {isWaiting ? (
-                  <Text
-                    fontSize="sm"
-                    letterSpacing="wide"
-                    align="right"
-                    cursor="pointer"
-                    onClick={() => {
-                      stopWaiting()
-                    }}
-                  >
-                    Loading kill switch
-                  </Text>
-                ) : (
-                  <Text></Text>
+                {isWaiting && (
+                  <Flex alignItems="left" paddingLeft="0">
+                    <Text
+                      fontSize="sm"
+                      className="blinking-dots"
+                      cursor="pointer"
+                      letterSpacing="wide"
+                      onClick={() => {
+                        onOpen()
+                      }}
+                    >
+                      Transaction pending
+                    </Text>
+                  </Flex>
                 )}
               </>
             ) : (
               <Text></Text>
             )}
           </Box>
+          <TransactionStatusModal isOpen={isOpen} onClose={onClose} />
         </Flex>
       </Box>
       <Box mt="100px">{pageContests ? <PrimaryTable /> : <Positions />}</Box>

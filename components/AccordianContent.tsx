@@ -20,6 +20,7 @@ import { CFPv1Address } from "../constants/addresses"
 import { speculation } from "../constants/interface"
 import { ProviderContext } from "../contexts/ProviderContext"
 import { TransactionStatusModal } from "./TransactionStatusModal"
+import { handleFocus } from "../scripts/handleFocus"
 
 type AccordianContentProps = {
   speculation?: speculation
@@ -85,7 +86,7 @@ export function AccordianContent({
               onChange={setAmount}
               max={10}
             >
-              <NumberInputField id="amount" />
+              <NumberInputField id="amount" onFocus={handleFocus} />
               <NumberInputStepper>
                 <NumberIncrementStepper />
                 <NumberDecrementStepper />
@@ -102,7 +103,7 @@ export function AccordianContent({
               onChange={setContribution}
               isDisabled={!isApproved || approvedAmount === 0}
             >
-              <NumberInputField id="contribution" />
+              <NumberInputField id="contribution" onFocus={handleFocus} />
               <NumberInputStepper>
                 <NumberIncrementStepper />
                 <NumberDecrementStepper />

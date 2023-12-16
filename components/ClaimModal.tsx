@@ -22,6 +22,7 @@ import { useContext, useState } from "react"
 import { contest, position, speculation } from "../constants/interface"
 import { ProviderContext } from "../contexts/ProviderContext"
 import { createSpeculationDescriptions } from "../functions/createDescriptions"
+import { handleFocus } from "../scripts/handleFocus"
 
 type ClaimModalProps = {
   isOpenParent: boolean
@@ -84,7 +85,7 @@ export function ClaimModal({
                 value={+contribution}
                 onChange={setContribution}
               >
-                <NumberInputField id="contribution" />
+                <NumberInputField id="contribution" onFocus={handleFocus} />
                 <NumberInputStepper>
                   <NumberIncrementStepper />
                   <NumberDecrementStepper />

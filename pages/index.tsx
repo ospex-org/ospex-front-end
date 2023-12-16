@@ -161,19 +161,31 @@ const Home: NextPage = () => {
             <Divider mt={2} mb={1} />
             {isConnected ? (
               <>
-                <Text fontSize="sm" letterSpacing="wide" align="right">
+                <Text
+                  fontSize={["xs", "sm"]}
+                  letterSpacing="wide"
+                  align="right"
+                >
                   {address.slice(0, 6)}...{address.slice(-4)}
                 </Text>
-                <Text fontSize="sm" letterSpacing="wide" align="right">
+                <Text
+                  fontSize={["xs", "sm"]}
+                  letterSpacing="wide"
+                  align="right"
+                >
                   Balance: {balance.toFixed(2)} USDC
                 </Text>
-                <Text fontSize="sm" letterSpacing="wide" align="right">
+                <Text
+                  fontSize={["xs", "sm"]}
+                  letterSpacing="wide"
+                  align="right"
+                >
                   Approved: {approvedAmount.toFixed(2)} USDC
                 </Text>
                 {isWaiting && (
                   <Flex alignItems="left" paddingLeft="0">
                     <Text
-                      fontSize="sm"
+                      fontSize={["xs", "sm"]}
                       className="blinking-dots"
                       cursor="pointer"
                       letterSpacing="wide"

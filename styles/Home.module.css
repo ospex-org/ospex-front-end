@@ -109,6 +109,9 @@
 }
 
 @media (max-width: 600px) {
+  .header-class {
+    font-size: smaller;
+  }
   .grid {
     width: 100%;
     flex-direction: column;

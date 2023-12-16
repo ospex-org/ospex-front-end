@@ -100,7 +100,7 @@ const Home: NextPage = () => {
               <Text>Open Speculation Exchange</Text>
             </Hide>
           </Flex>
-          <Box width="145px">
+          <Box width="150px">
             <IconButton
               mr={1}
               aria-label="Toggle Mode"

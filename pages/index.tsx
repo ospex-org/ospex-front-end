@@ -161,31 +161,19 @@ const Home: NextPage = () => {
             <Divider mt={2} mb={1} />
             {isConnected ? (
               <>
-                <Text
-                  fontSize={["xs", "sm"]}
-                  letterSpacing="wide"
-                  align="right"
-                >
+                <Text fontSize="sm" letterSpacing="wide" align="right">
                   {address.slice(0, 6)}...{address.slice(-4)}
                 </Text>
-                <Text
-                  fontSize={["xs", "sm"]}
-                  letterSpacing="wide"
-                  align="right"
-                >
+                <Text fontSize="sm" letterSpacing="wide" align="right">
                   Balance: {balance.toFixed(2)} USDC
                 </Text>
-                <Text
-                  fontSize={["xs", "sm"]}
-                  letterSpacing="wide"
-                  align="right"
-                >
+                <Text fontSize="sm" letterSpacing="wide" align="right">
                   Approved: {approvedAmount.toFixed(2)} USDC
                 </Text>
                 {isWaiting && (
                   <Flex alignItems="left" paddingLeft="0">
                     <Text
-                      fontSize={["xs", "sm"]}
+                      fontSize="sm"
                       className="blinking-dots"
                       cursor="pointer"
                       letterSpacing="wide"
@@ -202,8 +190,8 @@ const Home: NextPage = () => {
               <Text></Text>
             )}
           </Box>
-          <TransactionStatusModal isOpen={isOpen} onClose={onClose} />
         </Flex>
+        <TransactionStatusModal isOpen={isOpen} onClose={onClose} />
       </Box>
       <Box mt="100px">{pageContests ? <PrimaryTable /> : <Positions />}</Box>
       <Box pb={{ base: 8, md: 10 }} />

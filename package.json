@@ -18,6 +18,7 @@
     "@emotion/react": "11",
     "@emotion/styled": "11",
     "@ethersproject/providers": "^5.6.8",
+    "@unstoppabledomains/resolution": "^9.2.2",
     "@usedapp/core": "^1.2.7",
     "@web3-onboard/coinbase": "^2.2.6",
     "@web3-onboard/core": "^2.21.2",

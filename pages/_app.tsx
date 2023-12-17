@@ -7,6 +7,7 @@ import { ProviderContext } from "../contexts/ProviderContext"
 import { useWalletConnection } from "../hooks/useWalletConnection"
 import { useWalletStatus } from "../hooks/useWalletStatus"
 import { useWalletBalances } from "../hooks/useWalletBalances"
+import { useDomainResolution } from "../hooks/useDomainResolution"
 
 import { client } from "../utils/apolloClient"
 
@@ -31,6 +32,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     chainId
   )
 
+  const domainName = useDomainResolution(address)
+
   return (
     <ApolloProvider client={client}>
       <ChakraProvider>
@@ -42,6 +45,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             USDCContract,
             isConnected,
             address,
+            domainName,
             balance,
             approvedAmount,
             setApprovedAmount,

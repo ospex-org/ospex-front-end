@@ -34,6 +34,7 @@ const Home: NextPage = () => {
     USDCContract,
     isConnected,
     address,
+    domainName,
     balance,
     approvedAmount,
     setApprovedAmount,
@@ -59,6 +60,7 @@ const Home: NextPage = () => {
         USDCContract,
         isConnected,
         address,
+        domainName,
         balance,
         approvedAmount,
         setApprovedAmount,
@@ -100,69 +102,73 @@ const Home: NextPage = () => {
               <Text>Open Speculation Exchange</Text>
             </Hide>
           </Flex>
-          <Box width="150px">
-            <IconButton
-              mr={1}
-              aria-label="Toggle Mode"
-              variant="ghost"
-              borderColor={useColorModeValue("gray.200", "gray.700")}
-              _hover={{
-                bg: useColorModeValue("black", "white"),
-                borderColor: useColorModeValue("black", "white"),
-                color: useColorModeValue("white", "black"),
-              }}
-              onClick={toggleColorMode}
-            >
-              {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-            </IconButton>
-            {!isConnected ? (
-              <Button
-                variant="outline"
-                borderColor={colorMode === "light" ? "gray.200" : "gray.700"}
-                bg={colorMode === "light" ? "#f3f4f6" : "#272b33"}
-                _hover={
-                  colorMode === "light"
-                    ? { bg: "black", borderColor: "black", color: "white" }
-                    : { bg: "white", borderColor: "white", color: "black" }
-                }
-                onClick={async () => await connectToPolygon()}
+          <Box width="160px">
+            <Flex justifyContent="flex-end">
+              <IconButton
+                mr={1}
+                aria-label="Toggle Mode"
+                variant="ghost"
+                borderColor={useColorModeValue("gray.200", "gray.700")}
+                _hover={{
+                  bg: useColorModeValue("black", "white"),
+                  borderColor: useColorModeValue("black", "white"),
+                  color: useColorModeValue("white", "black"),
+                }}
+                onClick={toggleColorMode}
               >
-                Connect
-              </Button>
-            ) : pageContests ? (
-              <Button
-                variant="outline"
-                borderColor={colorMode === "light" ? "gray.200" : "gray.700"}
-                bg={colorMode === "light" ? "#f3f4f6" : "#272b33"}
-                _hover={
-                  colorMode === "light"
-                    ? { bg: "black", borderColor: "black", color: "white" }
-                    : { bg: "white", borderColor: "white", color: "black" }
-                }
-                onClick={togglePage}
-              >
-                Positions
-              </Button>
-            ) : (
-              <Button
-                variant="outline"
-                borderColor={colorMode === "light" ? "gray.200" : "gray.700"}
-                bg={colorMode === "light" ? "#f3f4f6" : "#272b33"}
-                _hover={
-                  colorMode === "light"
-                    ? { bg: "black", borderColor: "black", color: "white" }
-                    : { bg: "white", borderColor: "white", color: "black" }
-                }
-                onClick={togglePage}
-              >
-                Contests
-              </Button>
-            )}
+                {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+              </IconButton>
+              {!isConnected ? (
+                <Button
+                  variant="outline"
+                  borderColor={colorMode === "light" ? "gray.200" : "gray.700"}
+                  bg={colorMode === "light" ? "#f3f4f6" : "#272b33"}
+                  _hover={
+                    colorMode === "light"
+                      ? { bg: "black", borderColor: "black", color: "white" }
+                      : { bg: "white", borderColor: "white", color: "black" }
+                  }
+                  onClick={async () => await connectToPolygon()}
+                >
+                  Connect
+                </Button>
+              ) : pageContests ? (
+                <Button
+                  variant="outline"
+                  borderColor={colorMode === "light" ? "gray.200" : "gray.700"}
+                  bg={colorMode === "light" ? "#f3f4f6" : "#272b33"}
+                  _hover={
+                    colorMode === "light"
+                      ? { bg: "black", borderColor: "black", color: "white" }
+                      : { bg: "white", borderColor: "white", color: "black" }
+                  }
+                  onClick={togglePage}
+                >
+                  Positions
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  borderColor={colorMode === "light" ? "gray.200" : "gray.700"}
+                  bg={colorMode === "light" ? "#f3f4f6" : "#272b33"}
+                  _hover={
+                    colorMode === "light"
+                      ? { bg: "black", borderColor: "black", color: "white" }
+                      : { bg: "white", borderColor: "white", color: "black" }
+                  }
+                  onClick={togglePage}
+                >
+                  Contests
+                </Button>
+              )}
+            </Flex>
             <Divider mt={2} mb={1} />
             {isConnected ? (
               <>
                 <Text fontSize="sm" letterSpacing="wide" align="right">
-                  {address.slice(0, 6)}...{address.slice(-4)}
+                  {domainName === address
+                    ? `${address.slice(0, 6)}...${address.slice(-4)}`
+                    : domainName}
                 </Text>
                 <Text fontSize="sm" letterSpacing="wide" align="right">
                   Balance: {balance.toFixed(2)} USDC
@@ -171,7 +177,7 @@ const Home: NextPage = () => {
                   Approved: {approvedAmount.toFixed(2)} USDC
                 </Text>
                 {isWaiting && (
-                  <Flex alignItems="left" paddingLeft="0">
+                  <Flex alignItems="left" paddingLeft="3.5">
                     <Text
                       fontSize="sm"
                       className="blinking-dots"

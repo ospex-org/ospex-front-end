@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { contest, speculation, position } from "../constants/interface"
+import { contest } from "../constants/interface"
 import { useQuery, ApolloClient, NormalizedCacheObject } from "@apollo/client"
 import { contestsLtCurrentTime } from "../constants/queries"
 import { ContestCreatorAddress } from "../constants/addresses"

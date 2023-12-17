@@ -10,6 +10,7 @@ interface ProviderInterface {
   USDCContract: Contract | undefined | null
   isConnected: boolean
   address: string
+  domainName: string
   balance: number
   approvedAmount: number
   setApprovedAmount: Dispatch<SetStateAction<number>>
@@ -29,6 +30,7 @@ const defaultState = {
   USDCContract: undefined,
   isConnected: false,
   address: "",
+  domainName: "",
   balance: 0,
   approvedAmount: 0,
   setApprovedAmount: () => {},

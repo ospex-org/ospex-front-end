@@ -52,6 +52,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             contests: [],
             speculations: [],
             positions: [],
+            isLoadingContests: false,
             isWaiting,
             startWaiting,
             stopWaiting,

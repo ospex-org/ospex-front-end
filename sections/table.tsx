@@ -5,6 +5,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Spinner,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react"
@@ -14,64 +15,63 @@ import { SpeculationCard } from "../components/Speculation"
 import { SearchIcon } from "@chakra-ui/icons"
 
 const PrimaryTable = () => {
-  const { contests, speculations, positions } = useContext(ProviderContext)
+  const { contests, speculations, positions, isLoadingContests } = useContext(ProviderContext)
   const [query, setQuery] = useState("")
 
-  const RenderCards = () => {
-    const curTime = Date.now() / 1000
-    const speculationsNotStarted = speculations
-      ? speculations.filter((speculation) => speculation.lockTime >= curTime)
-      : undefined
+  const filteredSpeculations = speculations
+    ? speculations.filter((speculation) => {
+        const curTime = Date.now() / 1000
+        if (speculation.lockTime >= curTime) {
+          if (query === "") {
+            return true
+          }
+          const contestFilterContent = contests.find(
+            (contest) => contest.id === speculation.contestId
+          )
+          return (
+            contestFilterContent?.awayTeam.toLowerCase().includes(query.toLowerCase()) ||
+            contestFilterContent?.homeTeam.toLowerCase().includes(query.toLowerCase()) ||
+            contestFilterContent?.league.toLowerCase().includes(query.toLowerCase())
+          )
+        }
+        return false
+      })
+    : []
+
+  const RenderContent = () => {
+    if (isLoadingContests) {
+      return <Spinner size="xl" />
+    }
+
+    if (filteredSpeculations.length === 0) {
+      return <Text>No results found</Text>
+    }
+
     return (
-      <>
-        {speculationsNotStarted
-          ? speculationsNotStarted
-              .filter((speculation) => {
-                if (query === "") {
-                  return speculation
-                } else {
-                  const contestFilterContent = contests.find(
-                    (contest) => contest.id === speculation.contestId
-                  )
-                  if (
-                    contestFilterContent?.awayTeam
-                      .toLowerCase()
-                      .includes(query.toLowerCase()) ||
-                    contestFilterContent?.homeTeam
-                      .toLowerCase()
-                      .includes(query.toLowerCase()) ||
-                    contestFilterContent?.league
-                      .toLowerCase()
-                      .includes(query.toLowerCase())
-                  ) {
-                    return speculation
-                  }
-                }
-              })
-              .map((speculation) =>
-                contests.some(
-                  (contest) => contest.id === speculation.contestId
-                ) ? (
-                  <SpeculationCard
-                    speculation={speculation}
-                    contest={contests.find(
-                      (contest) => contest.id === speculation.contestId
-                    )}
-                    position={
-                      positions
-                        ? positions.filter(
-                            (position) => position.id === speculation.id
-                          )
-                        : undefined
-                    }
-                    key={speculation.id}
-                  />
-                ) : (
-                  <div key={speculation.id}></div>
-                )
-              )
-          : undefined}
-      </>
+      <Accordion>
+        {filteredSpeculations.map((speculation) => (
+          contests.some(
+            (contest) => contest.id === speculation.contestId
+          ) ? (
+            <SpeculationCard
+              speculation={speculation}
+              contest={contests.find(
+                (contest) => contest.id === speculation.contestId
+              )}
+              position={
+                positions
+                  ? positions.filter(
+                      (position) => position.id === speculation.id
+                    )
+                  : undefined
+              }
+              key={speculation.id}
+            />
+          ) : (
+            <div key={speculation.id}></div>
+          )
+        ))}
+      </Accordion>
     )
   }
 
@@ -110,7 +110,7 @@ const PrimaryTable = () => {
           </Box>
         </Center>
         <Center>
-          <Accordion>{RenderCards()}</Accordion>
+          {RenderContent()}
         </Center>
       </Box>
     </>

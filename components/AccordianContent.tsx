@@ -191,7 +191,7 @@ export function AccordianContent({
                 ? "(1 of 2) Approve amount first"
                 : "(2 of 2) Create position"}
             </Button>
-            <TransactionStatusModal isOpen={isOpen} onClose={onClose} />
+            <TransactionStatusModal isOpen={isOpen} onClose={onClose} stopWaiting={stopWaiting} />
             <Text
               fontSize="xs"
               fontWeight="semibold"

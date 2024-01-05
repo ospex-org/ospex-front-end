@@ -44,7 +44,7 @@ const Home: NextPage = () => {
     connectToPolygon,
   } = useContext(ProviderContext)
 
-  const { contests, speculations, positions } = useQueryResults(client)
+  const { contests, speculations, positions, isLoadingContests } = useQueryResults(client)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const togglePage = () => {
@@ -67,6 +67,7 @@ const Home: NextPage = () => {
         contests,
         speculations,
         positions,
+        isLoadingContests,
         isWaiting,
         startWaiting,
         stopWaiting,
@@ -197,7 +198,7 @@ const Home: NextPage = () => {
             )}
           </Box>
         </Flex>
-        <TransactionStatusModal isOpen={isOpen} onClose={onClose} />
+        <TransactionStatusModal isOpen={isOpen} onClose={onClose} stopWaiting={stopWaiting} />
       </Box>
       <Box mt="100px">{pageContests ? <PrimaryTable /> : <Positions />}</Box>
       <Box pb={{ base: 8, md: 10 }} />

@@ -8,7 +8,7 @@ import {
   useDisclosure,
   Divider,
 } from "@chakra-ui/react"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { ethers } from "ethers"
 import { contest, speculation, position } from "../constants/interface"
 import { ProviderContext } from "../contexts/ProviderContext"
@@ -40,6 +40,7 @@ export function PositionCard({
     onOpen: onStatusOpen,
     onClose: onStatusClose,
   } = useDisclosure()
+  const [totalClaimableAmount, setTotalClaimableAmount] = useState<string | number>(0)
 
   const claimableAmount = () => {
     if (speculation) {
@@ -81,6 +82,7 @@ export function PositionCard({
         }
       }
     }
+    return 0
   }
 
   const outcome = () => {
@@ -133,7 +135,10 @@ export function PositionCard({
                   ? { bg: "black", borderColor: "black", color: "white" }
                   : { bg: "white", borderColor: "white", color: "black" }
               }
-              onClick={onOpen}
+              onClick={() => {
+                setTotalClaimableAmount(claimableAmount)
+                onOpen()
+              }}
             >
               {speculation?.upperAmount === 0 ||
               speculation?.lowerAmount === 0 ||
@@ -148,10 +153,12 @@ export function PositionCard({
               speculation={speculation}
               contest={contest}
               position={position}
+              claimableAmount={totalClaimableAmount}
             />
             <TransactionStatusModal
               isOpen={isStatusOpen}
               onClose={onStatusClose}
+              stopWaiting={stopWaiting}
             />
             <Text fontSize="sm" fontWeight="semibold">
               {position ? `Claimable: ${claimableAmount()} USDC` : ""}

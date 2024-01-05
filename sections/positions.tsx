@@ -1,4 +1,4 @@
-import { Box, Center, Text, useColorModeValue } from "@chakra-ui/react"
+import { Box, Center, Spinner, Text, useColorModeValue } from "@chakra-ui/react"
 import { useContext } from "react"
 import { PositionCard } from "../components/Position"
 import {
@@ -112,45 +112,48 @@ const Positions = () => {
     })()
   }, [loading, error, data])
 
-  const RenderCards = () => {
-    return (
-      <>
-        {userPositions
-          .filter((position) => {
-            return position.userId === address
-          })
-          .sort((a: position, b: position) => {
-            const speculationA = userSpeculations.find(
-              (speculation) => speculation.id === a.speculationId
-            )
-            const speculationB = userSpeculations.find(
-              (speculation) => speculation.id === b.speculationId
-            )
-            if (speculationA && speculationB) {
-              return speculationB.lockTime - speculationA.lockTime
-            }
-            return 0
-          })
-          .map((position, index) => (
-            <PositionCard
-              speculation={userSpeculations.find(
-                (speculation) => speculation.id === position.speculationId
-              )}
-              position={position}
-              contest={userContests.find(
-                (contest) =>
-                  contest.id ===
-                  userSpeculations.find(
-                    (speculation) => speculation.id === position.speculationId
-                  )?.contestId
-              )}
-              key={index}
-            />
-          ))}
-      </>
-    )
+  const RenderContent = () => {
+    if (loading) {
+      return <Spinner size="xl" />
+    }
+  
+    const userFilteredPositions = userPositions
+      .filter((position) => position.userId === address)
+      .sort((a: position, b: position) => {
+        const speculationA = userSpeculations.find(
+          (speculation) => speculation.id === a.speculationId
+        )
+        const speculationB = userSpeculations.find(
+          (speculation) => speculation.id === b.speculationId
+        )
+        if (speculationA && speculationB) {
+          return speculationB.lockTime - speculationA.lockTime;
+        }
+        return 0
+      })
+  
+    if (userFilteredPositions.length === 0) {
+      return <Text>No results found</Text>
+    }
+  
+    return userFilteredPositions.map((position, index) => (
+      <PositionCard
+        speculation={userSpeculations.find(
+          (speculation) => speculation.id === position.speculationId
+        )}
+        position={position}
+        contest={userContests.find(
+          (contest) =>
+            contest.id ===
+            userSpeculations.find(
+              (speculation) => speculation.id === position.speculationId
+            )?.contestId
+        )}
+        key={index}
+      />
+    ))
   }
-
+  
   return (
     <>
       <Box flexDirection="column" alignContent="center" m="0 auto">
@@ -169,7 +172,7 @@ const Positions = () => {
           </Box>
         </Center>
         <Center>
-          <Box>{RenderCards()}</Box>
+          <Box>{RenderContent()}</Box>
         </Center>
       </Box>
     </>

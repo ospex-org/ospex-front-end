@@ -17,6 +17,8 @@ import {
   FormHelperText,
   useColorModeValue,
   Text,
+  SimpleGrid,
+  Box,
 } from "@chakra-ui/react"
 import { useContext, useState } from "react"
 import { contest, position, speculation } from "../constants/interface"
@@ -31,6 +33,7 @@ type ClaimModalProps = {
   speculation?: speculation
   contest?: contest
   position: position
+  claimableAmount: string | number
 }
 
 export function ClaimModal({
@@ -40,6 +43,7 @@ export function ClaimModal({
   speculation,
   contest,
   position,
+  claimableAmount
 }: ClaimModalProps) {
   const { provider, cfpContract, startWaiting, stopWaiting } =
     useContext(ProviderContext)
@@ -76,22 +80,41 @@ export function ClaimModal({
             <Text fontWeight="bold">Click submit to claim</Text>
             <br />
             <FormControl>
-              <FormLabel htmlFor="contribution">Contribute (USDC)</FormLabel>
-              <NumberInput
-                defaultValue={0}
-                min={0}
-                step={1}
-                width="125px"
-                value={+contribution}
-                onChange={setContribution}
-              >
-                <NumberInputField id="contribution" onFocus={handleFocus} />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-              <FormHelperText>(Not required)</FormHelperText>
+              <SimpleGrid columns={2} spacing={1} mb={3}>
+                <Box>
+                  <FormLabel htmlFor="amount">Claim (USDC)</FormLabel>
+                </Box>
+                <Box>
+                  <FormLabel htmlFor="contribution">Contribute (USDC)</FormLabel>
+                </Box>
+                <Box>
+                  <NumberInput
+                    value={(claimableAmount ? +claimableAmount : 0) - +contribution}
+                    width="125px"
+                    isReadOnly
+                  >
+                    <NumberInputField id="amount" onFocus={handleFocus} disabled />
+                  </NumberInput>
+                </Box>
+                <Box>
+                  <NumberInput
+                    defaultValue={0}
+                    min={0}
+                    max={+claimableAmount}
+                    step={1}
+                    width="125px"
+                    value={+contribution}
+                    onChange={setContribution}
+                  >
+                    <NumberInputField id="contribution" onFocus={handleFocus} />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                  <FormHelperText>(Not required)</FormHelperText>
+                </Box>
+              </SimpleGrid>
             </FormControl>
           </ModalBody>
           <ModalFooter>

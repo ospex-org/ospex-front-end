@@ -34,45 +34,37 @@ export function useQueryResults(client: ApolloClient<NormalizedCacheObject>) {
   }, [data, refetch])
 
   useEffect(() => {
-    ;(async () => {
-      const contestsFromQuery: contest[] = []
-      const speculationsFromQuery: speculation[] = []
-      const positionsFromQuery: position[] = []
-      console.log("Processing data...")
-      if (data && !loading && !error) {
+    const processData = async () => {
+      if (data && !error) {
         console.log("Data received:", data)
-        await data.contests.forEach((contest: contest) => {
-          if (contest.contestCreator === ContestCreatorAddress.toLowerCase()) {
-            contestsFromQuery.push(contest)
-            if (contest.speculations) {
-              contest.speculations.forEach((speculation: speculation) => {
-                if (
-                  speculation.speculationCreator ===
-                  SpeculationCreatorAddress.toLowerCase()
-                ) {
-                  speculationsFromQuery.push(speculation)
-                  if (speculation.positions) {
-                    speculation.positions.forEach((position: position) => {
-                      positionsFromQuery.push(position)
-                    })
-                  }
-                }
-              })
-            }
-          }
-        })
+        const contestsFromQuery = data.contests
+          .filter((contest: contest) => contest.contestCreator === ContestCreatorAddress.toLowerCase())
+          .map((contest: contest) => contest)
+  
+        const speculationsFromQuery = data.contests
+          .flatMap((contest: contest) => contest.speculations || [])
+          .filter((speculation: speculation) => speculation.speculationCreator === SpeculationCreatorAddress.toLowerCase())
+  
+        const positionsFromQuery = speculationsFromQuery
+          .flatMap((speculation: speculation) => speculation.positions || [])
+  
         setContests(contestsFromQuery)
         setSpeculations(speculationsFromQuery)
         setPositions(positionsFromQuery)
       } else if (error) {
-        console.error("Error fetching data:", error)
+        console.error("Error fetching data:", error);
       }
-    })()
+    }
+  
+    processData()
+
   }, [loading, error, data])
 
   return {
     contests,
     speculations,
     positions,
+    isLoadingContests: loading,
+    error
   }
 }

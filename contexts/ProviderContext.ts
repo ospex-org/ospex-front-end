@@ -17,6 +17,7 @@ interface ProviderInterface {
   contests: contest[] | []
   speculations: speculation[] | []
   positions: position[] | []
+  isLoadingContests: boolean
   isWaiting: boolean | undefined
   startWaiting: () => void
   stopWaiting: () => void
@@ -37,6 +38,7 @@ const defaultState = {
   contests: [],
   speculations: [],
   positions: [],
+  isLoadingContests: false,
   isWaiting: false,
   startWaiting: () => {},
   stopWaiting: () => {},

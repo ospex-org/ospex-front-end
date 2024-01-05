@@ -7,22 +7,20 @@ export function useWalletStatus() {
 
   // Effect to run only on the client side after initial render
   useEffect(() => {
-    const getInitialWaitingState = () => {
-      const storedValue = localStorage.getItem(waitingStateKey)
-      return storedValue ? JSON.parse(storedValue) : false
-    }
+    // Retrieve the stored state from session storage
+    const storedState = sessionStorage.getItem(waitingStateKey);
+    // If a stored state exists, parse it to boolean and set it,
+    // otherwise, default to false (not waiting)
+    setIsWaiting(storedState !== null ? JSON.parse(storedState) : false);
+  }, []);
 
-    // Set the state with the value from localStorage or the default value
-    setIsWaiting(getInitialWaitingState())
-  }, [])
-
-  // Effect to update localStorage whenever isWaiting changes
+  // Effect to update sessionStorage whenever isWaiting changes
   useEffect(() => {
-    // Check if isWaiting is not undefined to avoid setting localStorage during initial render
+    // Only update sessionStorage if isWaiting is not undefined
     if (isWaiting !== undefined) {
-      localStorage.setItem(waitingStateKey, JSON.stringify(isWaiting))
+      sessionStorage.setItem(waitingStateKey, JSON.stringify(isWaiting));
     }
-  }, [isWaiting])
+  }, [isWaiting]);
 
   const startWaiting = () => setIsWaiting(true)
   const stopWaiting = () => setIsWaiting(false)

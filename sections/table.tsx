@@ -9,69 +9,84 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react"
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
+import { useRouter } from 'next/router'
 import { ProviderContext } from "../contexts/ProviderContext"
 import { SpeculationCard } from "../components/Speculation"
 import { SearchIcon } from "@chakra-ui/icons"
 
 const PrimaryTable = () => {
+  const router = useRouter()
   const { contests, speculations, positions, isLoadingContests } = useContext(ProviderContext)
   const [query, setQuery] = useState("")
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
+
+  useEffect(() => {
+    if (!isLoadingContests && isInitialLoad) {
+      setIsInitialLoad(false) // Set isInitialLoad to false once the initial load is completed
+    }
+  }, [isLoadingContests, isInitialLoad])
+
+  const navigateToCreateContest = () => {
+    router.push('/c/create')
+  }
 
   const filteredSpeculations = speculations
     ? speculations.filter((speculation) => {
-        const curTime = Date.now() / 1000
-        if (speculation.lockTime >= curTime) {
-          if (query === "") {
-            return true
-          }
-          const contestFilterContent = contests.find(
-            (contest) => contest.id === speculation.contestId
-          )
-          return (
-            contestFilterContent?.awayTeam.toLowerCase().includes(query.toLowerCase()) ||
-            contestFilterContent?.homeTeam.toLowerCase().includes(query.toLowerCase()) ||
-            contestFilterContent?.league.toLowerCase().includes(query.toLowerCase())
-          )
+      const curTime = Date.now() / 1000
+      if (speculation.lockTime >= curTime) {
+        if (query === "") {
+          return true
         }
-        return false
-      })
+        const contestFilterContent = contests.find(
+          (contest) => contest.id === speculation.contestId
+        )
+        return (
+          contestFilterContent?.awayTeam.toLowerCase().includes(query.toLowerCase()) ||
+          contestFilterContent?.homeTeam.toLowerCase().includes(query.toLowerCase()) ||
+          contestFilterContent?.league.toLowerCase().includes(query.toLowerCase())
+        )
+      }
+      return false
+    })
     : []
 
   const RenderContent = () => {
-    if (isLoadingContests) {
+    if (isInitialLoad) {
       return <Spinner size="xl" />
     }
 
-    if (filteredSpeculations.length === 0) {
-      return <Text>No results found</Text>
-    }
-
     return (
-      <Accordion>
-        {filteredSpeculations.map((speculation) => (
-          contests.some(
-            (contest) => contest.id === speculation.contestId
-          ) ? (
-            <SpeculationCard
-              speculation={speculation}
-              contest={contests.find(
+      <>
+        {filteredSpeculations.length === 0 ? (
+          <Text onClick={navigateToCreateContest} _hover={{ cursor: "pointer" }}>No results found - Create one</Text>
+        ) : (
+          <Accordion>
+            {filteredSpeculations.map((speculation) => (
+              contests.some(
                 (contest) => contest.id === speculation.contestId
-              )}
-              position={
-                positions
-                  ? positions.filter(
+              ) ? (
+                <SpeculationCard
+                  speculation={speculation}
+                  contest={contests.find(
+                    (contest) => contest.id === speculation.contestId
+                  )}
+                  position={
+                    positions?.filter(
                       (position) => position.id === speculation.id
-                    )
-                  : undefined
-              }
-              key={speculation.id}
-            />
-          ) : (
-            <div key={speculation.id}></div>
-          )
-        ))}
-      </Accordion>
+                    )}
+                  key={speculation.id}
+                />
+              ) : (
+                <div key={speculation.id}></div>
+              )
+            ))}
+            <Box textAlign="center" pb="4">
+              <Text onClick={navigateToCreateContest} _hover={{ cursor: "pointer" }}>Create Contest</Text>
+            </Box>
+          </Accordion>
+        )}
+      </>
     )
   }
 

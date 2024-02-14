@@ -111,3 +111,21 @@ export const contestsLtCurrentTime = gql`
     }
   }
 `
+
+export const userTotals = gql`
+  query getUsers($Id: String!) {
+    users(where: {id: $Id}) {
+      id
+      totalSpeculated
+      totalClaimed
+      totalClaimable
+      totalContributed
+      totalLost
+      totalPending
+      wins
+      losses
+      ties
+      net
+    }
+  }
+`

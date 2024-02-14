@@ -7,6 +7,7 @@ export const handleFileUpload = (
     const reader = new FileReader()
     reader.onload = (e: ProgressEvent<FileReader>) => {
       if (e.target?.result) {
+        console.log("File content before callback:", e.target.result.toString())
         callback(e.target.result.toString())
       }
     }

@@ -19,7 +19,11 @@ export default async function handler(
       }
     })
     const data = await response.json()
-    res.status(200).json({ address: data.meta.owner })
+    if (data.meta && data.meta.owner) {
+      res.status(200).json({ address: data.meta.owner })
+    } else {
+      res.status(404).json({ error: "Domain owner not found" })
+    }
   } catch (error) {
     console.error(error)
     res.status(500).json({

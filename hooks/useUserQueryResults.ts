@@ -7,9 +7,9 @@ export function useUserQueryResults(
   client: ApolloClient<NormalizedCacheObject>,
   address: string
 ) {
-  const [userContests, setUserContests] = useState<contest[] | []>([])
-  const [userSpeculations, setUserSpeculations] = useState<speculation[] | []>([])
-  const [userPositions, setUserPositions] = useState<position[] | []>([])
+  const [userContests, setUserContests] = useState<contest[]>([])
+  const [userSpeculations, setUserSpeculations] = useState<speculation[]>([])
+  const [userPositions, setUserPositions] = useState<position[]>([])
 
   const { loading, error, data, refetch, startPolling } = useQuery(
     addressSpecificPositions,
@@ -31,7 +31,7 @@ export function useUserQueryResults(
   }, [data, refetch])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const contestsFromQuery: contest[] = []
       const speculationsFromQuery: speculation[] = []
       const positionsFromQuery: position[] = []
@@ -105,6 +105,6 @@ export function useUserQueryResults(
   }, [loading, error, data])
 
   return {
-    userContests, userSpeculations, userPositions
+    userContests, userSpeculations, userPositions, isLoadingPositions: loading, error
   }
 }

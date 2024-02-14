@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore"
+
 export interface modalData {
   heading: string,
   subheading: string,
@@ -93,4 +95,32 @@ export interface userPosition {
 
 export interface EncryptedSecretsUrlsResponse {
   encryptedSecretsUrls: string
+}
+
+export interface PotentialContest {
+  id: string
+  jsonoddsID: string
+  rundownID: string
+  sportspageID: number
+  Sport: number
+  AwayTeam: string
+  HomeTeam: string
+  MatchTime: Timestamp
+  OddType: string
+  PointSpreadAway: string
+  TotalNumber: string
+  Created: boolean
+  contestId?: string
+  status: string
+}
+
+export interface CreatedSpeculation {
+  id: string
+  contestId: string
+  lockTime: Timestamp
+  speculationCreator: string
+  speculationId: string
+  speculationScorer: string
+  theNumber: number
+  status: string
 }

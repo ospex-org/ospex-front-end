@@ -1,4 +1,5 @@
 import type { NextPage } from "next"
+import { useRouter } from "next/router"
 import React, { useState, useContext } from "react"
 import {
   Box,
@@ -26,7 +27,13 @@ import { TransactionStatusModal } from "../components/TransactionStatusModal"
 const Home: NextPage = () => {
   const { colorMode, toggleColorMode } = useColorMode()
   const [pageContests, setPageContests] = useState(true)
+  const router = useRouter()
 
+  const navigateToProfile = () => {
+    const profilePath = domainName !== address ? `/u/${domainName}` : `/u/${address}`
+    router.push(profilePath);
+  }
+  
   const {
     provider,
     contestOracleResolvedContract,
@@ -166,7 +173,7 @@ const Home: NextPage = () => {
             <Divider mt={2} mb={1} />
             {isConnected ? (
               <>
-                <Text fontSize="sm" letterSpacing="wide" align="right">
+                <Text fontSize="sm" letterSpacing="wide" align="right" onClick={navigateToProfile} _hover={{cursor: "pointer"}}>
                   {domainName === address
                     ? `${address.slice(0, 6)}...${address.slice(-4)}`
                     : domainName}

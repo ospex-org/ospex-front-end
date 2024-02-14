@@ -39,11 +39,23 @@ export const JsonRpcProviderUrl = 'https://eth-goerli.g.alchemy.com/v2/987gt3TTk
 // export const SpeculationCreatorAddress = '0xA8eb19F9B7c2b2611C1279423A0CB2aee3735320'
 
 // polygon mainnet deployment 11/30/2023
-export const ContestOracleResolvedAddress = '0x6342692B76273554beb4Ce1284ac6a92Ef645e79'
-export const CFPv1Address = '0x4fE4732953Ccfb58976B4fab8A8623876Fa2A44E'
-export const SpeculationSpreadAddress = '0x3c56194ED3C9F0400Bff6D4E04B396904EE96E75'
-export const SpeculationTotalAddress = '0x29b2e956B50AfF3292f75FE2C40105AA6560a847'
-export const SpeculationMoneylineAddress = '0x81cFc0Fd2360aC2E9A6EFe6A680fBF2E42074AD0'
+// export const ContestOracleResolvedAddress = '0x6342692B76273554beb4Ce1284ac6a92Ef645e79'
+// export const CFPv1Address = '0x4fE4732953Ccfb58976B4fab8A8623876Fa2A44E'
+// export const SpeculationSpreadAddress = '0x3c56194ED3C9F0400Bff6D4E04B396904EE96E75'
+// export const SpeculationTotalAddress = '0x29b2e956B50AfF3292f75FE2C40105AA6560a847'
+// export const SpeculationMoneylineAddress = '0x81cFc0Fd2360aC2E9A6EFe6A680fBF2E42074AD0'
+// export const USDCAddress = '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'
+// export const JsonRpcProviderUrl = 'https://polygon-mainnet.g.alchemy.com/v2/MCwR7_IJpLl2ke3uGB3Ru2sFbejLtBJF'
+// export const ContestCreatorAddress = '0x9B6b9Fa7fDb867a425d9507FFc013D74e70e6822'
+// export const SpeculationCreatorAddress = '0x9B6b9Fa7fDb867a425d9507FFc013D74e70e6822'
+// export const SecretsUrl = 'https://green-considerable-whitefish-752.mypinata.cloud/ipfs/QmStrMPyzjsaeZC5at9nRjznGFGdjkandWZhB8LkEgshRL'
+
+// polygon mainnet deployment 2/14/2024 (slight change to set contest scoring hash when contest is created)
+export const ContestOracleResolvedAddress = '0x415713dD8Db291a48957237eFb860c948F804197'
+export const CFPv1Address = '0x904029883412427994a4d32e496d0e7f5743e193'
+export const SpeculationSpreadAddress = '0x7aa2dC75A5aD5d99EEa28d344c2d8f7cF622d3E2'
+export const SpeculationTotalAddress = '0x4be070cb3f4c6ce07fec0586e3d7453b5dce33e3'
+export const SpeculationMoneylineAddress = '0xd77ba5b3883315c4c25c7adb52575680824b4b6a'
 export const USDCAddress = '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'
 export const JsonRpcProviderUrl = 'https://polygon-mainnet.g.alchemy.com/v2/MCwR7_IJpLl2ke3uGB3Ru2sFbejLtBJF'
 export const ContestCreatorAddress = '0x9B6b9Fa7fDb867a425d9507FFc013D74e70e6822'

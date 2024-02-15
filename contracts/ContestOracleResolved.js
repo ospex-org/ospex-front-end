@@ -20,11 +20,6 @@ export const ContestOracleResolvedAbi = [
 				"internalType": "bytes32",
 				"name": "createContestSourceHashValue",
 				"type": "bytes32"
-			},
-			{
-				"internalType": "bytes32",
-				"name": "scoreContestSourceHashValue",
-				"type": "bytes32"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -552,6 +547,11 @@ export const ContestOracleResolvedAbi = [
 				"type": "address"
 			},
 			{
+				"internalType": "bytes32",
+				"name": "scoreContestSourceHash",
+				"type": "bytes32"
+			},
+			{
 				"internalType": "enum ContestStatus",
 				"name": "contestStatus",
 				"type": "uint8"
@@ -596,6 +596,11 @@ export const ContestOracleResolvedAbi = [
 				"internalType": "string",
 				"name": "source",
 				"type": "string"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "_scoreContestSourceHash",
+				"type": "bytes32"
 			},
 			{
 				"internalType": "bytes",
@@ -670,6 +675,11 @@ export const ContestOracleResolvedAbi = [
 						"internalType": "address",
 						"name": "contestCreator",
 						"type": "address"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "scoreContestSourceHash",
+						"type": "bytes32"
 					},
 					{
 						"internalType": "enum ContestStatus",
@@ -974,19 +984,6 @@ export const ContestOracleResolvedAbi = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "scoreContestSourceHash",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "bytes32",
@@ -1034,6 +1031,19 @@ export const ContestOracleResolvedAbi = [
 	{
 		"inputs": [
 			{
+				"internalType": "bytes32",
+				"name": "newCreateContestSourceHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "updateCreateContestSourceHash",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "newLinkDenominator",
 				"type": "uint256"
@@ -1053,24 +1063,6 @@ export const ContestOracleResolvedAbi = [
 			}
 		],
 		"name": "updateRouterAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "sourceHashToUpdate",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "bytes32",
-				"name": "newSourceHash",
-				"type": "bytes32"
-			}
-		],
-		"name": "updateSourceHash",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

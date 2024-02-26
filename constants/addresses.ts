@@ -61,3 +61,4 @@ export const JsonRpcProviderUrl = 'https://polygon-mainnet.g.alchemy.com/v2/MCwR
 export const ContestCreatorAddress = '0x9B6b9Fa7fDb867a425d9507FFc013D74e70e6822'
 export const SpeculationCreatorAddress = '0x9B6b9Fa7fDb867a425d9507FFc013D74e70e6822'
 export const SecretsUrl = 'https://green-considerable-whitefish-752.mypinata.cloud/ipfs/QmStrMPyzjsaeZC5at9nRjznGFGdjkandWZhB8LkEgshRL'
+export const ScoreContestHash = '0xcb2a11db3190c322239b52afb3caefccfccd850566834819b012c5520f8d31cd'

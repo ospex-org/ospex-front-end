@@ -8,11 +8,11 @@ const useCreatedSpeculations = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const now = Timestamp.fromDate(new Date())
+    const now = Date.now()
     const speculationsQuery = query(
       collection(db, 'speculations'),
-      where('lockTime', '>', now),
-      orderBy('lockTime', 'asc')
+      where('MatchTime', '>', now),
+      orderBy('MatchTime', 'asc')
     )
 
     const unsubscribe = onSnapshot(speculationsQuery, (querySnapshot) => {

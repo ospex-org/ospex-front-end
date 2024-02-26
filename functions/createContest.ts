@@ -2,19 +2,10 @@ import { Contract, ethers } from "ethers"
 import { JsonRpcProvider } from "@ethersproject/providers"
 import { getEncryptedSecretsUrls } from "../scripts/getEncryptedSecretsUrls"
 import { linkTokenAddress, subscriptionId } from "../constants/functions"
-import { ContestOracleResolvedAddress } from "../constants/addresses"
-import { collection, getDocs, query, updateDoc, where } from "firebase/firestore"
-import { db } from "../utils/firebase"
-
-const getContestRef = async (jsonoddsID: string) => {
-  const contestsRef = collection(db, 'contests')
-  const q = query(contestsRef, where("jsonoddsID", "==", jsonoddsID))
-  const querySnapshot = await getDocs(q)
-  if (querySnapshot.empty) {
-    throw new Error("Contest not found")
-  }
-  return querySnapshot.docs[0].ref
-}
+import { ContestOracleResolvedAddress, ScoreContestHash } from "../constants/addresses"
+import { auth } from "../utils/firebase"
+import { signInAnonymously } from "firebase/auth"
+import { updateContestStatus } from "./updateContestStatus"
 
 export const createContest = async (
   rundownID: string,
@@ -27,16 +18,24 @@ export const createContest = async (
   onModalClose: () => void,
   provider: JsonRpcProvider | undefined | null,
   contestOracleResolvedContract: Contract | undefined | null
-) => {
+): Promise<void> => {
   try {
+
+    if (!provider || !contestOracleResolvedContract) {
+      throw new Error("Provider or contract is undefined")
+    }
+
+    await signInAnonymously(auth)
+    const currentUser = auth.currentUser
+    if (!currentUser) {
+      throw new Error("Failed to sign in anonymously")
+    }
+
+    const idToken = await currentUser.getIdToken()
     startWaiting()
     onModalOpen()
-    const contestRef = await getContestRef(jsonoddsID)
-    await updateDoc(contestRef, {
-      status: 'Pending',
-    })    
-    const encryptedSecretsUrls =
-      await getEncryptedSecretsUrls()
+    await updateContestStatus({ jsonoddsID, status: 'Pending', idToken })
+    const encryptedSecretsUrls = await getEncryptedSecretsUrls()
     const gasLimit = 300000
     const linkAmount = ethers.utils.parseUnits(
       "0.0125",
@@ -61,21 +60,24 @@ export const createContest = async (
         sportspageID,
         jsonoddsID,
         source,
+        ScoreContestHash,
         encryptedSecretsUrls,
         subscriptionId,
         gasLimit,
         { gasLimit: 1000000 }
       )
     await createContestTx.wait()
-    onModalClose()
   } catch (error) {
     console.error("an error has occurred:", error)
-    const contestRef = await getContestRef(jsonoddsID)
-    await updateDoc(contestRef, {
+    const currentUser = auth.currentUser
+    await updateContestStatus({
+      jsonoddsID,
       status: 'Ready',
-    })    
-    onModalClose()
+      idToken: await currentUser?.getIdToken()
+    })
   } finally {
+    onModalClose()
     stopWaiting()
   }
 }
+

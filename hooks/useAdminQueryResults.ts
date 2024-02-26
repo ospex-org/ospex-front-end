@@ -33,9 +33,10 @@ export function useAdminQueryResults(
       const contestsFromQuery: contest[] = []
       if (data && !loading && !error) {
         await data.contests.forEach((contest: contest) => {
-          if (contest.contestCreator === ContestCreatorAddress.toLowerCase()) {
+          // if (contest.contestCreator === ContestCreatorAddress.toLowerCase()) {
+          // allow anyone to create contests
             contestsFromQuery.push(contest)
-          }
+          // }
         })
         setAdminContests(contestsFromQuery)
       } else if (error) {

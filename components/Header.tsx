@@ -69,11 +69,11 @@ export const Header: NextPage = () => {
 					zIndex="1"
 				>
 					<Flex align="center" paddingTop={2}>
-						<Heading fontSize="21px" mr={1}>
+						<Heading fontSize="21px" mr={1} onClick={navigateHome} _hover={{ cursor: "pointer" }}>
 							ospex.org <Hide below="md">|</Hide>
 						</Heading>
 						<Hide below="md">
-							<Text>Open Speculation Exchange</Text>
+							<Text onClick={navigateHome} _hover={{ cursor: "pointer" }}>Open Speculation Exchange</Text>
 						</Hide>
 					</Flex>
 					<Box width="160px">

@@ -51,12 +51,14 @@ export function useQueryResults(client: ApolloClient<NormalizedCacheObject>) {
       if (data && !error) {
         console.log("Data received:", data)
         const contestsFromQuery = data.contests
-          .filter((contest: contest) => contest.contestCreator === ContestCreatorAddress.toLowerCase())
+          // .filter((contest: contest) => contest.contestCreator === ContestCreatorAddress.toLowerCase())
+          // allow anyone to create contests
           .map((contest: contest) => contest)
   
         const speculationsFromQuery = data.contests
           .flatMap((contest: contest) => contest.speculations || [])
-          .filter((speculation: speculation) => speculation.speculationCreator === SpeculationCreatorAddress.toLowerCase())
+          // .filter((speculation: speculation) => speculation.speculationCreator === SpeculationCreatorAddress.toLowerCase())
+          // allow anyone to create speculations
   
         const positionsFromQuery = speculationsFromQuery
           .flatMap((speculation: speculation) => speculation.positions || [])

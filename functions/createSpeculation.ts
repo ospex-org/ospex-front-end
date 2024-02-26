@@ -1,136 +1,85 @@
-import { doc, setDoc, Timestamp, updateDoc } from "firebase/firestore"
+import { Timestamp } from "firebase/firestore"
+import { signInAnonymously } from "firebase/auth"
 import { SpeculationMoneylineAddress, SpeculationSpreadAddress, SpeculationTotalAddress } from "../constants/addresses"
-import { db } from "../utils/firebase"
 import { Contract } from "ethers"
+import { auth } from "../utils/firebase"
+import { updateSpeculationStatus } from "./updateSpeculationStatus"
 
-export const createSpreadSpeculation = async (
-  contestId: string,
-  MatchTime: Timestamp,
-  theNumber: string,
+interface CreateSpeculationParams {
+  contestId: string
+  MatchTime: Timestamp
+  theNumber?: string
+  speculationScorer: string
   cfpContract: Contract | undefined | null,
   startWaiting: () => void,
   stopWaiting: () => void,
   onModalOpen: () => void,
-  onModalClose: () => void,
-) => {
-  try {
-    startWaiting()
-    onModalOpen()
-    const speculationIdentifier = `${contestId}-${SpeculationSpreadAddress}`
-    const speculationRef = doc(db, 'speculations', speculationIdentifier)
-    const parseFloatTheNumber = parseFloat(theNumber)
-    await setDoc(speculationRef, {
-      contestId,
-      lockTime: MatchTime,
-      speculationScorer: SpeculationSpreadAddress,
-      theNumber: parseFloatTheNumber,
-      status: 'Pending',
-    })
-    const convertTheNumberForSpread = parseFloatTheNumber > 0 ? Math.ceil(parseFloatTheNumber) : Math.floor(parseFloatTheNumber)
-    const createSpeculationTx = 
-      await cfpContract!.createSpeculation(
-        Number(contestId),
-        MatchTime.seconds,
-        SpeculationSpreadAddress,
-        convertTheNumberForSpread
-      )
-    await createSpeculationTx.wait()
-    onModalClose()
-  } catch (error) {
-    console.error("an error has occurred:", error)
-    const speculationRef = doc(db, 'speculations', `${contestId}-${SpeculationSpreadAddress}`)
-    await updateDoc(speculationRef, {
-      status: 'Ready',
-    })
-    onModalClose()
-  } finally {
-    stopWaiting()
-  }
+  onModalClose: () => void
 }
 
-export const createTotalSpeculation = async (
-  contestId: string,
-  MatchTime: Timestamp,
-  theNumber: string,
-  cfpContract: Contract | undefined | null,
-  startWaiting: () => void,
-  stopWaiting: () => void,
-  onModalOpen: () => void,
-  onModalClose: () => void,
-) => {
-  try {
-    startWaiting()
-    onModalOpen()
-    const speculationIdentifier = `${contestId}-${SpeculationTotalAddress}`
-    const speculationRef = doc(db, 'speculations', speculationIdentifier)
-    const parseFloatTheNumber = parseFloat(theNumber)
-    await setDoc(speculationRef, {
-      contestId,
-      lockTime: MatchTime,
-      speculationScorer: SpeculationTotalAddress,
-      theNumber: parseFloatTheNumber,
-      status: 'Pending',
-    })
-    const convertTheNumberForTotal = Math.round(parseFloatTheNumber)
-    const createSpeculationTx = 
-      await cfpContract!.createSpeculation(
-        Number(contestId),
-        MatchTime.seconds,
-        SpeculationTotalAddress,
-        convertTheNumberForTotal
-      )
-    await createSpeculationTx.wait()
-    onModalClose()
-  } catch (error) {
-    console.error("an error has occurred:", error)
-    const speculationRef = doc(db, 'speculations', `${contestId}-${SpeculationTotalAddress}`)
-    await updateDoc(speculationRef, {
-      status: 'Ready',
-    })
-    onModalClose()
-  } finally {
-    stopWaiting()
-  }
-}
+export const createSpeculation = async ({
+  contestId,
+  MatchTime,
+  theNumber = "0",
+  speculationScorer,
+  cfpContract,
+  startWaiting,
+  stopWaiting,
+  onModalOpen,
+  onModalClose
+}: CreateSpeculationParams): Promise<void> => {
 
-export const createMoneylineSpeculation = async (
-  contestId: string,
-  MatchTime: Timestamp,
-  cfpContract: Contract | undefined | null,
-  startWaiting: () => void,
-  stopWaiting: () => void,
-  onModalOpen: () => void,
-  onModalClose: () => void,
-) => {
+  let adjustedNumber = theNumber
+  if (speculationScorer === SpeculationSpreadAddress) {
+    adjustedNumber = Math.floor(parseFloat(theNumber)).toString()
+  } else if (speculationScorer === SpeculationTotalAddress) {
+    adjustedNumber = Math.round(parseFloat(theNumber)).toString()
+  } else if (speculationScorer === SpeculationMoneylineAddress) {
+    adjustedNumber = "0"
+  }
+
   try {
+    await signInAnonymously(auth)
+    const currentUser = auth.currentUser
+    if (!currentUser) {
+      throw new Error("Failed to sign in anonymously")
+    }
+
+    const idToken = await currentUser.getIdToken()
     startWaiting()
     onModalOpen()
-    const speculationIdentifier = `${contestId}-${SpeculationMoneylineAddress}`
-    const speculationRef = doc(db, 'speculations', speculationIdentifier)
-    await setDoc(speculationRef, {
+
+    await updateSpeculationStatus({
       contestId,
-      lockTime: MatchTime,
-      speculationScorer: SpeculationMoneylineAddress,
-      theNumber: 0,
+      MatchTime: MatchTime.toMillis(),
+      adjustedNumber,
+      speculationScorer,
       status: 'Pending',
+      idToken,
     })
-    const createSpeculationTx = 
-      await cfpContract!.createSpeculation(
-        Number(contestId),
-        MatchTime.seconds,
-        SpeculationMoneylineAddress,
-        0
-      )
+
+    const createSpeculationTx = await cfpContract!.createSpeculation(
+      Number(contestId),
+      MatchTime.seconds,
+      speculationScorer,
+      Number(adjustedNumber)
+    )
     await createSpeculationTx.wait()
-    onModalClose()
+
   } catch (error) {
-    console.error("an error has occurred:", error)
-    const speculationRef = doc(db, 'speculations', `${contestId}-${SpeculationMoneylineAddress}`)
-    await updateDoc(speculationRef, {
-      status: 'Ready',
+    console.error("Error calling setSpeculationStatus:", error)
+    const currentUser = auth.currentUser
+    await updateSpeculationStatus({
+      contestId,
+      MatchTime: MatchTime.toMillis(),
+      adjustedNumber,
+      speculationScorer,
+      status: 'Error',
+      idToken: await currentUser?.getIdToken(),
     })
-    onModalClose()
+    throw error
   } finally {
     stopWaiting()
+    onModalClose()
   }
 }

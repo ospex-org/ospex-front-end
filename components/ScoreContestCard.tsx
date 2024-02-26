@@ -1,15 +1,10 @@
 import { useContext } from "react"
 import { contest } from "../constants/interface"
-import { handleFileUpload } from "../scripts/fileUpload"
 import {
   Box,
   Flex,
   Button,
   Divider,
-  Input,
-  RadioGroup,
-  Radio,
-  Stack,
   Text,
   useColorMode,
 } from "@chakra-ui/react"
@@ -19,45 +14,23 @@ import { scoreContest } from "../functions/scoreContest"
 
 interface ContestCardProps {
   contest: contest
-  cardState: ContestCardState
-  updateCardState: (newState: ContestCardState) => void
   onModalOpen: () => void
   onModalClose: () => void
 }
 
-type ContestCardState = {
-  sourceOption: "default" | "custom"
-  createContestSource: string
-  useGithubSource: boolean
-}
-
 export const ScoreContestCard: React.FC<ContestCardProps> = ({
-  contest, cardState, updateCardState, onModalOpen, onModalClose
+  contest, onModalOpen, onModalClose
 }) => {
-  console.log(`Rendering ScoreContestCard with state:`, cardState)
   const { provider, contestOracleResolvedContract, isWaiting, startWaiting, stopWaiting } = useContext(ProviderContext)
   const { colorMode } = useColorMode()
 
   const handleScoreContest = async (contest: contest) => {
-    if (cardState.useGithubSource) {
-      try {
-        const sourceCode = await fetchCurrentScoreContestSourceFromGithub()
-        scoreContest(contest.id, sourceCode, startWaiting, stopWaiting, onModalOpen, onModalClose, provider, contestOracleResolvedContract)
-      } catch (error) {
-        console.error("Error fetching source code:", error)
-      }
-    } else {
-      scoreContest(contest.id, cardState.createContestSource, startWaiting, stopWaiting, onModalOpen, onModalClose, provider, contestOracleResolvedContract)
+    try {
+      const sourceCode = await fetchCurrentScoreContestSourceFromGithub()
+      scoreContest(contest.id, sourceCode, startWaiting, stopWaiting, onModalOpen, onModalClose, provider, contestOracleResolvedContract)
+    } catch (error) {
+      console.error("Error fetching source code:", error)
     }
-  }
-
-  const handleRadioChange = (nextValue: string) => {
-    console.log(`Radio button value before state update: ${cardState.sourceOption}`)
-    updateCardState({
-      ...cardState,
-      sourceOption: nextValue as "default" | "custom",
-      useGithubSource: nextValue === "default"
-    })
   }
 
   return (
@@ -97,33 +70,6 @@ export const ScoreContestCard: React.FC<ContestCardProps> = ({
               </Text>
               <Text fontSize="sm">Status: {contest.contestStatus}</Text>
             </Box>
-            <Divider my="2" />
-
-            <RadioGroup onChange={handleRadioChange} value={cardState?.sourceOption}>
-              <Stack direction="row">
-                <Radio value="default" colorScheme="gray">
-                  <Text fontSize="xs">Use Default Source</Text>
-                </Radio>
-                <Radio value="custom" colorScheme="gray">
-                  <Text fontSize="xs">Upload Custom Source</Text>
-                </Radio>
-              </Stack>
-            </RadioGroup>
-            {cardState?.sourceOption === "custom" && (
-              <>
-                {!cardState.createContestSource && (
-                  <Input
-                    type="file"
-                    accept=".js"
-                    mt="2"
-                    onChange={(e) => handleFileUpload(e, (fileContent) => {
-                      updateCardState({ ...cardState, createContestSource: fileContent })
-                    })}
-                  />
-                )}
-                {cardState.createContestSource && <Text mt="2" fontSize="sm">File loaded successfully.</Text>}
-              </>
-            )}
             <Divider my="2" />
 
             <Button

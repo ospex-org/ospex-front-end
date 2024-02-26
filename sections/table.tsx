@@ -25,6 +25,15 @@ const PrimaryTable = () => {
     if (!isLoadingContests && isInitialLoad) {
       setIsInitialLoad(false) // Set isInitialLoad to false once the initial load is completed
     }
+
+    // Timer to force component to update every minute
+    const interval = setInterval(() => {
+      // This will trigger a re-render by updating a state variable
+      setQuery((prevQuery) => prevQuery)
+    }, 60000)
+
+    // Cleanup function to clear the interval when the component is unmounted
+    return () => clearInterval(interval)
   }, [isLoadingContests, isInitialLoad])
 
   const navigateToCreateContest = () => {
@@ -82,7 +91,7 @@ const PrimaryTable = () => {
               )
             ))}
             <Box textAlign="center" pb="4">
-              <Text onClick={navigateToCreateContest} _hover={{ cursor: "pointer" }}>Create Contest</Text>
+              <Text onClick={navigateToCreateContest} _hover={{ cursor: "pointer" }}>Looking for something different? Create Contest</Text>
             </Box>
           </Accordion>
         )}

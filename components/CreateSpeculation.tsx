@@ -11,7 +11,7 @@ import router from "next/router"
 import { PotentialContest } from "../constants/interface"
 import { SpeculationMoneylineAddress, SpeculationSpreadAddress, SpeculationTotalAddress } from "../constants/addresses"
 import useCreatedSpeculations from "../hooks/useCreatedSpeculations"
-import { createMoneylineSpeculation, createSpreadSpeculation, createTotalSpeculation } from "../functions/createSpeculation"
+import { createSpeculation } from "../functions/createSpeculation"
 import { ProviderContext } from "../contexts/ProviderContext"
 
 interface CreateSpeculationProps {
@@ -29,6 +29,7 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
   const { colorMode } = useColorMode()
 
   const checkSpeculationStatus = (speculationType: string, contestId: string) => {
+    console.log(`Passed into checkSpeculationStatus: ${speculationType}, Contest ID: ${contestId}`)
     let address: string
     switch (speculationType) {
       case "spread":
@@ -41,11 +42,14 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
         address = SpeculationTotalAddress
         break
       default:
+        console.log("Unknown speculation type:", speculationType)
         return { created: false, status: "" }
     }
+    console.log(`Checking status for: ${speculationType}, Contest ID: ${contestId}, Address: ${address}`)
     const speculation = createdSpeculations.find(speculation =>
       speculation.contestId === contestId && speculation.speculationScorer.toLowerCase() === address.toLowerCase()
     )
+    console.log("Found speculation:", speculation)
     return {
       created: !!speculation,
       status: speculation?.status || "",
@@ -57,15 +61,28 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
   }
 
   const renderSpeculationButton = (typeOfSpeculation: string, label: string) => {
+    console.log(`Contest Id prior to passing to checkSpeculationStatus: ${contest.status}`)
     const { created, status } = checkSpeculationStatus(typeOfSpeculation, contest.contestId!)
-    let currentOdds
+    console.log(`Render button for ${typeOfSpeculation}: created=${created}, status=${status}`)
+    let currentOdds: string
+    let scorerAddress: string
+    let theNumber: string
 
     if (typeOfSpeculation === "spread") {
-      currentOdds = `Current line: ${Number(contest.PointSpreadAway) < 0 ? `${contest.AwayTeam} ${contest.PointSpreadAway}` : `${contest.HomeTeam} -${Number(contest.PointSpreadAway)}`}`
+      currentOdds = `Current line: ${Number(contest.PointSpreadAway) < 0 ? 
+        `${contest.AwayTeam} ${contest.PointSpreadAway}` : 
+        `${contest.HomeTeam} -${Number(contest.PointSpreadAway)}`
+      }`
+      scorerAddress = SpeculationSpreadAddress
+      theNumber = contest.PointSpreadAway
     } else if (typeOfSpeculation === "total") {
       currentOdds = `Current total: ${contest.TotalNumber}`
+      scorerAddress = SpeculationTotalAddress
+      theNumber = contest.TotalNumber
     } else {
       currentOdds = ""
+      scorerAddress = SpeculationMoneylineAddress
+      theNumber = "0"
     }
 
     if (created && status === "Pending") {
@@ -106,13 +123,18 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
                 : { bg: "white", borderColor: "white", color: "black" }
             }
             onClick={() => {
-              if (typeOfSpeculation === "spread") {
-                createSpreadSpeculation(contest.contestId!, contest.MatchTime, contest.PointSpreadAway, cfpContract, startWaiting, stopWaiting, onModalOpen, onModalClose)
-              } else if (typeOfSpeculation === "moneyline") {
-                createMoneylineSpeculation(contest.contestId!, contest.MatchTime, cfpContract, startWaiting, stopWaiting, onModalOpen, onModalClose)
-              } else if (typeOfSpeculation === "total") {
-                createTotalSpeculation(contest.contestId!, contest.MatchTime, contest.TotalNumber, cfpContract, startWaiting, stopWaiting, onModalOpen, onModalClose)
-              }
+              console.log(`Contest is (from clicking to create): ${contest.contestId}`)
+              createSpeculation({
+                contestId: contest.contestId!, 
+                MatchTime: contest.MatchTime, 
+                theNumber, 
+                speculationScorer: scorerAddress,
+                cfpContract, 
+                startWaiting, 
+                stopWaiting, 
+                onModalOpen, 
+                onModalClose
+              })
             }}
           >
             Create {label} Speculation

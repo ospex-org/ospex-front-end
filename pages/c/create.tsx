@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext } from "react"
 import { Header } from "../../components/Header"
 import {
   Box,
@@ -16,41 +16,10 @@ import { TransactionStatusModal } from "../../components/TransactionStatusModal"
 import { CreateContestCard } from "../../components/CreateContestCard"
 import { Footer } from "../../components/Footer"
 
-type ContestCardState = {
-  sourceOption: "default" | "custom"
-  createContestSource: string
-  useGithubSource: boolean
-}
-
 const CreateContest: React.FC = () => {
   const { potentialContests, loading: loadingContests } = usePotentialContests()
-  const { provider, contestOracleResolvedContract, cfpContract, isWaiting, startWaiting, stopWaiting } =
-    useContext(ProviderContext)
-  const [contestCardsState, setContestCardsState] = useState<Record<string, ContestCardState>>({})
+  const { stopWaiting } = useContext(ProviderContext)
   const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
-
-  useEffect(() => {
-    const initialState = potentialContests.reduce((acc, contest) => {
-      const uniqueKey = `${contest.rundownID}-${contest.sportspageID}-${contest.jsonoddsID}`
-      acc[uniqueKey] = {
-        sourceOption: "default",
-        createContestSource: "",
-        useGithubSource: true,
-      }
-      return acc
-    }, {} as Record<string, ContestCardState>)
-    console.log("Initial state:", initialState)
-    setContestCardsState(initialState)
-  }, [potentialContests])
-
-  const updateContestCardState = (key: string, newState: ContestCardState) => {
-    console.log(`State before update for key ${key}:`, contestCardsState[key])
-    setContestCardsState(prevState => {
-      const updatedState = { ...prevState, [key]: newState }
-      console.log(`State after update for key ${key}:`, updatedState[key])
-      return updatedState
-    })
-  }
 
   return (
     <>
@@ -72,14 +41,11 @@ const CreateContest: React.FC = () => {
               {loadingContests ? (<Spinner size="xl" />) : potentialContests.length > 0 ? (
                 potentialContests.map((contest, index) => {
                   const uniqueKey = `${contest.rundownID}-${contest.sportspageID}-${contest.jsonoddsID}`
-                  console.log("Card state for", uniqueKey, contestCardsState[uniqueKey])
                   return (
                     <CreateContestCard
                       key={uniqueKey}
                       contest={contest}
                       index={index}
-                      cardState={contestCardsState[uniqueKey]}
-                      updateCardState={(newState) => updateContestCardState(uniqueKey, newState)}
                       onModalOpen={onModalOpen}
                       onModalClose={onModalClose}
                     />

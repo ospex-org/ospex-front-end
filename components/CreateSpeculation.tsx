@@ -29,7 +29,6 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
   const { colorMode } = useColorMode()
 
   const checkSpeculationStatus = (speculationType: string, contestId: string) => {
-    console.log(`Passed into checkSpeculationStatus: ${speculationType}, Contest ID: ${contestId}`)
     let address: string
     switch (speculationType) {
       case "spread":
@@ -45,11 +44,9 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
         console.log("Unknown speculation type:", speculationType)
         return { created: false, status: "" }
     }
-    console.log(`Checking status for: ${speculationType}, Contest ID: ${contestId}, Address: ${address}`)
     const speculation = createdSpeculations.find(speculation =>
       speculation.contestId === contestId && speculation.speculationScorer.toLowerCase() === address.toLowerCase()
     )
-    console.log("Found speculation:", speculation)
     return {
       created: !!speculation,
       status: speculation?.status || "",
@@ -61,9 +58,7 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
   }
 
   const renderSpeculationButton = (typeOfSpeculation: string, label: string) => {
-    console.log(`Contest Id prior to passing to checkSpeculationStatus: ${contest.status}`)
     const { created, status } = checkSpeculationStatus(typeOfSpeculation, contest.contestId!)
-    console.log(`Render button for ${typeOfSpeculation}: created=${created}, status=${status}`)
     let currentOdds: string
     let scorerAddress: string
     let theNumber: string
@@ -123,7 +118,6 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
                 : { bg: "white", borderColor: "white", color: "black" }
             }
             onClick={() => {
-              console.log(`Contest is (from clicking to create): ${contest.contestId}`)
               createSpeculation({
                 contestId: contest.contestId!, 
                 MatchTime: contest.MatchTime, 

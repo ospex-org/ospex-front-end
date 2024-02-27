@@ -19,6 +19,8 @@ export const updateContestStatus = async ({
 			body: JSON.stringify({ jsonoddsID, status }),
 		})
 
+		console.log('idToken:', idToken)
+
 		if (!response.ok) {
 			throw new Error(`Failed to update contest status to ${status}`)
 		}

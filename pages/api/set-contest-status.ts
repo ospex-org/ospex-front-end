@@ -12,18 +12,20 @@ interface ContestStatusResponse {
   error?: string;
 }
 
-if (!admin.apps.length) {
-  console.log('Initializing Firebase Admin SDK...')
-  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
-  console.log(`Processed Private Key: ${privateKey}`)
+if (admin.apps.length === 0) {
+  // Parse the SERVICE_ACCOUNT_KEY environment variable
+  const serviceAccount = process.env.SERVICE_ACCOUNT_KEY
+      ? JSON.parse(process.env.SERVICE_ACCOUNT_KEY)
+      : undefined
+
+  if (!serviceAccount) {
+      console.error('Missing or invalid SERVICE_ACCOUNT_KEY environment variable')
+      process.exit(1) // Exit if the service account key is not provided
+  }
+
   admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: privateKey,
-    }),
+      credential: admin.credential.cert(serviceAccount),
   })
-  console.log('Firebase Admin SDK initialized.')
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ContestStatusResponse>) {

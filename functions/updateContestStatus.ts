@@ -1,21 +1,21 @@
 interface ContestStatusUpdateBody {
-  jsonoddsID: string
+	jsonoddsID: string
 	status: string
-  idToken?: string
+	idToken?: string
 }
 
 export const updateContestStatus = async ({
-  jsonoddsID,
+	jsonoddsID,
 	status,
-  idToken
+	idToken
 }: ContestStatusUpdateBody): Promise<void> => {
 	try {
 		const response = await fetch('/api/set-contest-status', {
 			method: 'POST',
-			headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${idToken}`,
-      },
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${idToken}`,
+			},
 			body: JSON.stringify({ jsonoddsID, status }),
 		})
 

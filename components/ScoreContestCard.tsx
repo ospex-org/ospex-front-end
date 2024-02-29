@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import React, { useContext } from "react"
 import { contest } from "../constants/interface"
 import {
   Box,
@@ -27,7 +27,7 @@ export const ScoreContestCard: React.FC<ContestCardProps> = ({
   const handleScoreContest = async (contest: contest) => {
     try {
       const sourceCode = await fetchCurrentScoreContestSourceFromGithub()
-      scoreContest(contest.id, sourceCode, startWaiting, stopWaiting, onModalOpen, onModalClose, provider, contestOracleResolvedContract)
+      scoreContest(contest.id, contest.jsonoddsId, sourceCode, startWaiting, stopWaiting, onModalOpen, onModalClose, provider, contestOracleResolvedContract)
     } catch (error) {
       console.error("Error fetching source code:", error)
     }
@@ -89,7 +89,9 @@ export const ScoreContestCard: React.FC<ContestCardProps> = ({
                   : { bg: "white", borderColor: "white", color: "black" }
               }
               onClick={() => {
-                handleScoreContest(contest)
+                if (provider) {
+                  handleScoreContest(contest)
+                }
               }}
             >
               Score Contest

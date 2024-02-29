@@ -14,6 +14,8 @@ import { useRouter } from 'next/router'
 import { ProviderContext } from "../contexts/ProviderContext"
 import { SpeculationCard } from "../components/Speculation"
 import { SearchIcon } from "@chakra-ui/icons"
+import { useFilteredItems } from "../hooks/useFilteredItems"
+import { contest, speculation } from "../constants/interface"
 
 const PrimaryTable = () => {
   const router = useRouter()
@@ -40,35 +42,19 @@ const PrimaryTable = () => {
     router.push('/c/create')
   }
 
-  const filteredSpeculations = React.useMemo(() => {
-    // Deduplicate speculations based on a combination of contestId and speculationScorer
-    const uniqueSpeculations = new Map()
-    
-    speculations?.forEach((speculation) => {
-      const curTime = Date.now() / 1000
-      if (speculation.lockTime >= curTime) {
-        const uniqueKey = `${speculation.contestId}-${speculation.speculationScorer}`
-        if (!uniqueSpeculations.has(uniqueKey)) {
-          uniqueSpeculations.set(uniqueKey, speculation)
-        }
-      }
-    })
+  const speculationFilterCriteria = (speculation: speculation, query: string, contests: contest[] | undefined): boolean => {
+    if (query === "") return true
+    if (!contests) return false
+    const contest = contests.find(c => c.id === speculation.contestId)
+    if (!contest) return false
+    return contest && (
+      contest.awayTeam.toLowerCase().includes(query.toLowerCase()) ||
+      contest.homeTeam.toLowerCase().includes(query.toLowerCase()) ||
+      contest.league.toLowerCase().includes(query.toLowerCase())
+    )
+  }
 
-    // Filter based on the search query
-    return Array.from(uniqueSpeculations.values()).filter((speculation) => {
-      if (query === "") {
-        return true
-      }
-      const contestFilterContent = contests.find(
-        (contest) => contest.id === speculation.contestId
-      )
-      return (
-        contestFilterContent?.awayTeam.toLowerCase().includes(query.toLowerCase()) ||
-        contestFilterContent?.homeTeam.toLowerCase().includes(query.toLowerCase()) ||
-        contestFilterContent?.league.toLowerCase().includes(query.toLowerCase())
-      )
-    })
-  }, [speculations, query, contests])
+  const filteredSpeculations = useFilteredItems(query, speculations, speculationFilterCriteria)
 
   const RenderContent = () => {
     if (isInitialLoad) {

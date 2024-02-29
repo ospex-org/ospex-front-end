@@ -32,9 +32,10 @@ export const createContest = async (
     }
 
     const idToken = await currentUser.getIdToken()
+
+    await updateContestStatus({ jsonoddsID, status: 'Pending', idToken })
     startWaiting()
     onModalOpen()
-    await updateContestStatus({ jsonoddsID, status: 'Pending', idToken })
     const encryptedSecretsUrls = await getEncryptedSecretsUrls()
     const gasLimit = 300000
     const linkAmount = ethers.utils.parseUnits(

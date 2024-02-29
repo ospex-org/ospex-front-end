@@ -13,9 +13,13 @@ import { contest } from "../../constants/interface"
 import { useAdminQueryResults } from "../../hooks/useAdminQueryResults"
 import { client } from "../../utils/apolloClient"
 import { Header } from "../../components/Header"
+import { TransactionStatusModal } from "../../components/TransactionStatusModal"
+import { useContext } from "react"
+import { ProviderContext } from "../../contexts/ProviderContext"
 
 const ScoreContest: NextPage = () => {
   const { adminContests } = useAdminQueryResults(client)
+  const { stopWaiting } = useContext(ProviderContext)
   const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
 
   const RenderCards = () => {
@@ -61,6 +65,7 @@ const ScoreContest: NextPage = () => {
         </Box>
         <Footer />
       </Flex>
+      <TransactionStatusModal isOpen={isModalOpen} onClose={onModalClose} stopWaiting={stopWaiting} />
     </>
   )
 }

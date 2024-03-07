@@ -40,6 +40,11 @@ export const createSpeculation = async ({
   }
 
   try {
+
+    if (!cfpContract) {
+      throw new Error("Contract is undefined")
+    }
+
     await signInAnonymously(auth)
     const currentUser = auth.currentUser
     if (!currentUser) {
@@ -47,6 +52,14 @@ export const createSpeculation = async ({
     }
 
     const idToken = await currentUser.getIdToken()
+    await updateSpeculationStatus({
+      contestId,
+      MatchTime: MatchTime.toMillis(),
+      adjustedNumber,
+      speculationScorer,
+      status: 'Pending',
+      idToken,
+    })
     startWaiting()
     onModalOpen()
 
@@ -56,7 +69,7 @@ export const createSpeculation = async ({
         MatchTime: MatchTime.toMillis(),
         adjustedNumber,
         speculationScorer,
-        status: 'Pending',
+        status: 'Ready',
         idToken,
       })
       onModalClose()
@@ -79,7 +92,7 @@ export const createSpeculation = async ({
       MatchTime: MatchTime.toMillis(),
       adjustedNumber,
       speculationScorer,
-      status: 'Error',
+      status: 'Ready',
       idToken: await currentUser?.getIdToken(),
     })
     throw error

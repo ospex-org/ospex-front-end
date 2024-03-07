@@ -23,6 +23,7 @@ import { Footer } from "../components/Footer"
 import { useQueryResults } from "../hooks/useQueryResults"
 import { client } from "../utils/apolloClient"
 import { TransactionStatusModal } from "../components/TransactionStatusModal"
+import { Header } from "../components/Header"
 
 const Home: NextPage = () => {
   const { colorMode, toggleColorMode } = useColorMode()
@@ -33,7 +34,7 @@ const Home: NextPage = () => {
     const profilePath = domainName !== address ? `/u/${domainName}` : `/u/${address}`
     router.push(profilePath);
   }
-  
+
   const {
     provider,
     contestOracleResolvedContract,
@@ -58,6 +59,11 @@ const Home: NextPage = () => {
     setPageContests((prev) => !prev)
   }
 
+  const navigateHome = () => {
+    router.push('/')
+  }
+
+
   return (
     <ProviderContext.Provider
       value={{
@@ -80,16 +86,15 @@ const Home: NextPage = () => {
         stopWaiting,
         connectToPolygon,
       }}
+    ><Box
+      boxShadow="md"
+      p="1"
+      bg={useColorModeValue("white", "#1A202C")}
+      rounded="none"
+      mt="-1"
+      overflowY="auto"
+      maxH="calc(100vh - 100px)"
     >
-      <Box
-        boxShadow="md"
-        p="1"
-        bg={useColorModeValue("white", "#1A202C")}
-        rounded="none"
-        mt="-1"
-        overflowY="auto"
-        maxH="calc(100vh - 100px)"
-      >
         <Flex
           as="header"
           align="start"
@@ -103,11 +108,11 @@ const Home: NextPage = () => {
           zIndex="1"
         >
           <Flex align="center" paddingTop={2}>
-            <Heading fontSize="21px" mr={1}>
+            <Heading fontSize="21px" mr={1} onClick={navigateHome} _hover={{ cursor: "pointer" }}>
               ospex.org <Hide below="md">|</Hide>
             </Heading>
             <Hide below="md">
-              <Text>Open Speculation Exchange</Text>
+              <Text onClick={navigateHome} _hover={{ cursor: "pointer" }}>Open Speculation Exchange</Text>
             </Hide>
           </Flex>
           <Box width="160px">
@@ -173,7 +178,7 @@ const Home: NextPage = () => {
             <Divider mt={2} mb={1} />
             {isConnected ? (
               <>
-                <Text fontSize="sm" letterSpacing="wide" align="right" onClick={navigateToProfile} _hover={{cursor: "pointer"}}>
+                <Text fontSize="sm" letterSpacing="wide" align="right" onClick={navigateToProfile} _hover={{ cursor: "pointer" }}>
                   {domainName === address
                     ? `${address.slice(0, 6)}...${address.slice(-4)}`
                     : domainName}

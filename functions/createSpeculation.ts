@@ -28,6 +28,7 @@ export const createSpeculation = async ({
   onModalOpen,
   onModalClose
 }: CreateSpeculationParams): Promise<void> => {
+  let transactionTimeout: NodeJS.Timeout | null = null
 
   let adjustedNumber = theNumber
   if (speculationScorer === SpeculationSpreadAddress) {
@@ -49,14 +50,18 @@ export const createSpeculation = async ({
     startWaiting()
     onModalOpen()
 
-    await updateSpeculationStatus({
-      contestId,
-      MatchTime: MatchTime.toMillis(),
-      adjustedNumber,
-      speculationScorer,
-      status: 'Pending',
-      idToken,
-    })
+    transactionTimeout = setTimeout(async () => {
+      await updateSpeculationStatus({
+        contestId,
+        MatchTime: MatchTime.toMillis(),
+        adjustedNumber,
+        speculationScorer,
+        status: 'Pending',
+        idToken,
+      })
+      onModalClose()
+      stopWaiting()
+    }, 300000) // 5 minutes timeout
 
     const createSpeculationTx = await cfpContract!.createSpeculation(
       Number(contestId),
@@ -79,6 +84,9 @@ export const createSpeculation = async ({
     })
     throw error
   } finally {
+    if (transactionTimeout) {
+      clearTimeout(transactionTimeout)
+    }
     stopWaiting()
     onModalClose()
   }

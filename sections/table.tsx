@@ -38,6 +38,23 @@ const PrimaryTable = () => {
     return () => clearInterval(interval)
   }, [isLoadingContests, isInitialLoad])
 
+  const deduplicateSpeculations = (speculations: speculation[]): speculation[] => {
+    const seen = new Set()
+    const deduplicated: speculation[] = []
+  
+    speculations.sort((a, b) => a.id.localeCompare(b.id))
+  
+    for (const speculation of speculations) {
+      const uniqueKey = `${speculation.contestId}-${speculation.speculationScorer}`
+      if (!seen.has(uniqueKey)) {
+        deduplicated.push(speculation)
+        seen.add(uniqueKey)
+      }
+    }
+  
+    return deduplicated
+  }  
+
   const navigateToCreateContest = () => {
     router.push('/c/create')
   }
@@ -54,7 +71,7 @@ const PrimaryTable = () => {
     )
   }
 
-  const filteredSpeculations = useFilteredItems(query, speculations, speculationFilterCriteria)
+  const filteredSpeculations = useFilteredItems(query, deduplicateSpeculations(speculations), speculationFilterCriteria)
 
   const RenderContent = () => {
     if (isInitialLoad) {

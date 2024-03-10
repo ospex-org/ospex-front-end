@@ -15,11 +15,17 @@ import { ProviderContext } from "../contexts/ProviderContext"
 import { createSpeculationDescriptions } from "../functions/createDescriptions"
 import { ClaimModal } from "./ClaimModal"
 import { TransactionStatusModal } from "./TransactionStatusModal"
+import router from "next/router"
 
 type PositionCardProps = {
   speculation?: speculation
   position: position
   contest?: contest
+}
+
+interface OddsResult {
+  finalOdds: number
+  potentialWinningAmount: number
 }
 
 export function PositionCard({
@@ -41,6 +47,31 @@ export function PositionCard({
     onClose: onStatusClose,
   } = useDisclosure()
   const [totalClaimableAmount, setTotalClaimableAmount] = useState<string | number>(0)
+
+  const navigateToScoreContest = () => {
+    router.push('/c/score')
+  }
+
+  const finalOddsDescription = (speculation: speculation, position: position): OddsResult | null => {
+    const upperAmount = Number(speculation.upperAmount) / 1e6
+    const lowerAmount = Number(speculation.lowerAmount) / 1e6
+    const positionAmount = Number(position.amount) / 1e6
+
+    let finalOdds: number
+
+    if (position.positionType === "Away" || position.positionType === "Over") {
+      finalOdds = (((upperAmount + lowerAmount) / upperAmount) - 1)
+    } else if (position.positionType === "Home" || position.positionType === "Under") {
+      finalOdds = (((upperAmount + lowerAmount) / lowerAmount) - 1)
+    } else {
+      console.error('Unexpected positionType:', position.positionType)
+      return null
+    }
+
+    const potentialWinningAmount = positionAmount * finalOdds
+
+    return { finalOdds, potentialWinningAmount }
+  }
 
   const claimableAmount = () => {
     if (speculation) {
@@ -102,9 +133,18 @@ export function PositionCard({
         speculation?.winSide === "TBD"
       ) {
         return (
-          <Text fontSize="sm" fontWeight="semibold">
-            Contest pending
-          </Text>
+          <>
+            <Text fontSize="sm" fontWeight="semibold" onClick={navigateToScoreContest} _hover={{ cursor: "pointer" }}>
+              Contest pending; if contest over, try scoring it
+            </Text>
+            <Divider p={1} mb={1} />
+            <Text fontSize="sm" fontWeight="semibold">
+              Final odds: 1 wins {finalOddsDescription(speculation, position)?.finalOdds.toFixed(2)} USDC
+            </Text>
+            <Text fontSize="sm" fontWeight="semibold">
+              Potential win: {finalOddsDescription(speculation, position)?.potentialWinningAmount.toFixed(2)} USDC
+            </Text>
+          </>
         )
       }
 
@@ -141,8 +181,8 @@ export function PositionCard({
               }}
             >
               {speculation?.upperAmount === 0 ||
-              speculation?.lowerAmount === 0 ||
-              speculation?.winSide === "Invalid"
+                speculation?.lowerAmount === 0 ||
+                speculation?.winSide === "Invalid"
                 ? "Claim (position invalid)"
                 : "Claim"}
             </Button>
@@ -171,8 +211,8 @@ export function PositionCard({
       if (
         position.claimed &&
         Number(position.contributedUponCreation / 1e6) +
-          Number(position.contributedUponClaim / 1e6) <=
-          0
+        Number(position.contributedUponClaim / 1e6) <=
+        0
       ) {
         return (
           <Text fontSize="sm" fontWeight="semibold">
@@ -185,8 +225,8 @@ export function PositionCard({
       if (
         position.claimed &&
         Number(position.contributedUponCreation / 1e6) +
-          Number(position.contributedUponClaim / 1e6) >
-          0
+        Number(position.contributedUponClaim / 1e6) >
+        0
       ) {
         return (
           <>
@@ -275,18 +315,18 @@ export function PositionCard({
                 {/* Sep 12, 2022, 5:15 PM PST */}
                 {contest?.eventTime
                   ? new Date(contest?.eventTime * 1000).toLocaleString(
-                      "en-US",
-                      {
-                        hour12: true,
-                        weekday: "short",
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "2-digit",
-                        timeZoneName: "short",
-                      }
-                    )
+                    "en-US",
+                    {
+                      hour12: true,
+                      weekday: "short",
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "2-digit",
+                      timeZoneName: "short",
+                    }
+                  )
                   : ""}
               </Box>
               <Box fontWeight="bold">
@@ -303,8 +343,8 @@ export function PositionCard({
                   <Text fontSize="sm" fontWeight="semibold">
                     {position
                       ? `Speculated: ${(Number(position.amount) / 1e6).toFixed(
-                          2
-                        )} USDC`
+                        2
+                      )} USDC`
                       : ""}
                   </Text>
                   {Number(position.contributedUponCreation) > 0 ? (
@@ -319,8 +359,8 @@ export function PositionCard({
                   <Divider p={1} mb={1} />
                   <Box fontWeight="semibold" as="h4" lineHeight="tight">
                     {contest?.awayScore &&
-                    contest?.homeScore &&
-                    contest?.contestStatus === "Scored" ? (
+                      contest?.homeScore &&
+                      contest?.contestStatus === "Scored" ? (
                       <>
                         <Text>
                           {contest?.awayScore > contest?.homeScore

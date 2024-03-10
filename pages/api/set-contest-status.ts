@@ -12,19 +12,21 @@ interface ContestStatusResponse {
   error?: string;
 }
 
+const { Timestamp } = admin.firestore
+
 if (admin.apps.length === 0) {
   // Parse the SERVICE_ACCOUNT_KEY environment variable
   const serviceAccount = process.env.SERVICE_ACCOUNT_KEY
-      ? JSON.parse(process.env.SERVICE_ACCOUNT_KEY)
-      : undefined
+    ? JSON.parse(process.env.SERVICE_ACCOUNT_KEY)
+    : undefined
 
   if (!serviceAccount) {
-      console.error('Missing or invalid SERVICE_ACCOUNT_KEY environment variable')
-      process.exit(1) // Exit if the service account key is not provided
+    console.error('Missing or invalid SERVICE_ACCOUNT_KEY environment variable')
+    process.exit(1) // Exit if the service account key is not provided
   }
 
   admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(serviceAccount),
   })
 }
 
@@ -61,9 +63,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
 
     // Document exists, proceed to update
-    await contestRef.update({
-      status,
-    })
+    const updatedContest: { status: string; pendingTime?: admin.firestore.Timestamp } = { status }
+    if (status === 'Pending') {
+      updatedContest.pendingTime = Timestamp.now()
+    }
+
+    await contestRef.update(updatedContest)
 
     res.status(200).json({ success: true, message: "Contest status updated." })
   } catch (error) {

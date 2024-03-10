@@ -19,7 +19,6 @@ export const createContest = async (
   provider: JsonRpcProvider | undefined | null,
   contestOracleResolvedContract: Contract | undefined | null
 ): Promise<void> => {
-  let transactionTimeout: NodeJS.Timeout | null = null
 
   try {
 
@@ -37,16 +36,6 @@ export const createContest = async (
     await updateContestStatus({ jsonoddsID, status: 'Pending', idToken })
     startWaiting()
     onModalOpen()
-    transactionTimeout = setTimeout(async () => {
-      // Transaction didn't proceed in time, revert state
-      await updateContestStatus({
-        jsonoddsID,
-        status: 'Ready',
-        idToken
-      })
-      onModalClose()
-      stopWaiting()
-    }, 300000) // 5 minutes timeout
     const encryptedSecretsUrls = await getEncryptedSecretsUrls()
     const gasLimit = 300000
     const linkAmount = ethers.utils.parseUnits(
@@ -88,9 +77,6 @@ export const createContest = async (
       idToken: await currentUser?.getIdToken()
     })
   } finally {
-    if (transactionTimeout) {
-      clearTimeout(transactionTimeout)
-    }
     onModalClose()
     stopWaiting()
   }

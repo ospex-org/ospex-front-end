@@ -1,10 +1,11 @@
 import * as admin from 'firebase-admin'
-import { Timestamp } from 'firebase/firestore'
 import type { NextApiRequest, NextApiResponse } from 'next'
+
+const { Timestamp } = admin.firestore
 
 interface SpeculationStatusRequest {
   contestId: string
-  MatchTime: Timestamp
+  MatchTime: admin.firestore.Timestamp
   adjustedNumber: number
   speculationScorer: string
   status: string
@@ -42,13 +43,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       const speculationIdentifier = `${contestId}-${speculationScorer.toLowerCase()}`
       const speculationRef = admin.firestore().collection('speculations').doc(speculationIdentifier)
 
-      await speculationRef.set({
+      const updatedSpeculation: {
+        contestId: string,
+        MatchTime: admin.firestore.Timestamp,
+        adjustedNumber: number,
+        speculationScorer: string,
+        status: string,
+        pendingTime?: admin.firestore.Timestamp,
+      } = {
         contestId,
         MatchTime,
         adjustedNumber,
         speculationScorer: speculationScorer.toLowerCase(),
         status,
-      })
+      }
+
+      if (status === 'Pending') {
+        updatedSpeculation.pendingTime = Timestamp.now()
+      }
+      await speculationRef.set(updatedSpeculation)
 
       res.status(200).json({ success: true, message: "Speculation created successfully and status updated." })
     } else {

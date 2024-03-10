@@ -63,7 +63,6 @@ const Home: NextPage = () => {
     router.push('/')
   }
 
-
   return (
     <ProviderContext.Provider
       value={{

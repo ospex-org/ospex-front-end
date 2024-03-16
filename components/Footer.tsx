@@ -45,7 +45,7 @@ export function Footer() {
           />
           <IconButton
             as="a"
-            href="/"
+            href="https://docs.ospex.org"
             aria-label="Documentation"
             icon={<SiDocusaurus fontSize="1.5rem" />}
             target="_blank"

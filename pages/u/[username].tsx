@@ -5,6 +5,8 @@ import { client } from "../../utils/apolloClient"
 import { Header } from "../../components/Header"
 import { Center, useColorModeValue, Box, Text, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Flex } from "@chakra-ui/react"
 import { useUserStatistics } from "../../hooks/useUserStatistics"
+import { useUserQueryResults } from "../../hooks/useUserQueryResults"
+import UserPositions from "../../components/UserPositions"
 import { Footer } from "../../components/Footer"
 
 const UserProfile: React.FC = () => {
@@ -29,6 +31,8 @@ const UserProfile: React.FC = () => {
     userTies,
     userNet,
   } = useUserStatistics(client, resolvedAddress.toLowerCase())
+
+  const { detailedPositions } = useUserQueryResults(client, resolvedAddress.toLowerCase())
 
   return (
     <>
@@ -122,8 +126,9 @@ const UserProfile: React.FC = () => {
                 </Table>
               </TableContainer>
             </Box>
+            <UserPositions userPositions={detailedPositions} />
+            <Footer />
           </Box>
-          <Footer />
         </Flex>
       </Center>
     </>

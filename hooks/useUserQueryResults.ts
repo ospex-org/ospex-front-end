@@ -10,6 +10,7 @@ export function useUserQueryResults(
   const [userContests, setUserContests] = useState<contest[]>([])
   const [userSpeculations, setUserSpeculations] = useState<speculation[]>([])
   const [userPositions, setUserPositions] = useState<position[]>([])
+  const [detailedPositions, setDetailedPositions] = useState<userPosition[]>([])
 
   const { loading, error, data, refetch, startPolling } = useQuery(
     addressSpecificPositions,
@@ -36,6 +37,7 @@ export function useUserQueryResults(
       const speculationsFromQuery: speculation[] = []
       const positionsFromQuery: position[] = []
       if (data && !loading && !error) {
+        setDetailedPositions(data.positions)
         await data.positions.forEach((position: userPosition) => {
           const positionToAdd: position = {
             id: position.id,
@@ -105,6 +107,6 @@ export function useUserQueryResults(
   }, [loading, error, data])
 
   return {
-    userContests, userSpeculations, userPositions, isLoadingPositions: loading, error
+    detailedPositions, userContests, userSpeculations, userPositions, isLoadingPositions: loading, error
   }
 }

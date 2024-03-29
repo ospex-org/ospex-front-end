@@ -15,17 +15,13 @@ import { ProviderContext } from "../contexts/ProviderContext"
 import { createSpeculationDescriptions } from "../functions/createDescriptions"
 import { ClaimModal } from "./ClaimModal"
 import { TransactionStatusModal } from "./TransactionStatusModal"
+import { finalOddsDescription } from "../functions/finalOddsDescription"
 import router from "next/router"
 
 type PositionCardProps = {
   speculation?: speculation
   position: position
   contest?: contest
-}
-
-interface OddsResult {
-  finalOdds: number
-  potentialWinningAmount: number
 }
 
 export function PositionCard({
@@ -50,27 +46,6 @@ export function PositionCard({
 
   const navigateToScoreContest = () => {
     router.push('/c/score')
-  }
-
-  const finalOddsDescription = (speculation: speculation, position: position): OddsResult | null => {
-    const upperAmount = Number(speculation.upperAmount) / 1e6
-    const lowerAmount = Number(speculation.lowerAmount) / 1e6
-    const positionAmount = Number(position.amount) / 1e6
-
-    let finalOdds: number
-
-    if (position.positionType === "Away" || position.positionType === "Over") {
-      finalOdds = (((upperAmount + lowerAmount) / upperAmount) - 1)
-    } else if (position.positionType === "Home" || position.positionType === "Under") {
-      finalOdds = (((upperAmount + lowerAmount) / lowerAmount) - 1)
-    } else {
-      console.error('Unexpected positionType:', position.positionType)
-      return null
-    }
-
-    const potentialWinningAmount = positionAmount * finalOdds
-
-    return { finalOdds, potentialWinningAmount }
   }
 
   const claimableAmount = () => {

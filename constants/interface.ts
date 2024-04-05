@@ -15,6 +15,7 @@ export interface contest {
   rundownId: string,
   sportspageId: string,
   jsonoddsId: string,
+  contestCreationId?: string,
   leagueId: number,
   league: string,
   awayTeamId: number,

@@ -10,6 +10,7 @@ export const contestsGteCurrentTime = gql`
       rundownId
       sportspageId
       jsonoddsId
+      contestCreationId
       leagueId
       league
       awayTeamId
@@ -76,6 +77,7 @@ export const addressSpecificPositions = gql`
           rundownId
           sportspageId
           jsonoddsId
+          contestCreationId
           leagueId
           league
           awayTeamId
@@ -100,6 +102,7 @@ export const contestsLtCurrentTime = gql`
       rundownId
       sportspageId
       jsonoddsId
+      contestCreationId
       leagueId
       league
       awayTeamId
@@ -108,6 +111,61 @@ export const contestsLtCurrentTime = gql`
       homeTeam
       eventTime
       contestStatus
+    }
+  }
+`
+
+export const contestById = gql`
+  query getContestById($id: ID!) {
+    contests(where: {id: $id}) {
+      id
+      awayScore
+      homeScore
+      contestCreator
+      rundownId
+      sportspageId
+      jsonoddsId
+      contestCreationId
+      leagueId
+      league
+      awayTeamId
+      awayTeam
+      homeTeamId
+      homeTeam
+      eventTime
+      contestStatus
+      speculations {
+        id
+        contestId
+        lockTime
+        speculationScorer
+        theNumber
+        speculationCreator
+        upperAmount
+        lowerAmount
+        winSide
+        speculationStatus
+        positions {
+          id
+          speculationId
+          userId
+          amount
+          contributedUponCreation
+          contributedUponClaim
+          positionType
+          claimed
+          amountClaimed
+          user {
+            id
+            totalSpeculated
+            totalClaimed
+            totalClaimable
+            totalContributed
+            totalLost
+            totalPending
+          }
+        }
+      }
     }
   }
 `

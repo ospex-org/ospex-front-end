@@ -1,20 +1,22 @@
 import {
-  Container,
   Stack,
   ButtonGroup,
   IconButton,
   useColorModeValue,
   Box,
+  useBreakpointValue
 } from "@chakra-ui/react"
 import { FaGithub, FaTelegram } from "react-icons/fa"
 import { SiDocusaurus } from "react-icons/si"
 
 export function Footer() {
+  const footerPosition = useBreakpointValue<'absolute' | 'fixed'>({ base: 'absolute', md: 'fixed' })
+
   return (
     <Box
       as="footer"
       role="contentinfo"
-      position="fixed"
+      position={footerPosition}
       bottom="0"
       left="0"
       right="0"

@@ -20,7 +20,7 @@ const UserPositions: React.FC<UserPositionsProps> = ({ userPositions }) => {
   const winColor = useColorModeValue('green.600', 'green.200')
   const lossColor = useColorModeValue('red.600', 'red.200')
   const fontSize = useBreakpointValue({ base: '12px', md: '14px' })
-  const tableWidth = useBreakpointValue({ base: '95%', md: '600px' })
+  const tableWidth = useBreakpointValue({ base: '370px', md: '600px' })
   const px = useBreakpointValue({ base: 0.5, md: 1 })
 
   const sortedPositions = [...userPositions].sort(

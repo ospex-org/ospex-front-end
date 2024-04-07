@@ -3,7 +3,7 @@ import React from "react"
 import { useAddressResolution } from "../../hooks/useAddressResolution"
 import { client } from "../../utils/apolloClient"
 import { Header } from "../../components/Header"
-import { Center, useColorModeValue, Box, Text, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Flex } from "@chakra-ui/react"
+import { Center, useColorModeValue, Box, Text, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Flex, Spacer } from "@chakra-ui/react"
 import { useUserStatistics } from "../../hooks/useUserStatistics"
 import { useUserQueryResults } from "../../hooks/useUserQueryResults"
 import UserPositions from "../../components/UserPositions"
@@ -36,101 +36,104 @@ const UserProfile: React.FC = () => {
 
   return (
     <>
-      <Header></Header>
-      <Center>
-        <Flex justifyContent="center" alignItems="center" width="100%">
-          <Box flexDirection="column" alignContent="center" mt="100px" textAlign="center">
-            <Text
-              textTransform="none"
-              fontWeight="bold"
-              fontSize="20px"
-              pt={50}
-              pb={1}
-              color={useColorModeValue("black", "white")}
-            >
-              {username}
-            </Text>
-            <Text
-              textTransform="none"
-              fontWeight="normal"
-              fontSize="14px"
-              pb={1}
-              color={useColorModeValue("black", "white")}
-            >
-              {resolvedAddress === username ? "" : resolvedAddress}
-            </Text>
-            <Text
-              textTransform="none"
-              fontWeight="bold"
-              fontSize="16px"
-              pb={1}
-              color={useColorModeValue("black", "white")}
-            >
-              {userNet > 0 ? "+" : ""}{userNet.toFixed(2)} ({userWins}-{userLosses}-{userTies})
-            </Text>
-            <Box
-              width="380px"
-              maxW="md"
-              borderWidth="1px"
-              borderRadius="lg"
-              overflow="hidden"
-              fontWeight="semibold"
-              m="auto"
-            >
-              <TableContainer>
-                <Table variant='simple'>
-                  <Thead>
-                    <Tr>
-                      <Th textAlign="left" pb={2}>Statistics</Th>
-                      <Th textAlign="right" pb={2}>Amount</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody fontSize="14px">
-                    <Tr _hover={{
-                      background: useColorModeValue(hoverBgLight, hoverBgDark),
-                    }}>
-                      <Td textAlign="left" py={1}>Speculated</Td>
-                      <Td textAlign="right" py={1}>{userTotalSpeculated.toFixed(2)} USDC</Td>
-                    </Tr>
-                    <Tr _hover={{
-                      background: useColorModeValue(hoverBgLight, hoverBgDark),
-                    }}>
-                      <Td textAlign="left" py={1}>Claimed</Td>
-                      <Td textAlign="right" py={1}>{userTotalClaimed.toFixed(2)} USDC</Td>
-                    </Tr>
-                    <Tr _hover={{
-                      background: useColorModeValue(hoverBgLight, hoverBgDark),
-                    }}>
-                      <Td textAlign="left" py={1}>Claimable</Td>
-                      <Td textAlign="right" py={1}>{userTotalClaimable.toFixed(2)} USDC</Td>
-                    </Tr>
-                    <Tr _hover={{
-                      background: useColorModeValue(hoverBgLight, hoverBgDark),
-                    }}>
-                      <Td textAlign="left" py={1}>Contributed</Td>
-                      <Td textAlign="right" py={1}>{userTotalContributed.toFixed(2)} USDC</Td>
-                    </Tr>
-                    <Tr _hover={{
-                      background: useColorModeValue(hoverBgLight, hoverBgDark),
-                    }}>
-                      <Td textAlign="left" py={1}>Lost</Td>
-                      <Td textAlign="right" py={1}>{userTotalLost.toFixed(2)} USDC</Td>
-                    </Tr>
-                    <Tr _hover={{
-                      background: useColorModeValue(hoverBgLight, hoverBgDark),
-                    }}>
-                      <Td textAlign="left" py={1}>Pending</Td>
-                      <Td textAlign="right" py={1}>{userTotalPending.toFixed(2)} USDC</Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-              </TableContainer>
-            </Box>
-            <UserPositions userPositions={detailedPositions} />
-            <Footer />
-          </Box>
-        </Flex>
-      </Center>
+      <Flex direction="column" minH="100vh">
+        <Header />
+        <Box flex="1">
+          <Center>
+            <Flex direction="column" alignItems="center" w="100%" mt="100px">
+              <Text
+                textTransform="none"
+                fontWeight="bold"
+                fontSize="20px"
+                pt={50}
+                pb={1}
+                color={useColorModeValue("black", "white")}
+              >
+                {username}
+              </Text>
+              <Text
+                textTransform="none"
+                fontWeight="normal"
+                fontSize="14px"
+                pb={1}
+                color={useColorModeValue("black", "white")}
+              >
+                {resolvedAddress === username ? "" : resolvedAddress}
+              </Text>
+              <Text
+                textTransform="none"
+                fontWeight="bold"
+                fontSize="16px"
+                pb={1}
+                color={useColorModeValue("black", "white")}
+              >
+                {userNet > 0 ? "+" : ""}{userNet.toFixed(2)} ({userWins}-{userLosses}-{userTies})
+              </Text>
+              <Box
+                width="380px"
+                maxW="md"
+                borderWidth="1px"
+                borderRadius="lg"
+                overflow="hidden"
+                fontWeight="semibold"
+                m="auto"
+              >
+                <TableContainer>
+                  <Table variant='simple'>
+                    <Thead>
+                      <Tr>
+                        <Th textAlign="left" pb={2}>Statistics</Th>
+                        <Th textAlign="right" pb={2}>Amount</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody fontSize="14px">
+                      <Tr _hover={{
+                        background: useColorModeValue(hoverBgLight, hoverBgDark),
+                      }}>
+                        <Td textAlign="left" py={1}>Speculated</Td>
+                        <Td textAlign="right" py={1}>{userTotalSpeculated.toFixed(2)} USDC</Td>
+                      </Tr>
+                      <Tr _hover={{
+                        background: useColorModeValue(hoverBgLight, hoverBgDark),
+                      }}>
+                        <Td textAlign="left" py={1}>Claimed</Td>
+                        <Td textAlign="right" py={1}>{userTotalClaimed.toFixed(2)} USDC</Td>
+                      </Tr>
+                      <Tr _hover={{
+                        background: useColorModeValue(hoverBgLight, hoverBgDark),
+                      }}>
+                        <Td textAlign="left" py={1}>Claimable</Td>
+                        <Td textAlign="right" py={1}>{userTotalClaimable.toFixed(2)} USDC</Td>
+                      </Tr>
+                      <Tr _hover={{
+                        background: useColorModeValue(hoverBgLight, hoverBgDark),
+                      }}>
+                        <Td textAlign="left" py={1}>Contributed</Td>
+                        <Td textAlign="right" py={1}>{userTotalContributed.toFixed(2)} USDC</Td>
+                      </Tr>
+                      <Tr _hover={{
+                        background: useColorModeValue(hoverBgLight, hoverBgDark),
+                      }}>
+                        <Td textAlign="left" py={1}>Lost</Td>
+                        <Td textAlign="right" py={1}>{userTotalLost.toFixed(2)} USDC</Td>
+                      </Tr>
+                      <Tr _hover={{
+                        background: useColorModeValue(hoverBgLight, hoverBgDark),
+                      }}>
+                        <Td textAlign="left" py={1}>Pending</Td>
+                        <Td textAlign="right" py={1}>{userTotalPending.toFixed(2)} USDC</Td>
+                      </Tr>
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </Box>
+              <UserPositions userPositions={detailedPositions} />
+              <Spacer height="50px" />
+            </Flex>
+          </Center>
+        </Box>
+        <Footer />
+      </Flex>
     </>
   )
 }

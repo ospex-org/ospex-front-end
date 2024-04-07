@@ -42,28 +42,28 @@ const CreateContest: React.FC = () => {
       potentialContest.HomeTeam.toLowerCase().includes(query.toLowerCase())
     )
   }
-  
+
   const filteredPotentialContests = useFilteredItems(query, potentialContests, potentialContestFilterCriteria)
 
   return (
     <>
-      <Header />
-      <Center>
-        <Flex justifyContent="center" alignItems="center" width="100%">
-          <Box flexDirection="column" alignContent="center" mt="100px" textAlign="center">
-            <Text
-              textTransform="none"
-              fontWeight="normal"
-              fontSize="24px"
-              pt={50}
-              pb={5}
-              color={useColorModeValue("black", "white")}
-            >
-              Create Contest
-            </Text>
+      <Flex direction="column" minH="100vh">
+        <Header />
+        <Box flex="1">
+          <Center>
+            <Flex direction="column" alignItems="center" w="100%" mt="100px">
+              <Text
+                textTransform="none"
+                fontWeight="normal"
+                fontSize="24px"
+                pt={50}
+                pb={5}
+                color={useColorModeValue("black", "white")}
+              >
+                Create Contest
+              </Text>
 
-            <Center>
-              <Box pb={5}>
+              <Center pb={5}>
                 <InputGroup>
                   <InputLeftElement
                     zIndex="unset"
@@ -77,31 +77,31 @@ const CreateContest: React.FC = () => {
                     onChange={(event) => debouncedSearchHandler(event)}
                   />
                 </InputGroup>
-              </Box>
-            </Center>
+              </Center>
 
-            <Box>
-              {loadingContests ? (<Spinner size="xl" />) : filteredPotentialContests.length > 0 ? (
-                filteredPotentialContests.map((contest, index) => {
-                  const uniqueKey = `${contest.rundownID}-${contest.sportspageID}-${contest.jsonoddsID}`
-                  return (
-                    <CreateContestCard
-                      key={uniqueKey}
-                      contest={contest}
-                      index={index}
-                      onModalOpen={onModalOpen}
-                      onModalClose={onModalClose}
-                    />
-                  )
-                })
-              ) : (<Text>No contests to create</Text>)}
-            </Box>
-            <Spacer height="50px" />
-          </Box>
-          <Footer />
-        </Flex>
-        <TransactionStatusModal isOpen={isModalOpen} onClose={onModalClose} stopWaiting={stopWaiting} />
-      </Center>
+              <Box>
+                {loadingContests ? (<Spinner size="xl" />) : filteredPotentialContests.length > 0 ? (
+                  filteredPotentialContests.map((contest, index) => {
+                    const uniqueKey = `${contest.rundownID}-${contest.sportspageID}-${contest.jsonoddsID}`
+                    return (
+                      <CreateContestCard
+                        key={uniqueKey}
+                        contest={contest}
+                        index={index}
+                        onModalOpen={onModalOpen}
+                        onModalClose={onModalClose}
+                      />
+                    )
+                  })
+                ) : (<Text>No contests to create</Text>)}
+                <Spacer height="50px" />
+              </Box>
+            </Flex>
+          </Center>
+        </Box>
+        <Footer />
+      </Flex>
+      <TransactionStatusModal isOpen={isModalOpen} onClose={onModalClose} stopWaiting={stopWaiting} />
     </>
   )
 }

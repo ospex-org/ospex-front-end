@@ -5,7 +5,8 @@ import {
   Text,
   Spacer,
   useColorModeValue,
-  useDisclosure
+  useDisclosure,
+  Center
 } from "@chakra-ui/react"
 import { Footer } from "../../components/Footer"
 import { ScoreContestCard } from "../../components/ScoreContestCard"
@@ -47,23 +48,31 @@ const ScoreContest: NextPage = () => {
 
   return (
     <>
-      <Header />
-      <Flex justifyContent="center" alignItems="center" width="100%">
-        <Box flexDirection="column" alignContent="center" mt="100px" textAlign="center">
-          <Text
-            textTransform="none"
-            fontWeight="normal"
-            fontSize="24px"
-            pt={50}
-            pb={1}
-            color={useColorModeValue("black", "white")}
-          >
-            Score Contest
-          </Text>
-          <>{RenderCards()}</>
-          <Spacer height="50px" />
+      <Flex direction="column" minH="100vh">
+        <Header />
+        <Box flex="1">
+          <Center>
+            <Flex direction="column" alignItems="center" w="100%" mt="100px">
+              <Text
+                textTransform="none"
+                fontWeight="normal"
+                fontSize="24px"
+                pt={50}
+                pb={5}
+                color={useColorModeValue("black", "white")}
+              >
+                Score Contest
+              </Text>
+              <Center>
+                <>{RenderCards()}</>
+              </Center>
+              <Spacer height="50px" />
+              <Box mt="auto">
+                <Footer />
+              </Box>
+            </Flex>
+          </Center>
         </Box>
-        <Footer />
       </Flex>
       <TransactionStatusModal isOpen={isModalOpen} onClose={onModalClose} stopWaiting={stopWaiting} />
     </>

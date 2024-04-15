@@ -53,12 +53,20 @@ export function PositionCard({
       if (
         (speculation?.winSide === position.positionType && !position.claimed) ||
         Number(speculation?.upperAmount) === 0 ||
-        Number(speculation?.lowerAmount) === 0
+        Number(speculation?.lowerAmount) === 0 ||
+        speculation?.winSide === "Push" || 
+        speculation?.winSide === "Forfeit" || 
+        speculation?.winSide === "Invalid" ||
+        speculation?.winSide === "Void"
       ) {
         // amount in position equals total speculation amount (this position was the only position)
         if (
           Number(speculation?.upperAmount) === 0 ||
-          Number(speculation?.lowerAmount) === 0
+          Number(speculation?.lowerAmount) === 0 ||
+          speculation?.winSide === "Push" || 
+          speculation?.winSide === "Forfeit" || 
+          speculation?.winSide === "Invalid" ||
+          speculation?.winSide === "Void"
         ) {
           return Number(position.amount / 1e6)
         }
@@ -125,12 +133,14 @@ export function PositionCard({
 
       // contest is over and user won and is able to claim
       // or all speculations have come in on one side and therefore is claimable once contest has started
+      // or speculation has been voided
       if (
         !position.claimed &&
         speculation?.speculationStatus !== "Open" &&
         (speculation?.winSide === position.positionType ||
           speculation?.upperAmount === 0 ||
-          speculation?.lowerAmount === 0)
+          speculation?.lowerAmount === 0 ||
+          speculation?.winSide === "Void")
       ) {
         return (
           <>
@@ -157,7 +167,8 @@ export function PositionCard({
             >
               {speculation?.upperAmount === 0 ||
                 speculation?.lowerAmount === 0 ||
-                speculation?.winSide === "Invalid"
+                speculation?.winSide === "Invalid" ||
+                speculation?.winSide === "Void"
                 ? "Claim (position invalid)"
                 : "Claim"}
             </Button>

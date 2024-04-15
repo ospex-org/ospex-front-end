@@ -44,7 +44,7 @@ const UserProfile: React.FC = () => {
               <Text
                 textTransform="none"
                 fontWeight="bold"
-                fontSize="20px"
+                fontSize={username ? username.length > 36 ? '16px' : '20px' : '20px'}
                 pt={50}
                 pb={1}
                 color={useColorModeValue("black", "white")}

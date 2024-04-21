@@ -6,7 +6,7 @@ import {
   Box,
   useBreakpointValue
 } from "@chakra-ui/react"
-import { FaGithub, FaTelegram } from "react-icons/fa"
+import { FaGithub, FaTelegram, FaTiktok } from "react-icons/fa"
 import { SiDocusaurus } from "react-icons/si"
 
 export function Footer() {
@@ -43,6 +43,16 @@ export function Footer() {
             href="https://t.me/ospex"
             aria-label="Telegram"
             icon={<FaTelegram fontSize="1.5rem" />}
+            target="_blank"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          />
+          <IconButton
+            as="a"
+            href="https://www.tiktok.com/@ospex.org"
+            aria-label="TikTok"
+            icon={<FaTiktok fontSize="1.5rem" />}
             target="_blank"
             display="flex"
             alignItems="center"

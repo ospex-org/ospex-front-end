@@ -64,9 +64,13 @@ const ScoreContest: NextPage = () => {
                 Score Contest
               </Text>
               <Center>
-                <>{RenderCards()}</>
+                <Flex direction="column" alignItems="center" w="100%">
+                  {RenderCards()}
+                  <Box>
+                    <Spacer height="50px" />
+                  </Box>
+                </Flex>
               </Center>
-              <Spacer height="50px" />
               <Box mt="auto">
                 <Footer />
               </Box>

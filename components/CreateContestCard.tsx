@@ -154,7 +154,7 @@ export const CreateContestCard: React.FC<ContestCardProps> = ({
                   fontWeight="bold"
                   border={"1px solid #e2e2e2"}
                   borderRadius={"md"}
-                  width={158}
+                  width={168}
                   height={8}
                   ml={-3}
                   mt={2}
@@ -167,7 +167,7 @@ export const CreateContestCard: React.FC<ContestCardProps> = ({
                       : { bg: "white", borderColor: "white", color: "black" }
                   }
                 >
-                  <Box flex="1" textAlign="left">
+                  <Box flex="1" textAlign="center">
                     Create Speculation
                   </Box>
                 </AccordionButton>

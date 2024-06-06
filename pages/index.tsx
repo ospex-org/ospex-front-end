@@ -190,7 +190,7 @@ const Home: NextPage = () => {
                     Approved: {approvedAmount.toFixed(2)} USDC
                   </Text>
                   {isWaiting && (
-                    <Flex alignItems="left" paddingLeft="3.5">
+                    <Flex alignItems="left" paddingLeft="3.6">
                       <Text
                         fontSize="sm"
                         className="blinking-dots"

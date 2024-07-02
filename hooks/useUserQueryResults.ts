@@ -31,6 +31,51 @@ export function useUserQueryResults(
     refetch()
   }, [data, refetch])
 
+  /* maybe more concise but did not work
+  useEffect(() => {
+    if (data) {
+      console.log(`[${new Date().toISOString()}] Processing data in useUserQueryResults:`, data);
+      const contestsFromQuery: contest[] = [];
+      const speculationsFromQuery: speculation[] = [];
+      const positionsFromQuery: position[] = [];
+      const detailedPositionsFromQuery: userPosition[] = [];
+
+      data.contests.forEach((contest: contest) => {
+        contest.speculations.forEach((speculation: speculation) => {
+          speculation.positions.forEach((position: position) => {
+            if (position.userId === address) {
+              const userPosition: userPosition = {
+                ...position,
+                speculation: {
+                  ...speculation,
+                  contest: { ...contest }
+                }
+              };
+
+              positionsFromQuery.push(position);
+              detailedPositionsFromQuery.push(userPosition);
+
+              if (!speculationsFromQuery.some(s => s.id === speculation.id)) {
+                speculationsFromQuery.push(speculation);
+              }
+
+              if (!contestsFromQuery.some(c => c.id === contest.id)) {
+                contestsFromQuery.push(contest);
+              }
+            }
+          });
+        });
+      });
+
+      setUserContests(contestsFromQuery);
+      setUserSpeculations(speculationsFromQuery);
+      setUserPositions(positionsFromQuery);
+      setDetailedPositions(detailedPositionsFromQuery);
+    }
+  }, [data, address]);
+
+  */
+
   useEffect(() => {
     ; (async () => {
       const contestsFromQuery: contest[] = []
@@ -104,7 +149,13 @@ export function useUserQueryResults(
       setUserSpeculations(speculationsFromQuery)
       setUserPositions(positionsFromQuery)
     })()
-  }, [loading, error, data])
+  }, [loading, error, data])  
+
+  // console.log(`[${new Date().toISOString()}] useUserQueryResults hook state:`, { userContests, userSpeculations, userPositions, detailedPositions, loading, error });
+
+  // useEffect(() => {
+  //   console.log(`[${new Date().toISOString()}] useUserQueryResults mounted, requesting data...`);
+  // }, []);  
 
   return {
     detailedPositions, userContests, userSpeculations, userPositions, isLoadingPositions: loading, error

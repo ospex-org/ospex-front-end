@@ -1,13 +1,9 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 // Assume these functions are properly typed in their definitions
 // import { getContestData, getComments } from '../../utils/api';
 import { Box, Badge, Text, Flex, SimpleGrid, Divider } from '@chakra-ui/react'
-import { SpeculationCard } from '../../components/Speculation'
-import { contest, speculation, position } from "../../constants/interface"
 import { client } from "../../utils/apolloClient"
 import { useContestDetails } from "../../hooks/useContestDetails"
-import { Header } from '../../components/Header';
 
 interface Comment {
   id: string
@@ -17,16 +13,16 @@ interface Comment {
 const ContestPage: React.FC = () => {
   const router = useRouter()
   const contestId = parseInt(router.query.contestId as string, 10)
-  const [comments, setComments] = useState<Comment[]>([])
+  // const [comments, setComments] = useState<Comment[]>([])
 
-  const { contestDetails, isLoading, error } = useContestDetails(client, contestId)
+  const { contestDetails, loading, error } = useContestDetails(client, contestId)
 
-  if (isLoading) {
+  if (loading) {
     return <div>Loading...</div>
   }
 
   if (error || !contestDetails) {
-    return <div>Error: {error ? error.message : 'Contest not found'}</div>
+    return <div>Error: {error ? (error as Error).message : 'Contest not found'}</div>
   }
 
   const formatDate = (date: number) => {

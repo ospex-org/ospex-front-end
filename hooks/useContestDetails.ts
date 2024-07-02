@@ -26,16 +26,16 @@ export function useContestDetails(
   }, [data, refetch])
 
   useEffect(() => {
-    if (data && !loading && !error) {
-      const contest = data.contests.length > 0 ? data.contests[0] : null
-      setContestDetails(contest)
+    if (data) {
+      const contest = data.contests.find((contest: contest) => contest.id === contestId.toString()) || null;
+      setContestDetails(contest);
       setIsLoading(false)
     }
     if (queryError) {
       setError(queryError)
       setIsLoading(false)
     }
-  }, [data, loading, queryError])
+  }, [data, loading, error, contestId]);
 
-  return { contestDetails, isLoading, error }
+  return { contestDetails, loading: isLoading, error }
 }

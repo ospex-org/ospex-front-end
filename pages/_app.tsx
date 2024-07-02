@@ -1,7 +1,7 @@
 import "../styles/globals.css"
 import type { AppProps } from "next/app"
-import { ChakraProvider } from "@chakra-ui/react"
 import { ApolloProvider } from "@apollo/client"
+import { ChakraProvider } from "@chakra-ui/react"
 import { ProviderContext } from "../contexts/ProviderContext"
 
 import { useWalletConnection } from "../hooks/useWalletConnection"
@@ -36,32 +36,32 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ApolloProvider client={client}>
-      <ChakraProvider>
-        <ProviderContext.Provider
-          value={{
-            provider,
-            contestOracleResolvedContract,
-            cfpContract,
-            USDCContract,
-            isConnected,
-            address,
-            domainName,
-            balance,
-            approvedAmount,
-            setApprovedAmount,
-            contests: [],
-            speculations: [],
-            positions: [],
-            isLoadingContests: false,
-            isWaiting,
-            startWaiting,
-            stopWaiting,
-            connectToPolygon,
-          }}
-        >
-          <Component {...pageProps} />
-        </ProviderContext.Provider>
-      </ChakraProvider>
+    <ChakraProvider>
+      <ProviderContext.Provider
+        value={{
+          provider,
+          contestOracleResolvedContract,
+          cfpContract,
+          USDCContract,
+          isConnected,
+          address,
+          domainName,
+          balance,
+          approvedAmount,
+          setApprovedAmount,
+          contests: [],
+          speculations: [],
+          positions: [],
+          isLoadingContests: false,
+          isWaiting,
+          startWaiting,
+          stopWaiting,
+          connectToPolygon,
+        }}
+      >
+        <Component {...pageProps} />
+      </ProviderContext.Provider>
+    </ChakraProvider>
     </ApolloProvider>
   )
 }

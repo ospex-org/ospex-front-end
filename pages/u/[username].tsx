@@ -3,7 +3,7 @@ import React from "react"
 import { useAddressResolution } from "../../hooks/useAddressResolution"
 import { client } from "../../utils/apolloClient"
 import { Header } from "../../components/Header"
-import { Center, useColorModeValue, Box, Text, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Flex, Spacer } from "@chakra-ui/react"
+import { Center, useColorModeValue, Box, Text, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Flex, Spacer, Spinner } from "@chakra-ui/react"
 import { useUserStatistics } from "../../hooks/useUserStatistics"
 import { useUserQueryResults } from "../../hooks/useUserQueryResults"
 import UserPositions from "../../components/UserPositions"
@@ -30,9 +30,41 @@ const UserProfile: React.FC = () => {
     userLosses,
     userTies,
     userNet,
+    loading: isLoadingStatistics,
   } = useUserStatistics(client, resolvedAddress.toLowerCase())
 
   const { detailedPositions } = useUserQueryResults(client, resolvedAddress.toLowerCase())
+
+  // caused hooks error, removed
+  // const isLoading = isLoadingStatistics // || isLoadingPositions;
+
+  // if (isLoading) {
+  //   return (
+  //     <>
+  //       <Flex direction="column" minH="100vh">
+  //         <Header />
+  //         <Box flex="1">
+  //           <Center>
+  //             <Flex direction="column" alignItems="center" w="100%" mt="100px">
+  //               <Text
+  //                 textTransform="none"
+  //                 fontWeight="bold"
+  //                 fontSize={username ? username.length > 36 ? '16px' : '20px' : '20px'}
+  //                 pt={50}
+  //                 pb={3}
+  //                 color={useColorModeValue("black", "white")}
+  //               >
+  //                 {username}
+  //               </Text>
+  //               <Spinner size="xl" />
+  //             </Flex>
+  //           </Center>
+  //         </Box >
+  //       </Flex>
+  //       <Footer />
+  //     </>
+  //   );
+  // }
 
   return (
     <>

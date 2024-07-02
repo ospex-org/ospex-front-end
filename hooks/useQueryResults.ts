@@ -2,10 +2,6 @@ import { useState, useEffect } from "react"
 import { contest, speculation, position } from "../constants/interface"
 import { useQuery, ApolloClient, NormalizedCacheObject } from "@apollo/client"
 import { contestsGteCurrentTime } from "../constants/queries"
-import {
-  ContestCreatorAddress,
-  SpeculationCreatorAddress,
-} from "../constants/addresses"
 
 export function useQueryResults(client: ApolloClient<NormalizedCacheObject>) {
   const [contests, setContests] = useState<contest[]>([])
@@ -21,7 +17,7 @@ export function useQueryResults(client: ApolloClient<NormalizedCacheObject>) {
       },
       pollInterval: 5000,
     }
-  )
+  )  
 
   function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
     let timeout: NodeJS.Timeout | null = null

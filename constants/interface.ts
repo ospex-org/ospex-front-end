@@ -125,3 +125,17 @@ export interface CreatedSpeculation {
   theNumber: number
   status: string
 }
+
+export interface user {
+  id: string;
+  totalSpeculated: number;
+  totalClaimed: number;
+  totalClaimable: number;
+  totalContributed: number;
+  totalLost: number;
+  totalPending: number;
+  wins: number;
+  losses: number;
+  ties: number;
+  net: number;
+}

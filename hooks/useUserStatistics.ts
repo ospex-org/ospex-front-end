@@ -66,5 +66,7 @@ export function useUserStatistics(
     userLosses,
     userTies,
     userNet,
+    loading,
+    error
   }
 }

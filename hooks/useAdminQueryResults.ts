@@ -2,7 +2,6 @@ import { useState, useEffect } from "react"
 import { contest } from "../constants/interface"
 import { useQuery, ApolloClient, NormalizedCacheObject } from "@apollo/client"
 import { contestsLtCurrentTime } from "../constants/queries"
-import { ContestCreatorAddress } from "../constants/addresses"
 
 export function useAdminQueryResults(
   client: ApolloClient<NormalizedCacheObject>
@@ -29,23 +28,19 @@ export function useAdminQueryResults(
   }, [data, refetch])
 
   useEffect(() => {
-    ;(async () => {
-      const contestsFromQuery: contest[] = []
-      if (data && !loading && !error) {
-        await data.contests.forEach((contest: contest) => {
-          // if (contest.contestCreator === ContestCreatorAddress.toLowerCase()) {
-          // allow anyone to create contests
-            contestsFromQuery.push(contest)
-          // }
-        })
-        setAdminContests(contestsFromQuery)
-      } else if (error) {
-        console.error("Error fetching data:", error)
-      }
-    })()
-  }, [loading, error, data])
+    if (data) {
+      // filtering logic similar to previous GraphQL query `contestsLtCurrentTime`
+      const currentTime = Math.floor(Date.now() / 1000)
+      const contestsFromQuery: contest[] = data.contests
+        .filter((contest: contest) => contest.eventTime < currentTime)
+        .map((contest: contest) => contest);
+      setAdminContests(contestsFromQuery)
+    }
+  }, [loading, error, data]);
 
   return {
     adminContests,
+    loading,
+    error,
   }
 }

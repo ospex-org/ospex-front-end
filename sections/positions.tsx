@@ -1,5 +1,5 @@
 import { Box, Center, Spinner, Text, useColorModeValue } from "@chakra-ui/react"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { PositionCard } from "../components/Position"
 import {
   position,
@@ -11,9 +11,20 @@ import { client } from "../utils/apolloClient"
 const Positions = () => {
   const { address } = useContext(ProviderContext)
   const { userContests, userSpeculations, userPositions, isLoadingPositions } = useUserQueryResults(client, address)
+  const [isLoadingTransition, setIsLoadingTransition] = useState(true)
 
+  useEffect(() => {
+    if (!isLoadingPositions) {
+      setTimeout(() => {
+        setIsLoadingTransition(false)
+      }, 300) // delay to show the loading spinner
+    } else {
+      setIsLoadingTransition(true)
+    }
+  }, [isLoadingPositions])
+  
   const RenderContent = () => {
-    if (isLoadingPositions) {
+    if (isLoadingTransition || isLoadingPositions) {
       return <Spinner size="xl" />
     }
   

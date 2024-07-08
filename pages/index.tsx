@@ -1,6 +1,6 @@
 import type { NextPage } from "next"
 import { useRouter } from "next/router"
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useRef, useEffect } from "react"
 import {
   Box,
   Heading,
@@ -20,6 +20,7 @@ import PrimaryTable from "../sections/table"
 import Positions from "../sections/positions"
 import { Footer } from "../components/Footer"
 import { useQueryResults } from "../hooks/useQueryResults"
+import { useUserQueryResults } from "../hooks/useUserQueryResults";
 import { client } from "../utils/apolloClient"
 import { TransactionStatusModal } from "../components/TransactionStatusModal"
 
@@ -27,6 +28,7 @@ const Home: NextPage = () => {
   const { colorMode, toggleColorMode } = useColorMode()
   const [pageContests, setPageContests] = useState(true)
   const router = useRouter()
+  const activeHookRef = useRef<string | null>(null);
 
   const navigateToProfile = () => {
     const profilePath = domainName !== address ? `/u/${domainName}` : `/u/${address}`
@@ -50,7 +52,20 @@ const Home: NextPage = () => {
     connectToPolygon,
   } = useContext(ProviderContext)
 
-  const { contests, speculations, positions, isLoadingContests } = useQueryResults(client)
+  const contestsResults = useQueryResults(client);
+  const userResults = useUserQueryResults(client, address, 5000);
+
+  useEffect(() => {
+    if (pageContests) {
+      userResults.stopPolling();
+      contestsResults.startPolling(5000);
+    } else {
+      contestsResults.stopPolling();
+      userResults.startPolling(5000);
+    }
+    activeHookRef.current = pageContests ? 'contestsResults' : 'userResults';
+  }, [pageContests, contestsResults, userResults]);
+
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const togglePage = () => {
@@ -74,10 +89,14 @@ const Home: NextPage = () => {
         balance,
         approvedAmount,
         setApprovedAmount,
-        contests,
-        speculations,
-        positions,
-        isLoadingContests,
+        contests: contestsResults.contests,
+        speculations: contestsResults.speculations,
+        positions: contestsResults.positions,
+        isLoadingContests: contestsResults.isLoadingContests,
+        userContests: userResults.userContests,
+        userSpeculations: userResults.userSpeculations,
+        userPositions: userResults.userPositions,
+        isLoadingPositions: userResults.isLoadingPositions,
         isWaiting,
         startWaiting,
         stopWaiting,
@@ -213,7 +232,12 @@ const Home: NextPage = () => {
           <TransactionStatusModal isOpen={isOpen} onClose={onClose} stopWaiting={stopWaiting} />
         </Box>
         <Flex direction="column" flex="1">
-          <Box mt="100px">{pageContests ? <PrimaryTable /> : <Positions />}</Box>
+          <Box mt="100px">{
+            pageContests ?
+              <PrimaryTable />
+              :
+              <Positions />
+          }</Box>
           <Box pb={{ base: 8, md: 10 }} />
         </Flex>
         <Footer />

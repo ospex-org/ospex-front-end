@@ -24,12 +24,12 @@ export function useUserStatistics(
       variables: {
         Id: address,
       },
-      pollInterval: 5000,
+      pollInterval: 60000,
     }
   )
 
   useEffect(() => {
-    startPolling(5000)
+    startPolling(60000)
   }, [startPolling])
 
   useEffect(() => {

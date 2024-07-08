@@ -5,27 +5,31 @@ import { addressSpecificPositions } from "../constants/queries"
 
 export function useUserQueryResults(
   client: ApolloClient<NormalizedCacheObject>,
-  address: string
+  address: string,
+  pollInterval: number = 5000 // default to 5 seconds
 ) {
   const [userContests, setUserContests] = useState<contest[]>([])
   const [userSpeculations, setUserSpeculations] = useState<speculation[]>([])
   const [userPositions, setUserPositions] = useState<position[]>([])
   const [detailedPositions, setDetailedPositions] = useState<userPosition[]>([])
 
-  const { loading, error, data, refetch, startPolling } = useQuery(
+  const { loading, error, data, refetch, startPolling, stopPolling } = useQuery(
     addressSpecificPositions,
     {
       client,
       variables: {
         userId: address,
       },
-      pollInterval: 5000,
+      pollInterval,
     }
   )
 
   useEffect(() => {
-    startPolling(5000)
-  }, [startPolling])
+    startPolling(pollInterval)
+    return () => {
+      stopPolling()
+    }
+  }, [startPolling, stopPolling, pollInterval])
 
   useEffect(() => {
     refetch()
@@ -158,6 +162,13 @@ export function useUserQueryResults(
   // }, []);  
 
   return {
-    detailedPositions, userContests, userSpeculations, userPositions, isLoadingPositions: loading, error
+    detailedPositions,
+    userContests,
+    userSpeculations,
+    userPositions,
+    isLoadingPositions: loading,
+    error,
+    startPolling,
+    stopPolling,
   }
 }

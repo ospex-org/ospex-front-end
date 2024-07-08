@@ -8,7 +8,7 @@ export function useQueryResults(client: ApolloClient<NormalizedCacheObject>) {
   const [speculations, setSpeculations] = useState<speculation[]>([])
   const [positions, setPositions] = useState<position[]>([])
 
-  const { loading, error, data, refetch, startPolling } = useQuery(
+  const { loading, error, data, refetch, startPolling, stopPolling } = useQuery(
     contestsGteCurrentTime,
     {
       client,
@@ -30,9 +30,11 @@ export function useQueryResults(client: ApolloClient<NormalizedCacheObject>) {
   }
 
   useEffect(() => {
-    console.log("Starting polling...")
     startPolling(5000)
-  }, [startPolling])
+    return () => {
+      stopPolling()
+    }
+  }, [startPolling, stopPolling])
 
   useEffect(() => {
     const debouncedRefetch = debounce(() => {
@@ -75,6 +77,8 @@ export function useQueryResults(client: ApolloClient<NormalizedCacheObject>) {
     speculations,
     positions,
     isLoadingContests: loading,
-    error
+    error,
+    startPolling,
+    stopPolling,
   }
 }

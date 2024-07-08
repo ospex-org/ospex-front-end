@@ -5,12 +5,10 @@ import {
   position,
 } from "../constants/interface"
 import { ProviderContext } from "../contexts/ProviderContext"
-import { useUserQueryResults } from "../hooks/useUserQueryResults"
-import { client } from "../utils/apolloClient"
 
 const Positions = () => {
   const { address } = useContext(ProviderContext)
-  const { userContests, userSpeculations, userPositions, isLoadingPositions } = useUserQueryResults(client, address)
+  const { userContests, userSpeculations, userPositions, isLoadingPositions } = useContext(ProviderContext)
   const [isLoadingTransition, setIsLoadingTransition] = useState(true)
 
   useEffect(() => {

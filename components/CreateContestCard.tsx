@@ -79,6 +79,42 @@ export const CreateContestCard: React.FC<ContestCardProps> = ({
           </Box>
         </Box>
         <SkeletonText mt='4' noOfLines={3} spacing='4' skeletonHeight='2' />
+        <Divider my="2" />
+
+        <Text
+          fontWeight="light"
+          letterSpacing="wide"
+          fontSize="xs"
+          m={1}
+        >
+          Another user is creating this contest...
+        </Text>
+        <Button
+          isLoading={isWaiting}
+          isDisabled={!provider || isWaiting || contest.Created}
+          fontWeight="bold"
+          variant="outline"
+          size="xs"
+          width={100}
+          height={8}
+          mt={1}
+          borderColor="gray.300"
+          bg={colorMode === "light" ? "#f3f4f6" : "#272b33"}
+          color={colorMode === "light" ? "black" : "white"}
+          // mb={1}
+          _hover={
+            colorMode === "light"
+              ? { bg: "black", borderColor: "black", color: "white" }
+              : { bg: "white", borderColor: "white", color: "black" }
+          }
+          onClick={() => {
+            if (provider) {
+              handleCreateContest(contest.rundownID, contest.sportspageID.toString(), contest.jsonoddsID)
+            }
+          }}
+        >
+          Create anyway
+        </Button>
       </Box>
     )
   }

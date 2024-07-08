@@ -6,6 +6,7 @@ import {
   AccordionPanel,
   useColorMode,
   SkeletonText,
+  Text,
 } from "@chakra-ui/react"
 import router from "next/router"
 import { PotentialContest } from "../constants/interface"
@@ -64,10 +65,10 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
     let theNumber: string
 
     if (typeOfSpeculation === "spread") {
-      currentOdds = `Current line: ${Number(contest.PointSpreadAway) < 0 ? 
-        `${contest.AwayTeam} ${contest.PointSpreadAway}` : 
+      currentOdds = `Current line: ${Number(contest.PointSpreadAway) < 0 ?
+        `${contest.AwayTeam} ${contest.PointSpreadAway}` :
         `${contest.HomeTeam} -${Number(contest.PointSpreadAway)}`
-      }`
+        }`
       scorerAddress = SpeculationSpreadAddress
       theNumber = contest.PointSpreadAway
     } else if (typeOfSpeculation === "total") {
@@ -81,7 +82,53 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
     }
 
     if (created && status === "Pending") {
-      return <SkeletonText mt='2' noOfLines={2} spacing='4' skeletonHeight='2' />
+      return (
+        <>
+          <SkeletonText mt='2' noOfLines={2} spacing='4' skeletonHeight='2' />
+          <Text
+            fontWeight="light"
+            letterSpacing="wide"
+            fontSize="xs"
+            m={1}
+          >
+            Another user is creating this {typeOfSpeculation} speculation...
+          </Text>
+          <Button
+            isLoading={isWaiting}
+            isDisabled={!provider || isWaiting}
+            fontWeight="bold"
+            variant="outline"
+            size="xs"
+            width={100}
+            height={8}
+            mt={1}
+            borderColor="gray.300"
+            bg={colorMode === "light" ? "#f3f4f6" : "#272b33"}
+            color={colorMode === "light" ? "black" : "white"}
+            // mb={1}
+            _hover={
+              colorMode === "light"
+                ? { bg: "black", borderColor: "black", color: "white" }
+                : { bg: "white", borderColor: "white", color: "black" }
+            }
+            onClick={() => {
+              createSpeculation({
+                contestId: contest.contestId!,
+                MatchTime: contest.MatchTime,
+                theNumber,
+                speculationScorer: scorerAddress,
+                cfpContract,
+                startWaiting,
+                stopWaiting,
+                onModalOpen,
+                onModalClose
+              })
+            }}
+          >
+            Create anyway
+          </Button>
+        </>
+      )
     } else if (created && status === "Created") {
       return (
         <Box
@@ -119,14 +166,14 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
             }
             onClick={() => {
               createSpeculation({
-                contestId: contest.contestId!, 
-                MatchTime: contest.MatchTime, 
-                theNumber, 
+                contestId: contest.contestId!,
+                MatchTime: contest.MatchTime,
+                theNumber,
                 speculationScorer: scorerAddress,
-                cfpContract, 
-                startWaiting, 
-                stopWaiting, 
-                onModalOpen, 
+                cfpContract,
+                startWaiting,
+                stopWaiting,
+                onModalOpen,
                 onModalClose
               })
             }}

@@ -36,32 +36,36 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ApolloProvider client={client}>
-    <ChakraProvider>
-      <ProviderContext.Provider
-        value={{
-          provider,
-          contestOracleResolvedContract,
-          cfpContract,
-          USDCContract,
-          isConnected,
-          address,
-          domainName,
-          balance,
-          approvedAmount,
-          setApprovedAmount,
-          contests: [],
-          speculations: [],
-          positions: [],
-          isLoadingContests: false,
-          isWaiting,
-          startWaiting,
-          stopWaiting,
-          connectToPolygon,
-        }}
-      >
-        <Component {...pageProps} />
-      </ProviderContext.Provider>
-    </ChakraProvider>
+      <ChakraProvider>
+        <ProviderContext.Provider
+          value={{
+            provider,
+            contestOracleResolvedContract,
+            cfpContract,
+            USDCContract,
+            isConnected,
+            address,
+            domainName,
+            balance,
+            approvedAmount,
+            setApprovedAmount,
+            contests: [],
+            speculations: [],
+            positions: [],
+            userContests: [],
+            userSpeculations: [],
+            userPositions: [],
+            isLoadingContests: false,
+            isLoadingPositions: false,
+            isWaiting,
+            startWaiting,
+            stopWaiting,
+            connectToPolygon,
+          }}
+        >
+          <Component {...pageProps} />
+        </ProviderContext.Provider>
+      </ChakraProvider>
     </ApolloProvider>
   )
 }

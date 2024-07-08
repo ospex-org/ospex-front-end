@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react"
 import { JsonRpcProvider } from "@ethersproject/providers"
 import { Contract } from "ethers"
-import { contest, speculation, position } from "../constants/interface"
+import { contest, speculation, position, userPosition } from "../constants/interface"
 
 interface ProviderInterface {
   provider: JsonRpcProvider | undefined | null
@@ -17,7 +17,11 @@ interface ProviderInterface {
   contests: contest[] | []
   speculations: speculation[] | []
   positions: position[] | []
+  userContests: contest[] | []
+  userSpeculations: speculation[] | []
+  userPositions: position[] | []
   isLoadingContests: boolean
+  isLoadingPositions: boolean
   isWaiting: boolean | undefined
   startWaiting: () => void
   stopWaiting: () => void
@@ -38,7 +42,11 @@ const defaultState = {
   contests: [],
   speculations: [],
   positions: [],
+  userContests: [],
+  userSpeculations: [],
+  userPositions: [],
   isLoadingContests: false,
+  isLoadingPositions: false,
   isWaiting: false,
   startWaiting: () => {},
   stopWaiting: () => {},

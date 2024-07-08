@@ -15,12 +15,12 @@ export function useAdminQueryResults(
       variables: {
         currentTime: Math.floor(new Date().getTime() / 1000),
       },
-      pollInterval: 5000,
+      pollInterval: 60000,
     }
   )
 
   useEffect(() => {
-    startPolling(5000)
+    startPolling(60000)
   }, [startPolling])
 
   useEffect(() => {

@@ -14,11 +14,11 @@ export function useContestDetails(
   const { data, loading, error: queryError, refetch, startPolling } = useQuery(contestById, {
     client,
     variables: { id: contestId },
-    pollInterval: 5000,
+    pollInterval: 3600000, // 1 hour, only used on experimental contest details page
   })
 
   useEffect(() => {
-    startPolling(5000)
+    startPolling(3600000) // 1 hour, only used on experimental contest details page
   }, [startPolling])
 
   useEffect(() => {

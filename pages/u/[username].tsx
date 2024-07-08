@@ -33,7 +33,7 @@ const UserProfile: React.FC = () => {
     loading: isLoadingStatistics,
   } = useUserStatistics(client, resolvedAddress.toLowerCase())
 
-  const { detailedPositions } = useUserQueryResults(client, resolvedAddress.toLowerCase())
+  const { detailedPositions } = useUserQueryResults(client, resolvedAddress.toLowerCase(), 60000)
 
   // caused hooks error, removed
   // const isLoading = isLoadingStatistics // || isLoadingPositions;

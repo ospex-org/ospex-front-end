@@ -3,6 +3,7 @@ import type { AppProps } from "next/app"
 import { ApolloProvider } from "@apollo/client"
 import { ChakraProvider } from "@chakra-ui/react"
 import { ProviderContext } from "../contexts/ProviderContext"
+import { UserActivityProvider } from "../contexts/UserActivityContext"
 
 import { useWalletConnection } from "../hooks/useWalletConnection"
 import { useWalletStatus } from "../hooks/useWalletStatus"
@@ -37,34 +38,36 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
       <ChakraProvider>
-        <ProviderContext.Provider
-          value={{
-            provider,
-            contestOracleResolvedContract,
-            cfpContract,
-            USDCContract,
-            isConnected,
-            address,
-            domainName,
-            balance,
-            approvedAmount,
-            setApprovedAmount,
-            contests: [],
-            speculations: [],
-            positions: [],
-            userContests: [],
-            userSpeculations: [],
-            userPositions: [],
-            isLoadingContests: false,
-            isLoadingPositions: false,
-            isWaiting,
-            startWaiting,
-            stopWaiting,
-            connectToPolygon,
-          }}
-        >
-          <Component {...pageProps} />
-        </ProviderContext.Provider>
+        <UserActivityProvider>
+          <ProviderContext.Provider
+            value={{
+              provider,
+              contestOracleResolvedContract,
+              cfpContract,
+              USDCContract,
+              isConnected,
+              address,
+              domainName,
+              balance,
+              approvedAmount,
+              setApprovedAmount,
+              contests: [],
+              speculations: [],
+              positions: [],
+              userContests: [],
+              userSpeculations: [],
+              userPositions: [],
+              isLoadingContests: false,
+              isLoadingPositions: false,
+              isWaiting,
+              startWaiting,
+              stopWaiting,
+              connectToPolygon,
+            }}
+          >
+            <Component {...pageProps} />
+          </ProviderContext.Provider>
+        </UserActivityProvider>
       </ChakraProvider>
     </ApolloProvider>
   )

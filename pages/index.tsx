@@ -23,6 +23,8 @@ import { useQueryResults } from "../hooks/useQueryResults"
 import { useUserQueryResults } from "../hooks/useUserQueryResults";
 import { client } from "../utils/apolloClient"
 import { TransactionStatusModal } from "../components/TransactionStatusModal"
+import { useUserActivity } from "../contexts/UserActivityContext";
+import InactivityModal from "../components/InactivityModal";
 
 const Home: NextPage = () => {
   const { colorMode, toggleColorMode } = useColorMode()
@@ -55,16 +57,23 @@ const Home: NextPage = () => {
   const contestsResults = useQueryResults(client);
   const userResults = useUserQueryResults(client, address, 5000);
 
+  const { showModal, setShowModal, polling, setPolling } = useUserActivity();
+
   useEffect(() => {
-    if (pageContests) {
-      userResults.stopPolling();
-      contestsResults.startPolling(5000);
+    if (polling) {
+      if (pageContests) {
+        userResults.stopPolling();
+        contestsResults.startPolling(5000);
+      } else {
+        contestsResults.stopPolling();
+        userResults.startPolling(5000);
+      }
     } else {
       contestsResults.stopPolling();
-      userResults.startPolling(5000);
+      userResults.stopPolling();
     }
     activeHookRef.current = pageContests ? 'contestsResults' : 'userResults';
-  }, [pageContests, contestsResults, userResults]);
+  }, [pageContests, contestsResults, userResults, polling]);
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -241,6 +250,7 @@ const Home: NextPage = () => {
           <Box pb={{ base: 8, md: 10 }} />
         </Flex>
         <Footer />
+        <InactivityModal />
       </Flex>
     </ProviderContext.Provider>
   )

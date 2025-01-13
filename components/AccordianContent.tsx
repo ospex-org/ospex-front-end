@@ -127,12 +127,11 @@ export function AccordianContent({
               mr={3}
               isLoading={isWaiting}
               loadingText="Awaiting confirmation"
-              disabled={
+              isDisabled={
                 !provider ||
                 !isConnected ||
                 isWaiting ||
-                balance < +amount + +contribution ||
-                (isApproved && balance < 1)
+                (isApproved && balance < Math.max(1, +amount + +contribution))
               }
               onClick={() => {
                 if (provider && !isApproved) {

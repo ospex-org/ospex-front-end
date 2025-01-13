@@ -131,7 +131,8 @@ export function AccordianContent({
                 !provider ||
                 !isConnected ||
                 isWaiting ||
-                balance < +amount + +contribution
+                balance < +amount + +contribution ||
+                balance === 0
               }
               onClick={() => {
                 if (provider && !isApproved) {
@@ -189,6 +190,8 @@ export function AccordianContent({
                 ? "Please connect wallet"
                 : !isApproved
                 ? "(1 of 2) Approve amount first"
+                : balance === 0
+                ? "Insufficient USDC balance"
                 : "(2 of 2) Create position"}
             </Button>
             <TransactionStatusModal isOpen={isOpen} onClose={onClose} stopWaiting={stopWaiting} />

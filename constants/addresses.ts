@@ -62,4 +62,4 @@ export const ContestCreatorAddress = '0x9B6b9Fa7fDb867a425d9507FFc013D74e70e6822
 export const SpeculationCreatorAddress = '0x9B6b9Fa7fDb867a425d9507FFc013D74e70e6822'
 export const SecretsUrl = 'https://green-considerable-whitefish-752.mypinata.cloud/ipfs/QmStrMPyzjsaeZC5at9nRjznGFGdjkandWZhB8LkEgshRL'
 export const ScoreContestHash = '0xcb2a11db3190c322239b52afb3caefccfccd850566834819b012c5520f8d31cd'
-export const ScoreContestHashAlt = '0x740769911b7a4a7e0125f859d6468e107f07a04f1ee2e33553328761a68445ed'
+export const ScoreContestHashAlt = '0x52663b3662221e75812415d8bd14931e91b8162836b5a1a63e7bcac9b13e7c17'

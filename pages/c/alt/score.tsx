@@ -6,7 +6,8 @@ import {
   Spacer,
   useColorModeValue,
   useDisclosure,
-  Center
+  Center,
+  Button
 } from "@chakra-ui/react"
 import { Footer } from "../../../components/Footer"
 import { ScoreContestCardAlt } from "../../../components/alt/ScoreContestCardAlt"
@@ -17,11 +18,32 @@ import { Header } from "../../../components/Header"
 import { TransactionStatusModal } from "../../../components/TransactionStatusModal"
 import { useContext } from "react"
 import { ProviderContext } from "../../../contexts/ProviderContext"
+import { fetchCurrentScoreContestSourceFromGithubAlt } from "../../../scripts/fetchCurrentScoreContestSourceFromGithubAlt"
+import { scoreContestAlt } from "../../../functions/alt/scoreContestAlt"
 
 const ScoreContestAlt: React.FC = () => {
   const { adminContests } = useAdminQueryResults(client)
-  const { stopWaiting } = useContext(ProviderContext)
+  const { provider, contestOracleResolvedContract, isWaiting, startWaiting, stopWaiting } = useContext(ProviderContext)
   const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
+
+  const handleTestScoreContest = async () => {
+    try {
+      const sourceCode = await fetchCurrentScoreContestSourceFromGithubAlt()
+      scoreContestAlt(
+        "1",
+        "test123",
+        sourceCode,
+        startWaiting,
+        stopWaiting,
+        onModalOpen,
+        onModalClose,
+        provider,
+        contestOracleResolvedContract
+      )
+    } catch (error) {
+      console.error("Error in test score:", error)
+    }
+  }
 
   const RenderCards = () => {
     return (
@@ -63,6 +85,14 @@ const ScoreContestAlt: React.FC = () => {
               >
                 Score Contest
               </Text>
+              <Button
+                onClick={handleTestScoreContest}
+                isLoading={isWaiting}
+                disabled={!provider || isWaiting}
+                mb={4}
+              >
+                Test Score Contest Hash
+              </Button>
               <Center>
                 <Flex direction="column" alignItems="center" w="100%">
                   {RenderCards()}

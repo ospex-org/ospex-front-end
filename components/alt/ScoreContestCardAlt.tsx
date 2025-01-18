@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react"
 import { ProviderContext } from "../../contexts/ProviderContext"
 import { fetchCurrentScoreContestSourceFromGithubAlt } from "../../scripts/fetchCurrentScoreContestSourceFromGithubAlt"
-import { scoreContest } from "../../functions/scoreContest"
+import { scoreContestAlt } from "../../functions/alt/scoreContestAlt"
 
 interface ContestCardProps {
   contest: contest
@@ -27,7 +27,7 @@ export const ScoreContestCardAlt: React.FC<ContestCardProps> = ({
   const handleScoreContest = async (contest: contest) => {
     try {
       const sourceCode = await fetchCurrentScoreContestSourceFromGithubAlt()
-      scoreContest(contest.id, contest.jsonoddsId, sourceCode, startWaiting, stopWaiting, onModalOpen, onModalClose, provider, contestOracleResolvedContract)
+      scoreContestAlt(contest.id, contest.jsonoddsId, sourceCode, startWaiting, stopWaiting, onModalOpen, onModalClose, provider, contestOracleResolvedContract)
     } catch (error) {
       console.error("Error fetching source code:", error)
     }

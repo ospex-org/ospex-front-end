@@ -21,17 +21,29 @@ interface ContestCardProps {
 export const ScoreContestCardAlt: React.FC<ContestCardProps> = ({
   contest, onModalOpen, onModalClose
 }) => {
-  const { provider, contestOracleResolvedContract, isWaiting, startWaiting, stopWaiting } = useContext(ProviderContext)
+  const { provider, contestOracleResolvedContract, isWaiting, startWaiting, stopWaiting, loadingButtonId } = useContext(ProviderContext)
   const { colorMode } = useColorMode()
 
-  const handleScoreContest = async (contest: contest) => {
+  const handleScoreContest = async (contest: contest, buttonId: string) => {
     try {
       const sourceCode = await fetchCurrentScoreContestSourceFromGithubAlt()
-      scoreContestAlt(contest.id, contest.jsonoddsId, sourceCode, startWaiting, stopWaiting, onModalOpen, onModalClose, provider, contestOracleResolvedContract)
+      scoreContestAlt(
+        contest.id, 
+        contest.jsonoddsId, 
+        sourceCode, 
+        () => startWaiting(buttonId), 
+        stopWaiting, 
+        onModalOpen, 
+        onModalClose, 
+        provider, 
+        contestOracleResolvedContract
+      )
     } catch (error) {
       console.error("Error fetching source code:", error)
     }
   }
+
+  const buttonId = `score-contest-${contest.id}`
 
   return (
     <>
@@ -73,7 +85,7 @@ export const ScoreContestCardAlt: React.FC<ContestCardProps> = ({
             <Divider my="2" />
 
             <Button
-              isLoading={isWaiting}
+              isLoading={isWaiting && loadingButtonId === buttonId}
               disabled={!provider || isWaiting}
               fontWeight="bold"
               variant="outline"
@@ -90,7 +102,7 @@ export const ScoreContestCardAlt: React.FC<ContestCardProps> = ({
               }
               onClick={() => {
                 if (provider) {
-                  handleScoreContest(contest)
+                  handleScoreContest(contest, buttonId)
                 }
               }}
             >

@@ -29,7 +29,7 @@ export function PositionCard({
   position,
   contest,
 }: PositionCardProps) {
-  const { provider, cfpContract, isWaiting, startWaiting, stopWaiting } =
+  const { provider, cfpContract, isWaiting, startWaiting, stopWaiting, loadingButtonId } =
     useContext(ProviderContext)
   const { colorMode } = useColorMode()
   const speculationDescriptions = createSpeculationDescriptions(
@@ -142,10 +142,12 @@ export function PositionCard({
           speculation?.lowerAmount === 0 ||
           speculation?.winSide === "Void")
       ) {
+        const buttonId = `claim-position-${position.id}`
+        
         return (
           <>
             <Button
-              isLoading={isWaiting}
+              isLoading={isWaiting && loadingButtonId === buttonId}
               disabled={!provider || isWaiting}
               fontWeight="bold"
               variant="outline"
@@ -162,6 +164,7 @@ export function PositionCard({
               }
               onClick={() => {
                 setTotalClaimableAmount(claimableAmount)
+                startWaiting(buttonId)
                 onOpen()
               }}
             >
@@ -175,7 +178,7 @@ export function PositionCard({
             <ClaimModal
               isOpenParent={isOpen}
               isCloseParent={onClose}
-              onClaim={handleClaim}
+              onClaim={(contribution) => handleClaim(contribution, buttonId)}
               speculation={speculation}
               contest={contest}
               position={position}
@@ -246,10 +249,10 @@ export function PositionCard({
     }
   }
 
-  const handleClaim = async (contribution: number | string) => {
+  const handleClaim = async (contribution: number | string, buttonId: string) => {
     onClose()
     onStatusOpen()
-    startWaiting()
+    startWaiting(buttonId)
     try {
       const claimTx = await cfpContract!.claim(
         Number(position.speculationId),

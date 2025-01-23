@@ -23,7 +23,8 @@ interface ProviderInterface {
   isLoadingContests: boolean
   isLoadingPositions: boolean
   isWaiting: boolean | undefined
-  startWaiting: () => void
+  loadingButtonId: string | null
+  startWaiting: (buttonId: string) => void
   stopWaiting: () => void
   connectToPolygon: () => void
 }
@@ -48,6 +49,7 @@ const defaultState = {
   isLoadingContests: false,
   isLoadingPositions: false,
   isWaiting: false,
+  loadingButtonId: null,
   startWaiting: () => {},
   stopWaiting: () => {},
   connectToPolygon: () => {},

@@ -4,6 +4,7 @@ const waitingStateKey = "isWaiting"
 
 export function useWalletStatus() {
   const [isWaiting, setIsWaiting] = useState<boolean | undefined>(undefined)
+  const [loadingButtonId, setLoadingButtonId] = useState<string | null>(null)
 
   // Effect to run only on the client side after initial render
   useEffect(() => {
@@ -22,11 +23,19 @@ export function useWalletStatus() {
     }
   }, [isWaiting])
 
-  const startWaiting = () => setIsWaiting(true)
-  const stopWaiting = () => setIsWaiting(false)
+  const startWaiting = (buttonId: string) => {
+    setIsWaiting(true)
+    setLoadingButtonId(buttonId)
+  }
+  
+  const stopWaiting = () => {
+    setIsWaiting(false)
+    setLoadingButtonId(null)
+  }
 
   return {
     isWaiting,
+    loadingButtonId,
     startWaiting,
     stopWaiting,
   }

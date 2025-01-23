@@ -25,7 +25,7 @@ interface CreateSpeculationProps {
 export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
   contest, index, onModalOpen, onModalClose
 }) => {
-  const { provider, cfpContract, isWaiting, startWaiting, stopWaiting } = useContext(ProviderContext)
+  const { provider, cfpContract, isWaiting, startWaiting, stopWaiting, loadingButtonId } = useContext(ProviderContext)
   const { createdSpeculations, loading: loadingSpeculations } = useCreatedSpeculations()
   const { colorMode } = useColorMode()
 
@@ -81,6 +81,8 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
       theNumber = "0"
     }
 
+    const buttonId = `create-${typeOfSpeculation}-${contest.contestId}`
+
     if (created && status === "Pending") {
       return (
         <>
@@ -94,7 +96,7 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
             Another user is creating this {typeOfSpeculation} speculation...
           </Text>
           <Button
-            isLoading={isWaiting}
+            isLoading={isWaiting && loadingButtonId === buttonId}
             isDisabled={!provider || isWaiting}
             fontWeight="bold"
             variant="outline"
@@ -112,17 +114,20 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
                 : { bg: "white", borderColor: "white", color: "black" }
             }
             onClick={() => {
-              createSpeculation({
-                contestId: contest.contestId!,
-                MatchTime: contest.MatchTime,
-                theNumber,
-                speculationScorer: scorerAddress,
-                cfpContract,
-                startWaiting,
-                stopWaiting,
-                onModalOpen,
-                onModalClose
-              })
+              if (provider) {
+                startWaiting(buttonId)
+                createSpeculation({
+                  contestId: contest.contestId!,
+                  MatchTime: contest.MatchTime,
+                  theNumber,
+                  speculationScorer: scorerAddress,
+                  cfpContract,
+                  startWaiting: () => startWaiting(buttonId),
+                  stopWaiting,
+                  onModalOpen,
+                  onModalClose
+                })
+              }
             }}
           >
             Create anyway
@@ -149,7 +154,7 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
           {currentOdds}
           {typeOfSpeculation !== "moneyline" ? <br /> : <></>}
           <Button
-            isLoading={isWaiting}
+            isLoading={isWaiting && loadingButtonId === buttonId}
             isDisabled={!provider || isWaiting}
             fontWeight="bold"
             variant="outline"
@@ -165,17 +170,20 @@ export const CreateSpeculation: React.FC<CreateSpeculationProps> = ({
                 : { bg: "white", borderColor: "white", color: "black" }
             }
             onClick={() => {
-              createSpeculation({
-                contestId: contest.contestId!,
-                MatchTime: contest.MatchTime,
-                theNumber,
-                speculationScorer: scorerAddress,
-                cfpContract,
-                startWaiting,
-                stopWaiting,
-                onModalOpen,
-                onModalClose
-              })
+              if (provider) {
+                startWaiting(buttonId)
+                createSpeculation({
+                  contestId: contest.contestId!,
+                  MatchTime: contest.MatchTime,
+                  theNumber,
+                  speculationScorer: scorerAddress,
+                  cfpContract,
+                  startWaiting: () => startWaiting(buttonId),
+                  stopWaiting,
+                  onModalOpen,
+                  onModalClose
+                })
+              }
             }}
           >
             Create {label} Speculation

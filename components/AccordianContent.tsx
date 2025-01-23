@@ -44,12 +44,17 @@ export function AccordianContent({
     isWaiting,
     startWaiting,
     stopWaiting,
+    loadingButtonId,
   } = useContext(ProviderContext)
   const [isApproved, setIsApproved] = useState(false)
   const [amount, setAmount] = useState<string | number>(1)
   const [contribution, setContribution] = useState<string | number>(0)
   const [total, setTotal] = useState<number>(1)
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  // Create unique button IDs for approve and create position actions
+  const approveButtonId = `approve-position-${speculation?.id}`
+  const createPositionButtonId = `create-position-${speculation?.id}`
 
   useEffect(() => {
     if (total > approvedAmount) {
@@ -84,7 +89,7 @@ export function AccordianContent({
               width="125px"
               value={+amount}
               onChange={setAmount}
-              max={10}
+              max={1000}
             >
               <NumberInputField id="amount" onFocus={handleFocus} />
               <NumberInputStepper>
@@ -117,7 +122,7 @@ export function AccordianContent({
         </SimpleGrid>
         <Box pb="2">
           <Text as="b" color="red">
-            Limit set to 10 USDC, contract is unaudited
+            Limit set to 1,000 USDC, contract is unaudited
           </Text>
         </Box>
         <Divider />
@@ -125,7 +130,7 @@ export function AccordianContent({
           <Box>
             <Button
               mr={3}
-              isLoading={isWaiting}
+              isLoading={isWaiting && loadingButtonId === (isApproved ? createPositionButtonId : approveButtonId)}
               loadingText="Awaiting confirmation"
               isDisabled={
                 !provider ||
@@ -137,7 +142,7 @@ export function AccordianContent({
                 if (provider && !isApproved) {
                   ;(async () => {
                     try {
-                      startWaiting()
+                      startWaiting(approveButtonId)
                       onOpen()
                       const approveTx = await USDCContract!.approve(
                         CFPv1Address,
@@ -158,7 +163,7 @@ export function AccordianContent({
                   if (speculation) {
                     ;(async () => {
                       try {
-                        startWaiting()
+                        startWaiting(createPositionButtonId)
                         onOpen()
                         const approveTx = await cfpContract!.createPosition(
                           speculation.id,

@@ -31,20 +31,32 @@ interface ContestCardProps {
 export const CreateContestCardAlt: React.FC<ContestCardProps> = ({
   contest, index, onModalOpen, onModalClose
 }) => {
-  const { provider, contestOracleResolvedContract, isWaiting, startWaiting, stopWaiting } = useContext(ProviderContext)
+  const { provider, contestOracleResolvedContract, isWaiting, startWaiting, stopWaiting, loadingButtonId } = useContext(ProviderContext)
   const formattedDate = moment(contest.MatchTime.toDate()).tz(moment.tz.guess()).format("ddd, MMM D, YYYY, h:mm A z")
   const { colorMode } = useColorMode()
 
-  const handleCreateContest = async (rundownID: string, sportspageID: string, jsonoddsID: string) => {
+  const handleCreateContest = async (rundownID: string, sportspageID: string, jsonoddsID: string, buttonId: string) => {
     try {
       const sourceCode = await fetchCurrentCreateContestSourceFromGithubAlt()
-      createContestAlt(rundownID, sportspageID, jsonoddsID, sourceCode, startWaiting, stopWaiting, onModalOpen, onModalClose, provider, contestOracleResolvedContract)
+      createContestAlt(
+        rundownID, 
+        sportspageID, 
+        jsonoddsID, 
+        sourceCode, 
+        () => startWaiting(buttonId), 
+        stopWaiting, 
+        onModalOpen, 
+        onModalClose, 
+        provider, 
+        contestOracleResolvedContract
+      )
     } catch (error) {
       console.error("Error fetching source code:", error)
     }
   }
 
   if (contest.status === "Pending") {
+    const buttonId = `create-anyway-${contest.id}`
     return (
       <Box
         width="380px"
@@ -90,7 +102,7 @@ export const CreateContestCardAlt: React.FC<ContestCardProps> = ({
           Another user is creating this contest...
         </Text>
         <Button
-          isLoading={isWaiting}
+          isLoading={isWaiting && loadingButtonId === buttonId}
           isDisabled={!provider || isWaiting || contest.Created}
           fontWeight="bold"
           variant="outline"
@@ -109,7 +121,12 @@ export const CreateContestCardAlt: React.FC<ContestCardProps> = ({
           }
           onClick={() => {
             if (provider) {
-              handleCreateContest(contest.rundownID, contest.sportspageID.toString(), contest.jsonoddsID)
+              handleCreateContest(
+                contest.rundownID, 
+                contest.sportspageID.toString(), 
+                contest.jsonoddsID,
+                buttonId
+              )
             }
           }}
         >
@@ -118,6 +135,9 @@ export const CreateContestCardAlt: React.FC<ContestCardProps> = ({
       </Box>
     )
   }
+
+  const createContestButtonId = `create-contest-${contest.id}`
+  
   return (
     <Accordion allowToggle>
       <Box
@@ -158,7 +178,7 @@ export const CreateContestCardAlt: React.FC<ContestCardProps> = ({
 
             <SimpleGrid columns={2} spacing={0}>
               <Button
-                isLoading={isWaiting}
+                isLoading={isWaiting && loadingButtonId === createContestButtonId}
                 isDisabled={!provider || isWaiting || contest.Created}
                 fontWeight="bold"
                 variant="outline"
@@ -177,7 +197,12 @@ export const CreateContestCardAlt: React.FC<ContestCardProps> = ({
                 }
                 onClick={() => {
                   if (provider) {
-                    handleCreateContest(contest.rundownID, contest.sportspageID.toString(), contest.jsonoddsID)
+                    handleCreateContest(
+                      contest.rundownID, 
+                      contest.sportspageID.toString(), 
+                      contest.jsonoddsID,
+                      createContestButtonId
+                    )
                   }
                 }}
               >

@@ -258,6 +258,7 @@ export function SpeculationCard({
                       }
                       speculationPositionTypeEnum={speculationPositionTypeEnum}
                       contest={contest}
+                      selectedButton={selectedButton}
                     />
                   </AccordionPanel>
                 </Box>

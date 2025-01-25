@@ -38,7 +38,8 @@ const ScoreContestAlt: React.FC = () => {
         onModalOpen,
         onModalClose,
         provider,
-        contestOracleResolvedContract
+        contestOracleResolvedContract,
+        "test"
       )
     } catch (error) {
       console.error("Error in test score:", error)

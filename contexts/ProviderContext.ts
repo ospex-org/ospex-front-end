@@ -22,7 +22,7 @@ interface ProviderInterface {
   userPositions: position[] | []
   isLoadingContests: boolean
   isLoadingPositions: boolean
-  isWaiting: boolean | undefined
+  isWaiting: boolean
   loadingButtonId: string | null
   startWaiting: (buttonId: string) => void
   stopWaiting: () => void

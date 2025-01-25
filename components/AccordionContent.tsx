@@ -17,22 +17,35 @@ import {
 import { ethers } from "ethers"
 import { useContext, useEffect, useState } from "react"
 import { CFPv1Address } from "../constants/addresses"
-import { speculation } from "../constants/interface"
+import { speculation, contest } from "../constants/interface"
 import { ProviderContext } from "../contexts/ProviderContext"
 import { TransactionStatusModal } from "./TransactionStatusModal"
 import { handleFocus } from "../scripts/handleFocus"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faShirt } from '@fortawesome/free-solid-svg-icons'
+import ShimmerText from './ShimmerText'
 
-type AccordianContentProps = {
+const NBA_TEAM_COLORS: { [key: string]: string } = {
+  "Cleveland Cavaliers": "#860038",
+  "Houston Rockets": "#CE1141",
+  // Add more teams as needed
+}
+
+type AccordionContentProps = {
   speculation?: speculation
   speculationDescription?: string
   speculationPositionTypeEnum?: number
+  contest?: contest
+  selectedButton?: 'yes' | 'no' | null
 }
 
-export function AccordianContent({
+export function AccordionContent({
   speculation,
   speculationDescription,
   speculationPositionTypeEnum,
-}: AccordianContentProps) {
+  contest,
+  selectedButton,
+}: AccordionContentProps) {
   const {
     provider,
     USDCContract,
@@ -68,11 +81,32 @@ export function AccordianContent({
     setTotal(+amount + +contribution)
   }, [amount, contribution])
 
+  // Function to get the relevant team name based on the description
+  const getTeamFromDescription = (description: string | undefined, contest: contest | undefined) => {
+    if (!description || !contest) return ""
+    // If description includes "win", use the team name before "win"
+    if (description.includes("win")) {
+      const teamName = description.split(" to")[0]
+      return teamName
+    }
+    return ""
+  }
+
   return (
     <>
-      <Text fontWeight="bold" mt={2} mb={2}>
-        {speculationDescription}
-      </Text>
+      <Box p={2}>
+        <Box display="flex" alignItems="center" fontWeight="bold">
+          <FontAwesomeIcon
+            icon={faShirt}
+            color={NBA_TEAM_COLORS[getTeamFromDescription(speculationDescription, contest)] || "gray.400"}
+            fontSize="12px"
+            style={{ marginRight: "8px" }}
+          />
+          <ShimmerText>
+            {speculationDescription}
+          </ShimmerText>
+        </Box>
+      </Box>
       <FormControl>
         <SimpleGrid columns={2} spacing={1} mb={3}>
           <Box>
@@ -122,7 +156,7 @@ export function AccordianContent({
         </SimpleGrid>
         <Box pb="2">
           <Text as="b" color="red">
-            Limit set to 1,000 USDC, contract is unaudited
+            {/* Limit set to 1,000 USDC, contract is unaudited */}
           </Text>
         </Box>
         <Divider />
@@ -140,7 +174,7 @@ export function AccordianContent({
               }
               onClick={() => {
                 if (provider && !isApproved) {
-                  ;(async () => {
+                  ; (async () => {
                     try {
                       startWaiting(approveButtonId)
                       onOpen()
@@ -161,7 +195,7 @@ export function AccordianContent({
                   })()
                 } else if (provider && isApproved) {
                   if (speculation) {
-                    ;(async () => {
+                    ; (async () => {
                       try {
                         startWaiting(createPositionButtonId)
                         onOpen()
@@ -193,10 +227,10 @@ export function AccordianContent({
               {!provider
                 ? "Please connect wallet"
                 : !isApproved
-                ? "(1 of 2) Approve amount first"
-                : balance < 1
-                ? "Insufficient USDC"
-                : "(2 of 2) Create position"}
+                  ? "(1 of 2) Approve amount first"
+                  : balance < 1
+                    ? "Insufficient USDC"
+                    : "(2 of 2) Create position"}
             </Button>
             <TransactionStatusModal isOpen={isOpen} onClose={onClose} stopWaiting={stopWaiting} />
             <Text

@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     connectToPolygon,
   } = useWalletConnection()
 
-  const { isWaiting, startWaiting, stopWaiting } = useWalletStatus()
+  const { isWaiting, loadingButtonId, startWaiting, stopWaiting } = useWalletStatus()
 
   const { balance, approvedAmount, setApprovedAmount } = useWalletBalances(
     provider,
@@ -59,7 +59,8 @@ function MyApp({ Component, pageProps }: AppProps) {
               userPositions: [],
               isLoadingContests: false,
               isLoadingPositions: false,
-              isWaiting,
+              isWaiting: isWaiting || false,
+              loadingButtonId: loadingButtonId || null,
               startWaiting,
               stopWaiting,
               connectToPolygon,

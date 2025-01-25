@@ -31,12 +31,13 @@ export const ScoreContestCardAlt: React.FC<ContestCardProps> = ({
         contest.id, 
         contest.jsonoddsId, 
         sourceCode, 
-        () => startWaiting(buttonId), 
+        startWaiting, 
         stopWaiting, 
         onModalOpen, 
         onModalClose, 
         provider, 
-        contestOracleResolvedContract
+        contestOracleResolvedContract,
+        buttonId
       )
     } catch (error) {
       console.error("Error fetching source code:", error)

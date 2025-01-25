@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 const waitingStateKey = "isWaiting"
 
 export function useWalletStatus() {
-  const [isWaiting, setIsWaiting] = useState<boolean | undefined>(undefined)
+  const [isWaiting, setIsWaiting] = useState<boolean>(false)
   const [loadingButtonId, setLoadingButtonId] = useState<string | null>(null)
 
   // Effect to run only on the client side after initial render

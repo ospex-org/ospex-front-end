@@ -12,7 +12,7 @@ export const createContestAlt = async (
   sportspageID: string,
   jsonoddsID: string,
   source: string,
-  startWaiting: () => void,
+  startWaiting: (buttonId: string) => void,
   stopWaiting: () => void,
   onModalOpen: () => void,
   onModalClose: () => void,
@@ -34,7 +34,7 @@ export const createContestAlt = async (
 
     const idToken = await currentUser.getIdToken()
     await updateContestStatus({ jsonoddsID, status: 'Pending', idToken })
-    startWaiting()
+    startWaiting("buttonId")
     onModalOpen()
     const encryptedSecretsUrls = await getEncryptedSecretsUrls()
     const gasLimit = 300000

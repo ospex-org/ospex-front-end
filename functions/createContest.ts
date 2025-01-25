@@ -12,12 +12,13 @@ export const createContest = async (
   sportspageID: string,
   jsonoddsID: string,
   source: string,
-  startWaiting: () => void,
+  startWaiting: (buttonId: string) => void,
   stopWaiting: () => void,
   onModalOpen: () => void,
   onModalClose: () => void,
   provider: JsonRpcProvider | undefined | null,
-  contestOracleResolvedContract: Contract | undefined | null
+  contestOracleResolvedContract: Contract | undefined | null,
+  buttonId: string
 ): Promise<void> => {
 
   try {
@@ -34,7 +35,7 @@ export const createContest = async (
 
     const idToken = await currentUser.getIdToken()
     await updateContestStatus({ jsonoddsID, status: 'Pending', idToken })
-    startWaiting()
+    startWaiting(buttonId)
     onModalOpen()
     const encryptedSecretsUrls = await getEncryptedSecretsUrls()
     const gasLimit = 300000

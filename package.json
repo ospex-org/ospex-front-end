@@ -18,6 +18,10 @@
     "@emotion/react": "11",
     "@emotion/styled": "11",
     "@ethersproject/providers": "^5.6.8",
+    "@fortawesome/fontawesome-free-solid": "^5.0.13",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@unstoppabledomains/resolution": "^9.2.2",
     "@usedapp/core": "^1.2.7",
     "@web3-onboard/coinbase": "^2.2.6",
@@ -57,6 +61,6 @@
     "**/@types/react-dom": "^17.0.9"
   },
   "engines": {
-    "node": "18.x"
+    "node": ">=18.x"
   }
 }

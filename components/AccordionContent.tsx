@@ -24,12 +24,7 @@ import { handleFocus } from "../scripts/handleFocus"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShirt } from '@fortawesome/free-solid-svg-icons'
 import ShimmerText from './ShimmerText'
-
-const NBA_TEAM_COLORS: { [key: string]: string } = {
-  "Cleveland Cavaliers": "#860038",
-  "Houston Rockets": "#CE1141",
-  // Add more teams as needed
-}
+import { TEAM_COLORS } from "../constants/teamColors"
 
 type AccordionContentProps = {
   speculation?: speculation
@@ -98,7 +93,7 @@ export function AccordionContent({
         <Box display="flex" alignItems="center" fontWeight="bold">
           <FontAwesomeIcon
             icon={faShirt}
-            color={NBA_TEAM_COLORS[getTeamFromDescription(speculationDescription, contest)] || "gray.400"}
+            color={TEAM_COLORS[getTeamFromDescription(speculationDescription, contest)] || "gray.400"}
             fontSize="12px"
             style={{ marginRight: "8px" }}
           />

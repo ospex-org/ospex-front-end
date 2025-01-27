@@ -34,4 +34,5 @@ export const TEAM_COLORS: { [key: string]: string } = {
   // NFL Teams
   "Buffalo Bills": "#00338D",
   "Kansas City Chiefs": "#E31837",
+  "Philadelphia Eagles": "#004C54",
 } 
